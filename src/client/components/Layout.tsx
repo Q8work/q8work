@@ -5,7 +5,7 @@ import { useAuth } from "../lib/auth";
 
 function todayArabic(): string {
   try {
-    return new Intl.DateTimeFormat("ar-KW", {
+    return new Intl.DateTimeFormat("ar-KW-u-nu-latn", {
       weekday: "long",
       year: "numeric",
       month: "long",

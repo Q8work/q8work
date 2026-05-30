@@ -179,7 +179,7 @@ function ProfileTab() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="label">رقم التواصل <span className="font-normal text-brand">(يظهر للشركة بعد قبول العرض فقط)</span></label>
-            <input className="input" value={p.phone} onChange={(e) => set({ phone: e.target.value })} placeholder="٩٦٥..." />
+            <input className="input" value={p.phone} onChange={(e) => set({ phone: e.target.value })} placeholder="965..." />
           </div>
           <div>
             <label className="label">الرقم المدني <span className="font-normal text-brand">(للتحقق من الجنسية)</span></label>

@@ -82,17 +82,17 @@ export function Home() {
       {/* Stats */}
       <section className="mx-auto mt-8 grid max-w-3xl grid-cols-3 gap-4 rounded-xl border border-brand-soft bg-white p-6 shadow-sm">
         <Stat value="مجاناً" label="التسجيل للطرفين" />
-        <Stat value="٦ محافظات" label="تغطية كامل الكويت" />
-        <Stat value="كويتي ١٠٠٪" label="كفاءات وطنية" />
+        <Stat value="6 محافظات" label="تغطية كامل الكويت" />
+        <Stat value="كويتي 100٪" label="كفاءات وطنية" />
       </section>
 
       {/* How it works */}
       <section className="mt-12">
         <h2 className="mb-6 text-center text-2xl font-extrabold text-brand-darkest">كيف تعمل المنصة؟</h2>
         <div className="grid gap-4 sm:grid-cols-3">
-          <Step n="١" title="سجّل ملفك" body="أنشئ بروفايلك، حدد مهاراتك وأوقات توفرك ونوع العمل المفضل." />
-          <Step n="٢" title="استقبل العروض" body="تصلك عروض العمل من الشركات مباشرة، اقبل أو ارفض بضغطة واحدة." />
-          <Step n="٣" title="اعمل وقيّم" body="تواصل عبر الرسائل، أنجز العمل، وتبادل التقييمات لبناء سمعتك." />
+          <Step n="1" title="سجّل ملفك" body="أنشئ بروفايلك، حدد مهاراتك وأوقات توفرك ونوع العمل المفضل." />
+          <Step n="2" title="استقبل العروض" body="تصلك عروض العمل من الشركات مباشرة، اقبل أو ارفض بضغطة واحدة." />
+          <Step n="3" title="اعمل وقيّم" body="تواصل عبر الرسائل، أنجز العمل، وتبادل التقييمات لبناء سمعتك." />
         </div>
       </section>
 

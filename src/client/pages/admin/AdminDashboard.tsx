@@ -6,7 +6,7 @@ import { api, fileUrl } from "../../lib/api";
 type Tab = "overview" | "users" | "companies" | "jobs" | "ratings";
 
 const fmtDate = (ms?: number) =>
-  ms ? new Intl.DateTimeFormat("ar-KW", { dateStyle: "medium" }).format(new Date(ms)) : "—";
+  ms ? new Intl.DateTimeFormat("ar-KW-u-nu-latn", { dateStyle: "medium" }).format(new Date(ms)) : "—";
 
 const roleLabel = (r: string) => ({ worker: "كويتي", company: "شركة", admin: "إدارة" }[r] || r);
 

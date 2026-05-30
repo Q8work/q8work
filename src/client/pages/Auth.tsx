@@ -158,7 +158,7 @@ export function Register() {
                 inputMode="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="٩٦٥..."
+                placeholder="965..."
                 required
               />
             </div>
