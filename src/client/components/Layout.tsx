@@ -92,8 +92,10 @@ export function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-8 text-center text-sm">
         <Logo light />
         <p className="mt-2">منصة الكويتيين للعمل الجزئي · اشتغل بشروطك واختار ساعاتك</p>
-        <p className="text-brand-light">q8work.com · info@q8work.com</p>
-        <p className="text-xs text-brand-light/70">© 2025 Q8Work · جميع الحقوق محفوظة</p>
+        <p className="text-brand-light" data-latin>q8work.com · info@q8work.com</p>
+        <p className="text-xs text-brand-light/70">
+          <span data-latin>© 2025 Q8Work</span> · جميع الحقوق محفوظة
+        </p>
       </div>
     </footer>
   );

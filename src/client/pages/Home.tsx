@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { LogoMark } from "../components/Logo";
 import { useAuth } from "../lib/auth";
 
 function Stat({ value, label }: { value: string; label: string }) {
@@ -33,10 +32,7 @@ export function Home() {
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl bg-brand-darkest px-6 py-16 text-center text-white">
-        <div className="pointer-events-none absolute -left-10 -top-10 text-brand-dark/40">
-          <LogoMark size={200} />
-        </div>
+      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-brand-darkest to-brand-dark px-6 py-12 text-center text-white sm:py-14">
         <div className="relative mx-auto max-w-2xl">
           <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">
             اشتغل بشروطك واختار ساعاتك
@@ -51,7 +47,7 @@ export function Home() {
               e.preventDefault();
               navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`);
             }}
-            className="mx-auto mt-8 flex max-w-lg gap-2 rounded-2xl bg-white p-2 shadow-lg"
+            className="mx-auto mt-7 flex max-w-lg gap-2 rounded-xl bg-white p-2 shadow-lg"
           >
             <input
               value={q}
@@ -84,14 +80,14 @@ export function Home() {
       </section>
 
       {/* Stats */}
-      <section className="mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-brand-soft">
+      <section className="mx-auto mt-8 grid max-w-3xl grid-cols-3 gap-4 rounded-xl border border-brand-soft bg-white p-6 shadow-sm">
         <Stat value="مجاناً" label="التسجيل للطرفين" />
         <Stat value="٦ مناطق" label="تغطية كامل الكويت" />
         <Stat value="كويتي ١٠٠٪" label="كفاءات وطنية" />
       </section>
 
       {/* How it works */}
-      <section className="mt-14">
+      <section className="mt-12">
         <h2 className="mb-6 text-center text-2xl font-extrabold text-brand-darkest">كيف تعمل المنصة؟</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <Step n="١" title="سجّل ملفك" body="أنشئ بروفايلك، حدد مهاراتك وأوقات توفرك ونوع العمل المفضل." />
@@ -101,7 +97,7 @@ export function Home() {
       </section>
 
       {/* Audience */}
-      <section className="mt-14 grid gap-4 sm:grid-cols-2">
+      <section className="mt-12 grid gap-4 sm:grid-cols-2">
         <div className="card">
           <h3 className="text-xl font-bold text-brand-darkest">للكويتي الباحث عن دخل إضافي</h3>
           <ul className="mt-3 space-y-2 text-sm text-brand-dark">
@@ -121,7 +117,7 @@ export function Home() {
       </section>
 
       {/* CTA */}
-      <section className="mt-14 rounded-3xl bg-brand-soft px-6 py-10 text-center">
+      <section className="mt-12 rounded-2xl bg-brand-soft px-6 py-10 text-center">
         <h2 className="text-2xl font-extrabold text-brand-darkest">جاهز تبدأ؟</h2>
         <p className="mt-2 text-brand-dark">انضم اليوم — التسجيل مجاني بالكامل في المرحلة الأولى.</p>
         <Link to={user ? "/app" : "/register"} className="btn-primary mt-5">

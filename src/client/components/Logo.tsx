@@ -33,16 +33,17 @@ export function LogoMark({ size = 32, className = "" }: { size?: number; classNa
 
 export function Logo({ light = false, withText = true }: { light?: boolean; withText?: boolean }) {
   return (
-    <span className={`inline-flex items-center gap-2 ${light ? "text-white" : "text-brand-darkest"}`}>
-      <LogoMark size={30} />
-      {withText && (
-        <span className="flex flex-col leading-none">
-          <span className="text-xl font-extrabold tracking-tight">Q8Work</span>
-          <span className={`text-[10px] font-semibold ${light ? "text-brand-soft" : "text-brand"}`}>
+    <span className={`inline-flex items-center ${light ? "text-white" : "text-brand-darkest"}`}>
+      <span className="flex flex-col leading-none">
+        <span className="text-2xl font-extrabold tracking-tight" data-latin>
+          Q8Work
+        </span>
+        {withText && (
+          <span className={`text-[10px] font-semibold ${light ? "text-brand-soft" : "text-brand-dark"}`}>
             العمل الجزئي للكويتيين
           </span>
-        </span>
-      )}
+        )}
+      </span>
     </span>
   );
 }
