@@ -173,8 +173,11 @@ function ProfileTab() {
             </select>
           </div>
           <div>
-            <label className="label">الراتب المتوقع</label>
-            <input className="input" value={p.expected_salary} onChange={(e) => set({ expected_salary: e.target.value })} placeholder="مثال: 5 د/ساعة" />
+            <label className="label">الراتب المتوقع (د.ك)</label>
+            <div className="relative">
+              <input type="number" min={0} step="0.5" className="input pl-12" value={p.expected_salary} onChange={(e) => set({ expected_salary: e.target.value })} placeholder="مثال: 5" />
+              <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm font-semibold text-brand">د.ك</span>
+            </div>
           </div>
         </div>
 
@@ -360,7 +363,7 @@ function ApplicationsTab() {
           </div>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
             {a.area && <span className="chip">📍 {a.area}</span>}
-            {a.salary && <span className="chip">💰 {a.salary}</span>}
+            {a.salary && <span className="chip">{a.salary} د.ك</span>}
           </div>
           {a.message && <p className="mt-2 rounded-lg bg-brand-bg p-3 text-sm text-brand-dark">{a.message}</p>}
         </div>

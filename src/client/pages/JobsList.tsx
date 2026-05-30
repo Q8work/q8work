@@ -97,7 +97,7 @@ export function JobsList() {
                 {job.area && <span className="chip">📍 {job.area}</span>}
                 {job.work_type && <span className="chip">{labelOf(WORK_TYPES, job.work_type)}</span>}
                 {job.duration && <span className="chip">{labelOf(DURATIONS, job.duration)}</span>}
-                {job.salary && <span className="chip">💰 {job.salary}</span>}
+                {job.salary && <span className="chip">{job.salary} د.ك</span>}
               </div>
               {job.skills_required.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">

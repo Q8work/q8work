@@ -163,7 +163,7 @@ export function JobDetail() {
           {job.area && <span className="chip">📍 {job.area}</span>}
           {job.work_type && <span className="chip">{labelOf(WORK_TYPES, job.work_type)}</span>}
           {job.duration && <span className="chip">{labelOf(DURATIONS, job.duration)}</span>}
-          {job.salary && <span className="chip">💰 {job.salary}</span>}
+          {job.salary && <span className="chip">{job.salary} د.ك</span>}
           {job.sector && <span className="chip bg-brand-bg">{job.sector}</span>}
           <span className="chip bg-brand-bg">العدد المطلوب: {job.headcount}</span>
         </div>

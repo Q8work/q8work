@@ -177,8 +177,11 @@ function JobsTab() {
               </select>
             </div>
             <div>
-              <label className="label">الراتب</label>
-              <input className="input" value={form.salary} onChange={(e) => setForm({ ...form, salary: e.target.value })} placeholder="مثال: 30 د/يوم" />
+              <label className="label">الراتب (د.ك)</label>
+              <div className="relative">
+                <input type="number" min={0} step="0.5" className="input pl-12" value={form.salary} onChange={(e) => setForm({ ...form, salary: e.target.value })} placeholder="مثال: 30" />
+                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm font-semibold text-brand">د.ك</span>
+              </div>
             </div>
             <div>
               <label className="label">المحافظة</label>
@@ -229,7 +232,7 @@ function JobsTab() {
             <div className="mt-2 flex flex-wrap gap-2 text-xs">
               {j.area && <span className="chip">📍 {j.area}</span>}
               {j.duration && <span className="chip">{labelOf(DURATIONS, j.duration)}</span>}
-              {j.salary && <span className="chip">💰 {j.salary}</span>}
+              {j.salary && <span className="chip">{j.salary} د.ك</span>}
               <span className="chip">العدد: {j.headcount}</span>
             </div>
             <button className="btn-ghost mt-3" onClick={() => toggleStatus(j)}>
@@ -409,7 +412,7 @@ function TalentTab() {
               <div className="mt-2 flex flex-wrap gap-2 text-xs text-brand">
                 {w.area && <span>📍 {w.area}</span>}
                 {w.work_type && <span>· {labelOf(WORK_TYPES, w.work_type)}</span>}
-                {w.expected_salary && <span>· 💰 {w.expected_salary}</span>}
+                {w.expected_salary && <span>· {w.expected_salary} د.ك</span>}
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button className="btn-secondary" onClick={() => setProfileId(w.user_id)}>عرض البروفايل</button>
