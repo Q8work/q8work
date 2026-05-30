@@ -396,7 +396,7 @@ function TalentTab() {
                 <Avatar src={fileUrl(w.photo_key)} name={w.full_name} />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-brand-darkest">{w.full_name || "كويتي"}</h3>
+                    <h3 className="font-bold text-brand-darkest">{w.full_name || "الشخص"}</h3>
                     {w.civil_id_verified ? <Badge className="bg-emerald-100 text-emerald-800">✓</Badge> : null}
                   </div>
                   <StarRating value={w.avg_rating} count={w.rating_count} />
@@ -425,7 +425,7 @@ function TalentTab() {
       {offerTo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setOfferTo(null)}>
           <div className="w-full max-w-md card" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-bold text-brand-darkest">إرسال عرض إلى {offerTo.full_name || "الكويتي"}</h3>
+            <h3 className="text-lg font-bold text-brand-darkest">إرسال عرض إلى {offerTo.full_name || "الشخص"}</h3>
             <p className="mt-1 text-sm text-brand">سيظهر رقم تواصله بعد قبوله العرض.</p>
             <textarea className="input mt-3" rows={4} placeholder="اكتب تفاصيل العرض..." value={offerMsg} onChange={(e) => setOfferMsg(e.target.value)} />
             <div className="mt-3 flex gap-2">
@@ -471,7 +471,7 @@ function OffersTab() {
             <div className="flex items-center gap-3">
               <Avatar src={fileUrl(o.worker_photo)} name={o.worker_name} />
               <div>
-                <h3 className="font-bold text-brand-darkest">{o.worker_name || "كويتي"}</h3>
+                <h3 className="font-bold text-brand-darkest">{o.worker_name || "الشخص"}</h3>
                 {o.job_title && <p className="text-sm text-brand">{o.job_title}</p>}
               </div>
             </div>
@@ -494,7 +494,7 @@ function OffersTab() {
                   </div>
                 </div>
               ) : (
-                <button className="btn-secondary" onClick={() => setRating({ offerId: o.id, stars: 5, comment: "" })}>قيّم الكويتي</button>
+                <button className="btn-secondary" onClick={() => setRating({ offerId: o.id, stars: 5, comment: "" })}>قيّم الشخص</button>
               )}
             </div>
           )}
