@@ -20,7 +20,7 @@ export function Navbar() {
         </Link>
         <nav className="flex items-center gap-2">
           <Link to="/jobs" className="btn-ghost hidden sm:inline-flex">
-            الوظائف
+            فرص العمل
           </Link>
           {user ? (
             <>

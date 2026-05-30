@@ -50,7 +50,7 @@ export function JobsList() {
 
   return (
     <Layout wide>
-      <h1 className="mb-2 text-3xl font-extrabold text-brand-darkest">الوظائف المتاحة</h1>
+      <h1 className="mb-2 text-3xl font-extrabold text-brand-darkest">فرص العمل المتاحة</h1>
       <p className="mb-6 text-brand-dark">تصفّح الفرص المنشورة من الشركات</p>
 
       {/* Filters */}
@@ -82,7 +82,7 @@ export function JobsList() {
       {loading ? (
         <PageLoader />
       ) : jobs.length === 0 ? (
-        <EmptyState title="لا توجد وظائف مطابقة" hint="جرّب تعديل عوامل التصفية." />
+        <EmptyState title="لا توجد فرص عمل مطابقة" hint="جرّب تعديل عوامل التصفية." />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {jobs.map((job) => (

@@ -27,8 +27,8 @@ function OverviewTab() {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard value={s.workers} label="باحث عن عمل" />
       <StatCard value={s.companies} label="شركة" />
-      <StatCard value={s.jobs} label="وظيفة منشورة" />
-      <StatCard value={s.open_jobs} label="وظيفة مفتوحة" />
+      <StatCard value={s.jobs} label="فرصة عمل منشورة" />
+      <StatCard value={s.open_jobs} label="فرصة عمل مفتوحة" />
       <StatCard value={s.offers} label="عرض عمل" />
       <StatCard value={s.completed_offers} label="عمل مكتمل" />
       <StatCard value={s.pending_companies} label="شركة بانتظار التوثيق" />

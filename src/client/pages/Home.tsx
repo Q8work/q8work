@@ -56,7 +56,7 @@ export function Home() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="ابحث عن وظيفة... مبيعات، كاشير، تسويق"
+              placeholder="ابحث عن فرصة عمل... مبيعات، كاشير، تسويق"
               className="flex-1 bg-transparent px-3 text-sm text-brand-darkest placeholder:text-brand focus:outline-none"
             />
             <button type="submit" className="btn-primary">

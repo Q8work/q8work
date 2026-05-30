@@ -50,7 +50,7 @@ jobs.get("/:id", async (c) => {
   )
     .bind(c.req.param("id"))
     .first<any>();
-  if (!row) return c.json({ error: "الوظيفة غير موجودة." }, 404);
+  if (!row) return c.json({ error: "فرصة العمل غير موجودة." }, 404);
   return c.json({ job: shapeJob(row) });
 });
 
@@ -58,7 +58,7 @@ jobs.get("/:id", async (c) => {
 jobs.post("/", requireAuth("company"), async (c) => {
   const user = c.get("user");
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
-  if (!isNonEmptyString(b.title)) return c.json({ error: "عنوان الوظيفة مطلوب." }, 400);
+  if (!isNonEmptyString(b.title)) return c.json({ error: "عنوان فرصة العمل مطلوب." }, 400);
 
   const id = genId("j_");
   const now = Date.now();
@@ -82,7 +82,7 @@ jobs.patch("/:id", requireAuth("company"), async (c) => {
   const id = c.req.param("id");
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
   const owned = await c.env.DB.prepare("SELECT company_user_id FROM jobs WHERE id = ?").bind(id).first<any>();
-  if (!owned) return c.json({ error: "الوظيفة غير موجودة." }, 404);
+  if (!owned) return c.json({ error: "فرصة العمل غير موجودة." }, 404);
   if (owned.company_user_id !== user.id) return c.json({ error: "لا تملك صلاحية التعديل." }, 403);
   if (b.status === "open" || b.status === "closed") {
     await c.env.DB.prepare("UPDATE jobs SET status = ? WHERE id = ?").bind(b.status, id).run();

@@ -9,7 +9,7 @@ with employers who need flexible national talent.
 
 - **ثلاث لوحات تحكم**: الكويتي (worker) · الشركة (company) · الإدارة (admin)
 - **لوحة الكويتي**: البروفايل، المهارات، أوقات التوفر، العروض الواردة، التقييمات
-- **لوحة الشركة**: بروفايل الشركة ورفع السجل التجاري، نشر الوظائف، البحث والفلترة عن المواهب، إرسال العروض، التقييم
+- **لوحة الشركة**: بروفايل الشركة ورفع السجل التجاري، نشر فرص العمل، البحث والفلترة عن المواهب، إرسال العروض، التقييم
 - **لوحة الإدارة**: إدارة المستخدمين، توثيق الشركات والجنسية، الإحصائيات
 - **نظام رسائل داخلي** بين الطرفين
 - **تقييمات بالنجوم** (١–٥) بعد كل تجربة
@@ -96,7 +96,7 @@ src/
 |--------|-------|
 | `POST /api/auth/register \| login \| logout`, `GET /api/auth/me` | المصادقة |
 | `GET/PUT /api/profile/worker \| company`, `POST /api/profile/upload` | الملفات الشخصية والرفع |
-| `GET/POST /api/jobs`, `GET /api/jobs/mine`, `PATCH /api/jobs/:id` | الوظائف |
+| `GET/POST /api/jobs`, `GET /api/jobs/mine`, `PATCH /api/jobs/:id` | فرص العمل |
 | `GET /api/workers`, `GET /api/workers/:id` | البحث عن المواهب (للشركات) |
 | `POST /api/offers`, `GET /api/offers`, `PATCH /api/offers/:id` | العروض |
 | `GET /api/messages/threads`, `GET/POST /api/messages/:offerId` | الرسائل |

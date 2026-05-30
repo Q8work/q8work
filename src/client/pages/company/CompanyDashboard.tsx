@@ -152,7 +152,7 @@ function JobsTab() {
   return (
     <div className="space-y-4">
       <button className="btn-primary" onClick={() => setShowForm((s) => !s)}>
-        {showForm ? "إغلاق" : "+ نشر وظيفة / مشروع"}
+        {showForm ? "إغلاق" : "+ نشر فرصة عمل / مشروع"}
       </button>
 
       {showForm && (
@@ -212,7 +212,7 @@ function JobsTab() {
       )}
 
       {jobs.length === 0 ? (
-        <EmptyState title="لم تنشر أي وظيفة بعد" />
+        <EmptyState title="لم تنشر أي فرصة عمل بعد" />
       ) : (
         jobs.map((j) => (
           <div key={j.id} className="card">
@@ -230,7 +230,7 @@ function JobsTab() {
               <span className="chip">العدد: {j.headcount}</span>
             </div>
             <button className="btn-ghost mt-3" onClick={() => toggleStatus(j)}>
-              {j.status === "open" ? "إغلاق الوظيفة" : "إعادة فتح"}
+              {j.status === "open" ? "إغلاق الفرصة" : "إعادة فتح"}
             </button>
           </div>
         ))
@@ -414,12 +414,12 @@ export function CompanyDashboard() {
   return (
     <Layout wide>
       <h1 className="mb-1 text-2xl font-extrabold text-brand-darkest">لوحة الشركة</h1>
-      <p className="mb-6 text-brand-dark">انشر الوظائف وابحث عن الكفاءات الكويتية</p>
+      <p className="mb-6 text-brand-dark">انشر فرص العمل وابحث عن الكفاءات الكويتية</p>
       <div className="mb-6">
         <Tabs active={tab} onChange={setTab}
           tabs={[
             { id: "profile", label: "بروفايل الشركة" },
-            { id: "jobs", label: "الوظائف" },
+            { id: "jobs", label: "فرص العمل" },
             { id: "talent", label: "البحث عن مواهب" },
             { id: "offers", label: "العروض المرسلة" },
             { id: "messages", label: "الرسائل" },
