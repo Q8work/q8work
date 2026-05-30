@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge, VerifiedBadge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
+import { WorkerProfileModal } from "../../components/WorkerProfileModal";
 import { api, fileUrl } from "../../lib/api";
 import {
   SKILLS,
@@ -259,6 +260,7 @@ interface Applicant {
 function JobApplicants({ jobId }: { jobId: string }) {
   const [open, setOpen] = useState(false);
   const [applicants, setApplicants] = useState<Applicant[] | null>(null);
+  const [profileId, setProfileId] = useState<string | null>(null);
 
   const load = () => api.get<{ applicants: Applicant[] }>(`/applications/job/${jobId}`).then((r) => setApplicants(r.applicants));
   useEffect(() => { if (open && !applicants) load(); }, [open]);
@@ -271,6 +273,7 @@ function JobApplicants({ jobId }: { jobId: string }) {
 
   return (
     <div className="mt-3 border-t border-brand-soft pt-3">
+      {profileId && <WorkerProfileModal workerId={profileId} onClose={() => setProfileId(null)} />}
       <button className="text-sm font-bold text-brand-dark hover:underline" onClick={() => setOpen((o) => !o)}>
         {open ? "إخفاء المتقدمين ▲" : "عرض المتقدمين ▼"}
       </button>
@@ -285,11 +288,11 @@ function JobApplicants({ jobId }: { jobId: string }) {
             {applicants.map((a) => (
               <div key={a.id} className="rounded-lg bg-brand-bg p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-3">
+                  <button className="flex items-center gap-3 text-right" onClick={() => setProfileId(a.worker_user_id)}>
                     <Avatar src={fileUrl(a.photo_key)} name={a.full_name} size={44} />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-brand-darkest">{a.full_name || "باحث عن عمل"}</span>
+                        <span className="font-bold text-brand-darkest hover:underline">{a.full_name || "باحث عن عمل"}</span>
                         {a.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-brand">
@@ -297,7 +300,7 @@ function JobApplicants({ jobId }: { jobId: string }) {
                         {a.rating != null && <StarRating value={a.rating} />}
                       </div>
                     </div>
-                  </div>
+                  </button>
                   <Badge className={APPLICATION_STATUS[a.status]?.cls}>{APPLICATION_STATUS[a.status]?.label}</Badge>
                 </div>
 
@@ -308,12 +311,15 @@ function JobApplicants({ jobId }: { jobId: string }) {
                 )}
                 {a.message && <p className="mt-2 rounded-lg bg-white p-2 text-sm text-brand-dark">{a.message}</p>}
 
-                {a.status === "pending" && (
-                  <div className="mt-3 flex gap-2">
-                    <button className="btn-primary text-xs" onClick={() => act(a, "accepted")}>قبول وإرسال عرض</button>
-                    <button className="btn-ghost text-xs" onClick={() => act(a, "rejected")}>رفض</button>
-                  </div>
-                )}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button className="btn-secondary text-xs" onClick={() => setProfileId(a.worker_user_id)}>عرض البروفايل</button>
+                  {a.status === "pending" && (
+                    <>
+                      <button className="btn-primary text-xs" onClick={() => act(a, "accepted")}>قبول وإرسال عرض</button>
+                      <button className="btn-ghost text-xs" onClick={() => act(a, "rejected")}>رفض</button>
+                    </>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -337,6 +343,7 @@ function TalentTab() {
   const [offerMsg, setOfferMsg] = useState("");
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [profileId, setProfileId] = useState<string | null>(null);
 
   const search = () => {
     setList(null);
@@ -403,13 +410,16 @@ function TalentTab() {
                 {w.work_type && <span>· {labelOf(WORK_TYPES, w.work_type)}</span>}
                 {w.expected_salary && <span>· 💰 {w.expected_salary}</span>}
               </div>
-              <button className="btn-secondary mt-3 self-start" onClick={() => { setOfferTo(w); setOfferMsg(""); }}>
-                إرسال عرض
-              </button>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button className="btn-secondary" onClick={() => setProfileId(w.user_id)}>عرض البروفايل</button>
+                <button className="btn-primary" onClick={() => { setOfferTo(w); setOfferMsg(""); }}>إرسال عرض</button>
+              </div>
             </div>
           ))}
         </div>
       )}
+
+      {profileId && <WorkerProfileModal workerId={profileId} onClose={() => setProfileId(null)} />}
 
       {offerTo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setOfferTo(null)}>
