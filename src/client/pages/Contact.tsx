@@ -40,10 +40,6 @@ export function Contact() {
               <h3 className="text-sm font-bold text-brand-dark">البريد الإلكتروني</h3>
               <p className="mt-1 text-sm text-brand-darkest" data-latin>info@q8work.com</p>
             </div>
-            <div className="card">
-              <h3 className="text-sm font-bold text-brand-dark">الموقع</h3>
-              <p className="mt-1 text-sm text-brand-darkest" data-latin>q8work.com</p>
-            </div>
           </div>
 
           {/* Form */}
