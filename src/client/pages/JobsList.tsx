@@ -110,8 +110,8 @@ export function JobsList() {
               )}
               <div className="mt-4 flex items-center justify-between border-t border-brand-soft pt-3">
                 <span className="text-xs text-brand">المطلوب: {job.headcount}</span>
-                <Link to="/register" className="btn-secondary text-xs">
-                  سجّل لتقديم
+                <Link to={`/jobs/${job.id}`} className="btn-secondary text-xs">
+                  عرض والتقديم
                 </Link>
               </div>
             </div>

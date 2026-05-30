@@ -73,3 +73,9 @@ export const OFFER_STATUS: Record<string, { label: string; cls: string }> = {
   rejected: { label: "مرفوض", cls: "bg-red-100 text-red-700" },
   completed: { label: "مكتمل", cls: "bg-brand-soft text-brand-darkest" },
 };
+
+export const APPLICATION_STATUS: Record<string, { label: string; cls: string }> = {
+  pending: { label: "قيد المراجعة", cls: "bg-amber-100 text-amber-800" },
+  accepted: { label: "مقبول", cls: "bg-emerald-100 text-emerald-800" },
+  rejected: { label: "غير مناسب", cls: "bg-red-100 text-red-700" },
+};

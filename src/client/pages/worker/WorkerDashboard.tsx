@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
@@ -11,9 +12,10 @@ import {
   COMMITMENTS,
   labelOf,
   OFFER_STATUS,
+  APPLICATION_STATUS,
 } from "../../lib/constants";
 
-type Tab = "profile" | "offers" | "messages" | "ratings";
+type Tab = "profile" | "applications" | "offers" | "messages" | "ratings";
 
 interface WorkerProfile {
   full_name: string;
@@ -321,6 +323,52 @@ function RatingsTab() {
   );
 }
 
+interface Application {
+  id: string;
+  status: keyof typeof APPLICATION_STATUS;
+  message: string;
+  created_at: number;
+  job_id: string;
+  job_title: string;
+  area: string;
+  salary: string;
+  job_status: string;
+  company_name: string;
+  company_verified: number;
+}
+
+function ApplicationsTab() {
+  const [apps, setApps] = useState<Application[] | null>(null);
+  useEffect(() => { api.get<{ applications: Application[] }>("/applications/mine").then((r) => setApps(r.applications)); }, []);
+
+  if (!apps) return <div className="py-10 text-center"><Spinner /></div>;
+  if (apps.length === 0)
+    return <EmptyState title="لم تتقدّم لأي فرصة بعد" hint="تصفّح فرص العمل وقدّم على ما يناسبك." />;
+
+  return (
+    <div className="space-y-3">
+      {apps.map((a) => (
+        <div key={a.id} className="card">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <Link to={`/jobs/${a.job_id}`} className="font-bold text-brand-darkest hover:underline">
+                {a.job_title}
+              </Link>
+              <p className="text-sm font-semibold text-brand">{a.company_name}</p>
+            </div>
+            <Badge className={APPLICATION_STATUS[a.status]?.cls}>{APPLICATION_STATUS[a.status]?.label}</Badge>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2 text-xs">
+            {a.area && <span className="chip">📍 {a.area}</span>}
+            {a.salary && <span className="chip">💰 {a.salary}</span>}
+          </div>
+          {a.message && <p className="mt-2 rounded-lg bg-brand-bg p-3 text-sm text-brand-dark">{a.message}</p>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function WorkerDashboard() {
   const [tab, setTab] = useState<Tab>("profile");
   const [bump, setBump] = useState(0);
@@ -328,7 +376,7 @@ export function WorkerDashboard() {
   return (
     <Layout wide>
       <h1 className="mb-1 text-2xl font-extrabold text-brand-darkest">لوحة الكويتي</h1>
-      <p className="mb-6 text-brand-dark">أدر ملفك واستقبل عروض العمل</p>
+      <p className="mb-6 text-brand-dark">أدر ملفك وقدّم على الفرص واستقبل العروض</p>
 
       <div className="mb-6">
         <Tabs
@@ -336,6 +384,7 @@ export function WorkerDashboard() {
           onChange={setTab}
           tabs={[
             { id: "profile", label: "البروفايل" },
+            { id: "applications", label: "تقديماتي" },
             { id: "offers", label: "العروض الواردة" },
             { id: "messages", label: "الرسائل" },
             { id: "ratings", label: "تقييماتي" },
@@ -344,6 +393,7 @@ export function WorkerDashboard() {
       </div>
 
       {tab === "profile" && <ProfileTab />}
+      {tab === "applications" && <ApplicationsTab />}
       {tab === "offers" && <OffersTab onChange={() => setBump((b) => b + 1)} />}
       {tab === "messages" && <MessagesPanel key={bump} />}
       {tab === "ratings" && <RatingsTab />}

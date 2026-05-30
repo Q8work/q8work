@@ -4,6 +4,7 @@ import { useAuth } from "./lib/auth";
 import { PageLoader } from "./components/ui";
 import { Home } from "./pages/Home";
 import { JobsList } from "./pages/JobsList";
+import { JobDetail } from "./pages/JobDetail";
 import { Login, Register } from "./pages/Auth";
 import { WorkerDashboard } from "./pages/worker/WorkerDashboard";
 import { CompanyDashboard } from "./pages/company/CompanyDashboard";
@@ -34,6 +35,7 @@ export function App() {
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/jobs" element={<JobsList />} />
+      <Route path="/jobs/:id" element={<JobDetail />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/app" element={<Dashboard />} />

@@ -7,6 +7,7 @@ import workers from "./routes/workers";
 import offers from "./routes/offers";
 import messages from "./routes/messages";
 import ratings from "./routes/ratings";
+import applications from "./routes/applications";
 import admin from "./routes/admin";
 import files from "./routes/files";
 
@@ -20,6 +21,7 @@ api.route("/workers", workers);
 api.route("/offers", offers);
 api.route("/messages", messages);
 api.route("/ratings", ratings);
+api.route("/applications", applications);
 api.route("/admin", admin);
 api.route("/files", files);
 

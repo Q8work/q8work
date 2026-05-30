@@ -110,3 +110,16 @@ CREATE TABLE IF NOT EXISTS ratings (
   created_at    INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_ratings_ratee ON ratings(ratee_user_id);
+
+-- Applications: a worker (الكويتي) applies to a posted job
+CREATE TABLE IF NOT EXISTS applications (
+  id             TEXT PRIMARY KEY,
+  job_id         TEXT NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+  worker_user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  message        TEXT NOT NULL DEFAULT '',
+  status         TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'rejected')),
+  created_at     INTEGER NOT NULL,
+  UNIQUE (job_id, worker_user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_applications_job ON applications(job_id);
+CREATE INDEX IF NOT EXISTS idx_applications_worker ON applications(worker_user_id);
