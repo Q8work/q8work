@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { Layout } from "../../components/Layout";
-import { Tabs, Spinner, EmptyState, Badge } from "../../components/ui";
+import { Tabs, Spinner, EmptyState, Badge, StarRating } from "../../components/ui";
 import { api, fileUrl } from "../../lib/api";
 
-type Tab = "overview" | "users" | "companies";
+type Tab = "overview" | "users" | "companies" | "jobs" | "ratings";
+
+const fmtDate = (ms?: number) =>
+  ms ? new Intl.DateTimeFormat("ar-KW", { dateStyle: "medium" }).format(new Date(ms)) : "—";
+
+const roleLabel = (r: string) => ({ worker: "كويتي", company: "شركة", admin: "إدارة" }[r] || r);
 
 interface Stats {
   workers: number; companies: number; jobs: number; open_jobs: number;
@@ -47,6 +52,7 @@ interface AdminUser {
 function UsersTab() {
   const [users, setUsers] = useState<AdminUser[] | null>(null);
   const [role, setRole] = useState("");
+  const [detailId, setDetailId] = useState<string | null>(null);
   const load = () => {
     setUsers(null);
     const qs = new URLSearchParams();
@@ -64,10 +70,9 @@ function UsersTab() {
     load();
   };
 
-  const roleLabel = (r: string) => ({ worker: "كويتي", company: "شركة", admin: "إدارة" }[r] || r);
-
   return (
     <div className="space-y-4">
+      {detailId && <UserDetailModal id={detailId} onClose={() => setDetailId(null)} />}
       <div className="flex gap-2">
         {["", "worker", "company"].map((r) => (
           <button key={r} onClick={() => setRole(r)}
@@ -102,8 +107,12 @@ function UsersTab() {
                     </Badge>
                   </td>
                   <td className="p-3">
+                    <div className="flex flex-wrap gap-1">
+                      <button onClick={() => setDetailId(u.id)} className="rounded-lg bg-brand-soft px-2 py-1 text-xs font-bold text-brand-darkest cursor-pointer hover:bg-brand-light">
+                        تفاصيل
+                      </button>
                     {u.role !== "admin" && (
-                      <div className="flex flex-wrap gap-1">
+                      <>
                         <button onClick={() => toggleStatus(u)} className="rounded-lg bg-brand-soft px-2 py-1 text-xs font-bold text-brand-darkest cursor-pointer hover:bg-brand-light">
                           {u.status === "active" ? "إيقاف" : "تفعيل"}
                         </button>
@@ -117,8 +126,9 @@ function UsersTab() {
                             توثيق الجنسية
                           </button>
                         )}
-                      </div>
+                      </>
                     )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -167,23 +177,217 @@ function CompaniesTab() {
   );
 }
 
+// ---- Account detail modal ----
+
+interface AccountDetail {
+  user: { id: string; email: string; role: string; status: string; created_at: number };
+  profile: any;
+  avg: number | null;
+  stats: Record<string, number>;
+}
+
+function Row({ label, value }: { label: string; value: React.ReactNode }) {
+  if (value === undefined || value === null || value === "") return null;
+  return (
+    <div className="flex justify-between gap-4 border-b border-brand-soft py-1.5 text-sm last:border-0">
+      <span className="font-semibold text-brand-dark">{label}</span>
+      <span className="text-left text-brand-darkest">{value}</span>
+    </div>
+  );
+}
+
+function UserDetailModal({ id, onClose }: { id: string; onClose: () => void }) {
+  const [d, setD] = useState<AccountDetail | null>(null);
+  useEffect(() => { api.get<AccountDetail>(`/admin/users/${id}`).then(setD); }, [id]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-extrabold text-brand-darkest">تفاصيل الحساب</h3>
+          <button onClick={onClose} className="btn-ghost px-3 py-1">إغلاق</button>
+        </div>
+        {!d ? (
+          <div className="py-10 text-center"><Spinner /></div>
+        ) : (
+          <div className="space-y-4">
+            <div>
+              <Row label="النوع" value={roleLabel(d.user.role)} />
+              <Row label="البريد" value={<span data-latin>{d.user.email}</span>} />
+              <Row label="الحالة" value={d.user.status === "active" ? "نشط" : "موقوف"} />
+              <Row label="تاريخ التسجيل" value={fmtDate(d.user.created_at)} />
+              <Row label="متوسط التقييم" value={<StarRating value={d.avg} count={d.stats.rating_count} />} />
+            </div>
+
+            {d.user.role === "worker" && d.profile && (
+              <div className="rounded-lg bg-brand-bg p-3">
+                <Row label="الاسم" value={d.profile.full_name} />
+                <Row label="المحافظة" value={d.profile.area} />
+                <Row label="الهاتف" value={d.profile.phone ? <span data-latin>{d.profile.phone}</span> : ""} />
+                <Row label="الرقم المدني" value={d.profile.civil_id ? <span data-latin>{d.profile.civil_id}</span> : ""} />
+                <Row label="توثيق الجنسية" value={d.profile.civil_id_verified ? "✓ موثّق" : "غير موثّق"} />
+                <Row label="المهارات" value={(d.profile.skills || []).join("، ")} />
+                <Row label="عروض مستلمة" value={d.stats.offers_received} />
+                {d.profile.civil_id_image_key && (
+                  <Row label="صورة الهوية" value={<a className="font-bold text-brand-dark underline" href={fileUrl(d.profile.civil_id_image_key)} target="_blank" rel="noopener noreferrer">عرض</a>} />
+                )}
+              </div>
+            )}
+
+            {d.user.role === "company" && d.profile && (
+              <div className="rounded-lg bg-brand-bg p-3">
+                <Row label="اسم الشركة" value={d.profile.company_name} />
+                <Row label="القطاع" value={d.profile.sector} />
+                <Row label="مسؤول التواصل" value={d.profile.contact_name} />
+                <Row label="هاتف التواصل" value={d.profile.contact_phone ? <span data-latin>{d.profile.contact_phone}</span> : ""} />
+                <Row label="موثّقة" value={d.profile.verified ? "✓ نعم" : "لا"} />
+                <Row label="فرص منشورة" value={d.stats.jobs_posted} />
+                <Row label="عروض مُرسلة" value={d.stats.offers_sent} />
+                {d.profile.commercial_registry_key && (
+                  <Row label="السجل التجاري" value={<a className="font-bold text-brand-dark underline" href={fileUrl(d.profile.commercial_registry_key)} target="_blank" rel="noopener noreferrer">عرض</a>} />
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---- Jobs moderation ----
+
+interface AdminJob {
+  id: string; title: string; area: string; status: string; headcount: number;
+  created_at: number; company_name: string | null; company_verified: number | null;
+}
+
+function JobsTab() {
+  const [jobs, setJobs] = useState<AdminJob[] | null>(null);
+  const [status, setStatus] = useState("");
+  const load = () => {
+    setJobs(null);
+    const qs = status ? `?status=${status}` : "";
+    api.get<{ jobs: AdminJob[] }>(`/admin/jobs${qs}`).then((r) => setJobs(r.jobs));
+  };
+  useEffect(() => { load(); }, [status]);
+
+  const toggle = async (j: AdminJob) => {
+    await api.patch(`/admin/jobs/${j.id}`, { status: j.status === "open" ? "closed" : "open" });
+    load();
+  };
+  const remove = async (j: AdminJob) => {
+    if (!window.confirm(`حذف فرصة العمل «${j.title}»؟ لا يمكن التراجع.`)) return;
+    await api.del(`/admin/jobs/${j.id}`);
+    load();
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        {[["", "الكل"], ["open", "مفتوحة"], ["closed", "مغلقة"]].map(([v, label]) => (
+          <button key={v} onClick={() => setStatus(v)}
+            className={`rounded-full px-4 py-1.5 text-sm font-bold cursor-pointer ${status === v ? "bg-brand-dark text-white" : "bg-white text-brand-dark ring-1 ring-brand-soft"}`}>
+            {label}
+          </button>
+        ))}
+      </div>
+      {!jobs ? <div className="py-10 text-center"><Spinner /></div> : jobs.length === 0 ? (
+        <EmptyState title="لا توجد فرص عمل" />
+      ) : (
+        jobs.map((j) => (
+          <div key={j.id} className="card flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-brand-darkest">{j.title}</h3>
+                <Badge className={j.status === "open" ? "bg-emerald-100 text-emerald-800" : "bg-gray-200 text-gray-600"}>
+                  {j.status === "open" ? "مفتوحة" : "مغلقة"}
+                </Badge>
+              </div>
+              <p className="mt-1 text-sm text-brand">
+                {j.company_name || "—"} · {j.area || "—"} · {fmtDate(j.created_at)}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button className="btn-ghost" onClick={() => toggle(j)}>
+                {j.status === "open" ? "إغلاق" : "إعادة فتح"}
+              </button>
+              <button className="btn-danger" onClick={() => remove(j)}>حذف</button>
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+
+// ---- Ratings moderation ----
+
+interface AdminRating {
+  id: string; stars: number; comment: string; created_at: number;
+  rater_name: string; ratee_name: string;
+}
+
+function RatingsTab() {
+  const [ratings, setRatings] = useState<AdminRating[] | null>(null);
+  const load = () => {
+    setRatings(null);
+    api.get<{ ratings: AdminRating[] }>("/admin/ratings").then((r) => setRatings(r.ratings));
+  };
+  useEffect(() => { load(); }, []);
+
+  const remove = async (r: AdminRating) => {
+    if (!window.confirm("حذف هذا التقييم؟ لا يمكن التراجع.")) return;
+    await api.del(`/admin/ratings/${r.id}`);
+    load();
+  };
+
+  if (!ratings) return <div className="py-10 text-center"><Spinner /></div>;
+  if (ratings.length === 0) return <EmptyState title="لا توجد تقييمات" />;
+
+  return (
+    <div className="space-y-3">
+      {ratings.map((r) => (
+        <div key={r.id} className="card flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <StarRating value={r.stars} />
+              <span className="text-xs text-brand">{fmtDate(r.created_at)}</span>
+            </div>
+            <p className="mt-1 text-sm font-semibold text-brand-dark">
+              {r.rater_name} ← {r.ratee_name}
+            </p>
+            {r.comment && <p className="mt-1 text-sm text-brand-darkest">{r.comment}</p>}
+          </div>
+          <button className="btn-danger" onClick={() => remove(r)}>حذف</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
+  const changeTab = (t: Tab) => { setTab(t); window.scrollTo(0, 0); };
   return (
     <Layout wide>
       <h1 className="mb-1 text-2xl font-extrabold text-brand-darkest">لوحة الإدارة</h1>
-      <p className="mb-6 text-brand-dark">إدارة المستخدمين والتوثيق والإحصائيات</p>
+      <p className="mb-6 text-brand-dark">إدارة المستخدمين والمحتوى والتوثيق والإحصائيات</p>
       <div className="mb-6">
-        <Tabs active={tab} onChange={setTab}
+        <Tabs active={tab} onChange={changeTab}
           tabs={[
             { id: "overview", label: "نظرة عامة" },
             { id: "users", label: "المستخدمون" },
             { id: "companies", label: "توثيق الشركات" },
+            { id: "jobs", label: "فرص العمل" },
+            { id: "ratings", label: "التقييمات" },
           ]} />
       </div>
       {tab === "overview" && <OverviewTab />}
       {tab === "users" && <UsersTab />}
       {tab === "companies" && <CompaniesTab />}
+      {tab === "jobs" && <JobsTab />}
+      {tab === "ratings" && <RatingsTab />}
     </Layout>
   );
 }

@@ -22,6 +22,11 @@ body {
   padding: 0;
 }
 
+/* Keep anchored/scrolled content clear of the sticky multi-tier header */
+html {
+  scroll-padding-top: 9rem;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-brand-bg);
