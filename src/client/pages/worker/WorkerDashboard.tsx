@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
@@ -369,13 +369,21 @@ function ApplicationsTab() {
   );
 }
 
+const TABS: Tab[] = ["profile", "applications", "offers", "messages", "ratings"];
+
 export function WorkerDashboard() {
-  const [tab, setTab] = useState<Tab>("profile");
+  const [params] = useSearchParams();
+  const tabParam = params.get("tab");
+  const [tab, setTab] = useState<Tab>(TABS.includes(tabParam as Tab) ? (tabParam as Tab) : "profile");
   const [bump, setBump] = useState(0);
+
+  useEffect(() => {
+    if (tabParam && TABS.includes(tabParam as Tab)) setTab(tabParam as Tab);
+  }, [tabParam]);
 
   return (
     <Layout wide>
-      <h1 className="mb-1 text-2xl font-extrabold text-brand-darkest">لوحة الكويتي</h1>
+      <h1 className="mb-1 text-2xl font-extrabold text-brand-darkest">حسابي الشخصي</h1>
       <p className="mb-6 text-brand-dark">أدر ملفك وقدّم على الفرص واستقبل العروض</p>
 
       <div className="mb-6">

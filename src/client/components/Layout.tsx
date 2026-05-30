@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Logo } from "./Logo";
+import { NotificationBell } from "./NotificationBell";
 import { useAuth } from "../lib/auth";
 
 function todayArabic(): string {
@@ -55,9 +56,12 @@ export function Navbar() {
           </Link>
           <nav className="flex items-center gap-2">
             {user ? (
-              <button onClick={onLogout} className="btn-secondary">
-                خروج
-              </button>
+              <>
+                {(user.role === "worker" || user.role === "company") && <NotificationBell />}
+                <button onClick={onLogout} className="btn-secondary">
+                  خروج
+                </button>
+              </>
             ) : (
               <>
                 <Link to="/login" className="btn-ghost">

@@ -8,6 +8,7 @@ import offers from "./routes/offers";
 import messages from "./routes/messages";
 import ratings from "./routes/ratings";
 import applications from "./routes/applications";
+import notifications from "./routes/notifications";
 import admin from "./routes/admin";
 import files from "./routes/files";
 
@@ -22,6 +23,7 @@ api.route("/offers", offers);
 api.route("/messages", messages);
 api.route("/ratings", ratings);
 api.route("/applications", applications);
+api.route("/notifications", notifications);
 api.route("/admin", admin);
 api.route("/files", files);
 

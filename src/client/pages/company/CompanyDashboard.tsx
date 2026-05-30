@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge, VerifiedBadge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
@@ -503,8 +504,15 @@ function OffersTab() {
   );
 }
 
+const TABS: Tab[] = ["profile", "jobs", "talent", "offers", "messages"];
+
 export function CompanyDashboard() {
-  const [tab, setTab] = useState<Tab>("profile");
+  const [params] = useSearchParams();
+  const tabParam = params.get("tab");
+  const [tab, setTab] = useState<Tab>(TABS.includes(tabParam as Tab) ? (tabParam as Tab) : "profile");
+  useEffect(() => {
+    if (tabParam && TABS.includes(tabParam as Tab)) setTab(tabParam as Tab);
+  }, [tabParam]);
   return (
     <Layout wide>
       <h1 className="mb-1 text-2xl font-extrabold text-brand-darkest">لوحة الشركة</h1>
