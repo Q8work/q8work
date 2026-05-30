@@ -62,7 +62,7 @@ export function JobsList() {
           onKeyDown={(e) => e.key === "Enter" && update("q", (e.target as HTMLInputElement).value)}
         />
         <select className="input w-auto" value={area} onChange={(e) => update("area", e.target.value)}>
-          <option value="">كل المناطق</option>
+          <option value="">كل المحافظات</option>
           {AREAS.map((a) => (
             <option key={a} value={a}>
               {a}

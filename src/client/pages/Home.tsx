@@ -82,7 +82,7 @@ export function Home() {
       {/* Stats */}
       <section className="mx-auto mt-8 grid max-w-3xl grid-cols-3 gap-4 rounded-xl border border-brand-soft bg-white p-6 shadow-sm">
         <Stat value="مجاناً" label="التسجيل للطرفين" />
-        <Stat value="٦ مناطق" label="تغطية كامل الكويت" />
+        <Stat value="٦ محافظات" label="تغطية كامل الكويت" />
         <Stat value="كويتي ١٠٠٪" label="كفاءات وطنية" />
       </section>
 

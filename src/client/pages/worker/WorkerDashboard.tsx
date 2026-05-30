@@ -118,9 +118,9 @@ function ProfileTab() {
             <input className="input" value={p.full_name} onChange={(e) => set({ full_name: e.target.value })} />
           </div>
           <div>
-            <label className="label">المنطقة</label>
+            <label className="label">المحافظة</label>
             <select className="input" value={p.area} onChange={(e) => set({ area: e.target.value })}>
-              <option value="">اختر المنطقة</option>
+              <option value="">اختر المحافظة</option>
               {AREAS.map((a) => (
                 <option key={a} value={a}>{a}</option>
               ))}

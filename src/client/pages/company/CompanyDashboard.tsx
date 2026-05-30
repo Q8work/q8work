@@ -178,7 +178,7 @@ function JobsTab() {
               <input className="input" value={form.salary} onChange={(e) => setForm({ ...form, salary: e.target.value })} placeholder="مثال: 30 د/يوم" />
             </div>
             <div>
-              <label className="label">المنطقة</label>
+              <label className="label">المحافظة</label>
               <select className="input" value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })}>
                 <option value="">—</option>
                 {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -278,7 +278,7 @@ function TalentTab() {
         <input className="input flex-1 min-w-[180px]" placeholder="بحث بالمهارة أو الاسم..." value={filters.q}
           onChange={(e) => setFilters({ ...filters, q: e.target.value })} onKeyDown={(e) => e.key === "Enter" && search()} />
         <select className="input w-auto" value={filters.area} onChange={(e) => setFilters({ ...filters, area: e.target.value })}>
-          <option value="">كل المناطق</option>
+          <option value="">كل المحافظات</option>
           {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
         </select>
         <select className="input w-auto" value={filters.work_type} onChange={(e) => setFilters({ ...filters, work_type: e.target.value })}>
