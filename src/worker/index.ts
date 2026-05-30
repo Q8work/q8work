@@ -28,6 +28,17 @@ api.route("/admin", admin);
 api.route("/files", files);
 
 api.get("/health", (c) => c.json({ ok: true, env: c.env.ENVIRONMENT }));
+
+// Public platform stats (for the landing page)
+api.get("/stats", async (c) => {
+  const q = async (sql: string) => ((await c.env.DB.prepare(sql).first<any>())?.n ?? 0) as number;
+  return c.json({
+    companies: await q("SELECT COUNT(*) AS n FROM users WHERE role = 'company'"),
+    workers: await q("SELECT COUNT(*) AS n FROM users WHERE role = 'worker'"),
+    jobs: await q("SELECT COUNT(*) AS n FROM jobs"),
+    open_jobs: await q("SELECT COUNT(*) AS n FROM jobs WHERE status = 'open'"),
+  });
+});
 api.notFound((c) => c.json({ error: "المسار غير موجود." }, 404));
 api.onError((err, c) => {
   console.error("API error:", err);
