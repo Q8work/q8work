@@ -31,7 +31,8 @@ admin.get("/users", requireAuth("admin"), async (c) => {
 
   const rows = await c.env.DB.prepare(
     `SELECT u.id, u.email, u.role, u.status, u.created_at,
-            wp.full_name AS worker_name,
+            wp.full_name AS worker_name, wp.phone AS worker_phone,
+            wp.civil_id_image_key, wp.civil_id_verified,
             cp.company_name, cp.verified AS company_verified
        FROM users u
        LEFT JOIN worker_profiles wp ON wp.user_id = u.id

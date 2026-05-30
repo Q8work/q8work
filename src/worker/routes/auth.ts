@@ -15,13 +15,16 @@ const auth = new Hono<{ Bindings: Env; Variables: Variables }>();
 // POST /api/auth/register
 auth.post("/register", async (c) => {
   const body = await c.req.json().catch(() => ({}));
-  const { email, password, role, name } = body as Record<string, unknown>;
+  const { email, password, role, name, phone } = body as Record<string, unknown>;
 
   if (!isEmail(email)) return c.json({ error: "بريد إلكتروني غير صالح." }, 400);
   if (!isNonEmptyString(password) || (password as string).length < 6)
     return c.json({ error: "كلمة المرور يجب أن تكون 6 أحرف على الأقل." }, 400);
   if (role !== "worker" && role !== "company")
     return c.json({ error: "نوع الحساب غير صالح." }, 400);
+  // رقم الهاتف إلزامي للباحث عن عمل
+  if (role === "worker" && !isNonEmptyString(phone))
+    return c.json({ error: "رقم الهاتف مطلوب." }, 400);
 
   const emailLc = (email as string).toLowerCase();
   const existing = await c.env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(emailLc).first();
@@ -40,9 +43,9 @@ auth.post("/register", async (c) => {
   const displayName = isNonEmptyString(name) ? (name as string) : "";
   if (role === "worker") {
     await c.env.DB.prepare(
-      "INSERT INTO worker_profiles (user_id, full_name, created_at) VALUES (?, ?, ?)"
+      "INSERT INTO worker_profiles (user_id, full_name, phone, created_at) VALUES (?, ?, ?, ?)"
     )
-      .bind(id, displayName, now)
+      .bind(id, displayName, (phone as string).trim(), now)
       .run();
   } else {
     await c.env.DB.prepare(

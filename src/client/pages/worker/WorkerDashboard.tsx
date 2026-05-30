@@ -23,6 +23,7 @@ interface WorkerProfile {
   area: string;
   phone: string;
   civil_id: string;
+  civil_id_image_key: string | null;
   civil_id_verified: number;
   availability: string[];
   work_type: string;
@@ -81,6 +82,13 @@ function ProfileTab() {
     if (!file) return;
     const r = await api.upload<{ key: string }>("/profile/upload?kind=photo", file);
     set({ photo_key: r.key });
+  };
+
+  const onCivilId = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const r = await api.upload<{ key: string }>("/profile/upload?kind=civil_id", file);
+    set({ civil_id_image_key: r.key });
   };
 
   return (
@@ -176,6 +184,23 @@ function ProfileTab() {
           <div>
             <label className="label">الرقم المدني <span className="font-normal text-brand">(للتحقق من الجنسية)</span></label>
             <input className="input" value={p.civil_id} onChange={(e) => set({ civil_id: e.target.value })} />
+          </div>
+        </div>
+
+        <div>
+          <label className="label">صورة الهوية المدنية <span className="font-normal text-brand">(الإدارة فقط · لا تظهر للشركات)</span></label>
+          <div className="flex items-center gap-3">
+            {p.civil_id_image_key ? (
+              <a href={fileUrl(p.civil_id_image_key)} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-brand-dark underline">
+                عرض الصورة الحالية
+              </a>
+            ) : (
+              <span className="text-sm text-brand">لم تُرفع صورة بعد</span>
+            )}
+            <label className="btn-secondary cursor-pointer">
+              {p.civil_id_image_key ? "تغيير الصورة" : "رفع صورة"}
+              <input type="file" accept="image/*" className="hidden" onChange={onCivilId} />
+            </label>
           </div>
         </div>
 

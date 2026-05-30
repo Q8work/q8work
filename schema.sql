@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS worker_profiles (
   area               TEXT NOT NULL DEFAULT '',     -- المنطقة الجغرافية
   phone              TEXT NOT NULL DEFAULT '',     -- shown to company only after acceptance
   civil_id           TEXT NOT NULL DEFAULT '',     -- الرقم المدني
+  civil_id_image_key TEXT,                          -- صورة الهوية المدنية (R2)
   civil_id_verified  INTEGER NOT NULL DEFAULT 0,
   availability       TEXT NOT NULL DEFAULT '[]',   -- JSON: ["morning","evening","weekend"]
   work_type          TEXT NOT NULL DEFAULT '',     -- field | office | remote

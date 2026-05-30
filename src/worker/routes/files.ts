@@ -14,8 +14,8 @@ files.get("/*", async (c) => {
   const user = await getUserFromSession(c, c.env);
   if (!user) return c.json({ error: "غير مصرح." }, 401);
 
-  // Registry documents (السجل التجاري) are sensitive: owner or admin only.
-  if (kind === "registry" && user.role !== "admin" && user.id !== ownerId) {
+  // Sensitive documents (السجل التجاري · صورة الهوية): owner or admin only.
+  if ((kind === "registry" || kind === "civil_id") && user.role !== "admin" && user.id !== ownerId) {
     return c.json({ error: "لا تملك صلاحية الوصول لهذا الملف." }, 403);
   }
 

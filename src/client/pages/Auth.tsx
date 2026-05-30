@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { ErrorText, Spinner } from "../components/ui";
 import { useAuth } from "../lib/auth";
-import { ApiError } from "../lib/api";
+import { ApiError, api } from "../lib/api";
 
 function AuthShell({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -71,15 +71,25 @@ export function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [idImage, setIdImage] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (role === "worker" && !idImage) {
+      setError("الرجاء إرفاق صورة من الهوية المدنية.");
+      return;
+    }
     setBusy(true);
     try {
-      await register({ email, password, role, name });
+      await register({ email, password, role, name, phone: role === "worker" ? phone : undefined });
+      // ارفع صورة الهوية بعد إنشاء الحساب (الجلسة أصبحت فعّالة)
+      if (role === "worker" && idImage) {
+        await api.upload("/profile/upload?kind=civil_id", idImage);
+      }
       navigate("/app");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "تعذّر إنشاء الحساب.");
@@ -137,6 +147,35 @@ export function Register() {
           />
           <p className="mt-1 text-xs text-brand">6 أحرف على الأقل</p>
         </div>
+
+        {role === "worker" && (
+          <>
+            <div>
+              <label className="label">رقم الهاتف</label>
+              <input
+                className="input"
+                type="tel"
+                inputMode="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="٩٦٥..."
+                required
+              />
+            </div>
+            <div>
+              <label className="label">صورة الهوية المدنية</label>
+              <input
+                className="input file:ml-3 file:rounded-lg file:border-0 file:bg-brand-soft file:px-3 file:py-1 file:text-sm file:font-bold file:text-brand-darkest"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setIdImage(e.target.files?.[0] ?? null)}
+                required
+              />
+              <p className="mt-1 text-xs text-brand">للتحقق من الجنسية · لا تظهر للشركات (الإدارة فقط)</p>
+            </div>
+          </>
+        )}
+
         <button className="btn-primary w-full" disabled={busy}>
           {busy ? <Spinner /> : "إنشاء الحساب"}
         </button>

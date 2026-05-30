@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, Badge } from "../../components/ui";
-import { api } from "../../lib/api";
+import { api, fileUrl } from "../../lib/api";
 
 type Tab = "overview" | "users" | "companies";
 
@@ -39,7 +39,9 @@ function OverviewTab() {
 
 interface AdminUser {
   id: string; email: string; role: string; status: string; created_at: number;
-  worker_name: string | null; company_name: string | null; company_verified: number | null;
+  worker_name: string | null; worker_phone: string | null;
+  civil_id_image_key: string | null; civil_id_verified: number | null;
+  company_name: string | null; company_verified: number | null;
 }
 
 function UsersTab() {
@@ -105,6 +107,11 @@ function UsersTab() {
                         <button onClick={() => toggleStatus(u)} className="rounded-lg bg-brand-soft px-2 py-1 text-xs font-bold text-brand-darkest cursor-pointer hover:bg-brand-light">
                           {u.status === "active" ? "إيقاف" : "تفعيل"}
                         </button>
+                        {u.role === "worker" && u.civil_id_image_key && (
+                          <a href={fileUrl(u.civil_id_image_key)} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-brand-soft px-2 py-1 text-xs font-bold text-brand-darkest cursor-pointer hover:bg-brand-light">
+                            عرض الهوية
+                          </a>
+                        )}
                         {u.role === "worker" && (
                           <button onClick={() => verifyWorker(u)} className="rounded-lg bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-800 cursor-pointer hover:bg-emerald-200">
                             توثيق الجنسية

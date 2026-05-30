@@ -87,6 +87,7 @@ profile.post("/upload", requireAuth("worker", "company"), async (c) => {
   const kind = c.req.query("kind");
   const allowed: Record<string, "worker" | "company"> = {
     photo: "worker",
+    civil_id: "worker",
     logo: "company",
     registry: "company",
   };
@@ -107,6 +108,8 @@ profile.post("/upload", requireAuth("worker", "company"), async (c) => {
   // Persist key on the relevant profile
   if (kind === "photo") {
     await c.env.DB.prepare("UPDATE worker_profiles SET photo_key = ? WHERE user_id = ?").bind(key, user.id).run();
+  } else if (kind === "civil_id") {
+    await c.env.DB.prepare("UPDATE worker_profiles SET civil_id_image_key = ? WHERE user_id = ?").bind(key, user.id).run();
   } else if (kind === "logo") {
     await c.env.DB.prepare("UPDATE company_profiles SET logo_key = ? WHERE user_id = ?").bind(key, user.id).run();
   } else if (kind === "registry") {
