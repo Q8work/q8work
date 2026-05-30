@@ -1,5 +1,42 @@
 @import "tailwindcss";
 
+/* Thmanyah Sans — self-hosted (خط ثمانية) */
+@font-face {
+  font-family: "Thmanyah";
+  src: url("/fonts/thmanyahsans-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah";
+  src: url("/fonts/thmanyahsans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah";
+  src: url("/fonts/thmanyahsans-Medium.woff2") format("woff2");
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah";
+  src: url("/fonts/thmanyahsans-Bold.woff2") format("woff2");
+  font-weight: 700 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah";
+  src: url("/fonts/thmanyahsans-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* Corporate navy palette */
   --color-brand-darkest: #0b1f3a;
@@ -9,7 +46,7 @@
   --color-brand-soft: #e6eef6;
   --color-brand-bg: #f5f8fc;
 
-  --font-sans: "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 :root {
