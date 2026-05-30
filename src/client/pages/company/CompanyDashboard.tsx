@@ -12,6 +12,7 @@ import {
   SECTORS,
   labelOf,
   OFFER_STATUS,
+  APPLICATION_STATUS,
 } from "../../lib/constants";
 
 type Tab = "profile" | "jobs" | "talent" | "offers" | "messages";
@@ -232,8 +233,91 @@ function JobsTab() {
             <button className="btn-ghost mt-3" onClick={() => toggleStatus(j)}>
               {j.status === "open" ? "إغلاق الفرصة" : "إعادة فتح"}
             </button>
+            <JobApplicants jobId={j.id} />
           </div>
         ))
+      )}
+    </div>
+  );
+}
+
+interface Applicant {
+  id: string;
+  status: keyof typeof APPLICATION_STATUS;
+  message: string;
+  created_at: number;
+  worker_user_id: string;
+  full_name: string;
+  area: string;
+  skills: string[];
+  bio: string;
+  photo_key: string | null;
+  civil_id_verified: number;
+  rating: number | null;
+}
+
+function JobApplicants({ jobId }: { jobId: string }) {
+  const [open, setOpen] = useState(false);
+  const [applicants, setApplicants] = useState<Applicant[] | null>(null);
+
+  const load = () => api.get<{ applicants: Applicant[] }>(`/applications/job/${jobId}`).then((r) => setApplicants(r.applicants));
+  useEffect(() => { if (open && !applicants) load(); }, [open]);
+
+  // Accepting sends an offer to the worker automatically (handled server-side).
+  const act = async (a: Applicant, status: "accepted" | "rejected") => {
+    await api.patch(`/applications/${a.id}`, { status });
+    load();
+  };
+
+  return (
+    <div className="mt-3 border-t border-brand-soft pt-3">
+      <button className="text-sm font-bold text-brand-dark hover:underline" onClick={() => setOpen((o) => !o)}>
+        {open ? "إخفاء المتقدمين ▲" : "عرض المتقدمين ▼"}
+      </button>
+
+      {open && (
+        applicants === null ? (
+          <div className="py-4 text-center"><Spinner /></div>
+        ) : applicants.length === 0 ? (
+          <p className="py-3 text-sm text-brand">لا يوجد متقدمون بعد.</p>
+        ) : (
+          <div className="mt-3 space-y-3">
+            {applicants.map((a) => (
+              <div key={a.id} className="rounded-lg bg-brand-bg p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-3">
+                    <Avatar src={fileUrl(a.photo_key)} name={a.full_name} size={44} />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-brand-darkest">{a.full_name || "باحث عن عمل"}</span>
+                        {a.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-brand">
+                        {a.area && <span>📍 {a.area}</span>}
+                        {a.rating != null && <StarRating value={a.rating} />}
+                      </div>
+                    </div>
+                  </div>
+                  <Badge className={APPLICATION_STATUS[a.status]?.cls}>{APPLICATION_STATUS[a.status]?.label}</Badge>
+                </div>
+
+                {a.skills.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {a.skills.map((s) => <span key={s} className="chip">{s}</span>)}
+                  </div>
+                )}
+                {a.message && <p className="mt-2 rounded-lg bg-white p-2 text-sm text-brand-dark">{a.message}</p>}
+
+                {a.status === "pending" && (
+                  <div className="mt-3 flex gap-2">
+                    <button className="btn-primary text-xs" onClick={() => act(a, "accepted")}>قبول وإرسال عرض</button>
+                    <button className="btn-ghost text-xs" onClick={() => act(a, "rejected")}>رفض</button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )
       )}
     </div>
   );

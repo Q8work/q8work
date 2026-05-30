@@ -97,14 +97,34 @@ applications.patch("/:id", requireAuth("company"), async (c) => {
     return c.json({ error: "حالة غير صالحة." }, 400);
 
   const app = await c.env.DB.prepare(
-    `SELECT a.id FROM applications a JOIN jobs j ON j.id = a.job_id
+    `SELECT a.id, a.job_id, a.worker_user_id, a.message
+       FROM applications a JOIN jobs j ON j.id = a.job_id
       WHERE a.id = ? AND j.company_user_id = ?`
   )
     .bind(id, user.id)
-    .first();
+    .first<any>();
   if (!app) return c.json({ error: "الطلب غير موجود." }, 404);
 
   await c.env.DB.prepare("UPDATE applications SET status = ? WHERE id = ?").bind(status, id).run();
+
+  // Accepting an application sends an offer to the worker (existing accept →
+  // phone-reveal flow), unless one already exists for this job + worker.
+  if (status === "accepted") {
+    const existing = await c.env.DB.prepare(
+      "SELECT id FROM offers WHERE company_user_id = ? AND worker_user_id = ? AND job_id = ?"
+    )
+      .bind(user.id, app.worker_user_id, app.job_id)
+      .first();
+    if (!existing) {
+      const now = Date.now();
+      await c.env.DB.prepare(
+        `INSERT INTO offers (id, job_id, company_user_id, worker_user_id, message, status, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)`
+      )
+        .bind(genId("o_"), app.job_id, user.id, app.worker_user_id, "تم قبول طلبك للفرصة. بانتظار تأكيدك.", now, now)
+        .run();
+    }
+  }
   return c.json({ ok: true });
 });
 
