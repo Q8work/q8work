@@ -38,6 +38,7 @@ export function Navbar() {
           <nav className="hidden items-center gap-1 md:flex">
             <NavItem to="/" end>الرئيسية</NavItem>
             <NavItem to="/jobs">فرص العمل</NavItem>
+            <NavItem to="/contact">تواصل معنا</NavItem>
             {user && <NavItem to="/app">لوحتي</NavItem>}
           </nav>
         </div>
@@ -92,8 +93,9 @@ export function Footer() {
           <li><Link to="/jobs" className="hover:text-white">تصفّح الفرص</Link></li>
         </FooterCol>
         <FooterCol title="تواصل معنا">
-          <li data-latin>q8work.com</li>
+          <li><Link to="/contact" className="hover:text-white">صفحة التواصل</Link></li>
           <li data-latin>info@q8work.com</li>
+          <li data-latin>q8work.com</li>
         </FooterCol>
       </div>
       <div className="border-t border-white/10">

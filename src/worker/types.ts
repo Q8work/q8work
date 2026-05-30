@@ -1,10 +1,21 @@
 import type { Context } from "hono";
 
+export interface EmailMessage {
+  to: string;
+  from: { email: string; name?: string };
+  replyTo?: string;
+  subject: string;
+  html?: string;
+  text?: string;
+}
+
 export interface Env {
   DB: D1Database;
   BUCKET: R2Bucket;
   ASSETS: Fetcher;
   ENVIRONMENT: string;
+  // Cloudflare Email Sending binding (optional until the domain is onboarded)
+  EMAIL?: { send: (message: EmailMessage) => Promise<unknown> };
 }
 
 export interface UserRow {

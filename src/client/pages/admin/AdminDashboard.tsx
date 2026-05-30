@@ -3,7 +3,7 @@ import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, Badge, StarRating } from "../../components/ui";
 import { api, fileUrl } from "../../lib/api";
 
-type Tab = "overview" | "users" | "companies" | "jobs" | "ratings";
+type Tab = "overview" | "users" | "companies" | "jobs" | "ratings" | "contact";
 
 const fmtDate = (ms?: number) =>
   ms ? new Intl.DateTimeFormat("ar-KW-u-nu-latn", { dateStyle: "medium" }).format(new Date(ms)) : "—";
@@ -366,6 +366,40 @@ function RatingsTab() {
   );
 }
 
+interface ContactMessage {
+  id: string; name: string; email: string; message: string; delivered: number; created_at: number;
+}
+
+function ContactTab() {
+  const [msgs, setMsgs] = useState<ContactMessage[] | null>(null);
+  useEffect(() => { api.get<{ messages: ContactMessage[] }>("/contact").then((r) => setMsgs(r.messages)); }, []);
+
+  if (!msgs) return <div className="py-10 text-center"><Spinner /></div>;
+  if (msgs.length === 0) return <EmptyState title="لا توجد رسائل تواصل بعد" />;
+
+  return (
+    <div className="space-y-3">
+      {msgs.map((m) => (
+        <div key={m.id} className="card">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <h3 className="font-bold text-brand-darkest">{m.name}</h3>
+              <a href={`mailto:${m.email}`} className="text-sm font-semibold text-brand-dark underline" data-latin>{m.email}</a>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge className={m.delivered ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}>
+                {m.delivered ? "أُرسل بالبريد" : "محفوظ"}
+              </Badge>
+              <span className="text-xs text-brand">{fmtDate(m.created_at)}</span>
+            </div>
+          </div>
+          <p className="mt-2 whitespace-pre-wrap rounded-lg bg-brand-bg p-3 text-sm text-brand-dark">{m.message}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
   const changeTab = (t: Tab) => { setTab(t); window.scrollTo(0, 0); };
@@ -381,6 +415,7 @@ export function AdminDashboard() {
             { id: "companies", label: "توثيق الشركات" },
             { id: "jobs", label: "فرص العمل" },
             { id: "ratings", label: "التقييمات" },
+            { id: "contact", label: "تواصل" },
           ]} />
       </div>
       {tab === "overview" && <OverviewTab />}
@@ -388,6 +423,7 @@ export function AdminDashboard() {
       {tab === "companies" && <CompaniesTab />}
       {tab === "jobs" && <JobsTab />}
       {tab === "ratings" && <RatingsTab />}
+      {tab === "contact" && <ContactTab />}
     </Layout>
   );
 }
