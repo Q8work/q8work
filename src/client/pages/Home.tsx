@@ -5,9 +5,9 @@ import { useAuth } from "../lib/auth";
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="text-center">
-      <div className="text-3xl font-extrabold text-brand-darkest">{value}</div>
-      <div className="text-sm font-semibold text-brand">{label}</div>
+    <div className="flex flex-col items-center text-center">
+      <div className="text-2xl font-extrabold leading-tight text-brand-darkest sm:text-3xl">{value}</div>
+      <div className="mt-2 text-sm font-semibold leading-snug text-brand">{label}</div>
     </div>
   );
 }
