@@ -51,6 +51,21 @@ notifications.get("/", requireAuth("worker", "company"), async (c) => {
     }
   }
 
+  // Common: completed engagements the user hasn't rated yet
+  const awaitingRating = await countOf(
+    c.env,
+    `SELECT COUNT(*) AS n FROM offers o
+      WHERE o.status = 'completed'
+        AND (o.worker_user_id = ? OR o.company_user_id = ?)
+        AND NOT EXISTS (SELECT 1 FROM ratings r WHERE r.offer_id = o.id AND r.rater_user_id = ?)`,
+    user.id,
+    user.id,
+    user.id
+  );
+  if (awaitingRating > 0) {
+    items.push({ type: "rating", label: "أعمال مكتملة بانتظار تقييمك", count: awaitingRating, tab: "offers" });
+  }
+
   const total = items.reduce((sum, i) => sum + i.count, 0);
   return c.json({ total, unread_messages: unreadMessages, items });
 });
