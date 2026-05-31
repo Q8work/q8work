@@ -60,17 +60,17 @@
 }
 
 @theme {
-  /* Brand palette: deep navy + yellow + red */
-  --color-brand-darkest: #020a3a; /* darkest navy: headings, dark sections, button hover */
-  --color-brand-dark: #030d4f;    /* navy: primary buttons, links, active */
-  --color-brand: #5b6480;         /* muted navy-gray: secondary text */
-  --color-brand-light: #b9c0e0;   /* pale navy: soft borders */
-  --color-brand-soft: #ebedf6;    /* very light navy: surfaces / chips */
-  --color-brand-bg: #f7f8fc;      /* faint cool background */
-  --color-gold: #ffc52c;          /* yellow accent (fills, highlights) */
-  --color-gold-soft: #fff1cc;     /* light yellow surface */
-  --color-flame: #fb0c06;         /* red accent (text emphasis) */
-  --color-flame-soft: #ffe2e1;    /* light red surface */
+  /* coolors-style: clean black & white, color expressed via palette bars */
+  --color-brand-darkest: #0b0b0d; /* near-black: headings, dark sections, button hover */
+  --color-brand-dark: #17191f;    /* near-black: primary buttons, active */
+  --color-brand: #6b7280;         /* gray: secondary/muted text */
+  --color-brand-light: #d6d8dc;   /* light gray */
+  --color-brand-soft: #eef0f2;    /* surfaces / borders / chips */
+  --color-brand-bg: #ffffff;      /* white page background */
+  --color-gold: #ffc52c;          /* yellow accent */
+  --color-gold-soft: #fff1cc;
+  --color-flame: #fb0c06;         /* red accent */
+  --color-flame-soft: #ffe2e1;
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Thmanyah", "Cairo", ui-sans-serif, sans-serif;
@@ -111,7 +111,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply btn bg-gold text-brand-darkest hover:brightness-95;
+    @apply btn bg-brand-dark text-white hover:bg-brand-darkest;
   }
   .btn-secondary {
     @apply btn bg-white text-brand-darkest border border-brand-light hover:bg-brand-soft;

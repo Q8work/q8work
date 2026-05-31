@@ -31,7 +31,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-brand-soft bg-white/95 backdrop-blur">
-      <div className="h-1 w-full bg-gold" />
+      <div className="h-1.5 w-full" style={{ background: "linear-gradient(90deg,#030D4F,#1F6FEB,#10B5A4,#FFC52C,#FB0C06)" }} />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <div className="flex items-center gap-6">
           <Link to="/"><Logo /></Link>

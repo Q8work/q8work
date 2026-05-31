@@ -48,17 +48,28 @@ export function Home() {
 
   const num = (v?: number) => (v == null ? "—" : v.toLocaleString("en-US"));
   const popular = ["مبيعات", "كاشير", "تسويق", "تصميم", "خدمة عملاء"];
+  const palette = ["#030D4F", "#1F6FEB", "#10B5A4", "#FFC52C", "#FB0C06"];
 
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="rounded-2xl bg-gradient-to-b from-brand-soft to-white px-6 py-16 text-center sm:py-20">
-        <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-5xl">
+      <section className="rounded-2xl border border-brand-soft bg-white px-6 py-14 text-center sm:py-16">
+        <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-6xl">
           فرصتك الجزئية القادمة <span className="text-flame">تبدأ هنا</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-brand">
           منصة العمل الجزئي للكويتيين — تصفّح آلاف الفرص وتواصل مع الشركات مباشرة.
         </p>
+
+        {/* coolors-style palette bar */}
+        <div className="mx-auto mt-8 flex h-24 max-w-2xl overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 sm:h-28">
+          {palette.map((c) => (
+            <div key={c} className="group relative flex-1 transition-[flex] duration-300 hover:flex-[1.4]" style={{ background: c }}>
+              <span className="absolute inset-x-0 bottom-2 text-center font-mono text-[10px] font-bold uppercase text-white/0 transition-colors group-hover:text-white/90" data-latin>{c}</span>
+            </div>
+          ))}
+        </div>
+
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
           className="mx-auto mt-8 flex max-w-xl gap-2 rounded-xl border border-brand-soft bg-white p-2 shadow-sm"
