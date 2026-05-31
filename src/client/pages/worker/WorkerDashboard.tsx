@@ -175,7 +175,7 @@ function ProfileTab() {
             </select>
           </div>
           <div>
-            <label className="label">الراتب المتوقع (د.ك)</label>
+            <label className="label">المكافأة المتوقعة (د.ك)</label>
             <div className="relative">
               <input type="number" min={0} step="0.5" className="input pl-12" value={p.expected_salary} onChange={(e) => set({ expected_salary: e.target.value })} placeholder="مثال: 5" />
               <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm font-semibold text-brand">د.ك</span>

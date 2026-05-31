@@ -226,7 +226,7 @@ export function JobDetail() {
           <div className="card">
             {job.salary && (
               <div className="mb-2 border-b border-brand-soft pb-3">
-                <div className="text-xs text-brand">الراتب</div>
+                <div className="text-xs text-brand">المكافأة</div>
                 <div className="text-2xl font-extrabold text-brand-darkest">
                   {toLatinDigits(job.salary)} <span className="text-base font-bold">د.ك</span>
                 </div>

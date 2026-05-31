@@ -89,7 +89,7 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                 <div><span className="font-semibold text-brand-dark">الالتزام: </span>{labelOf(COMMITMENTS, p.commitment)}</div>
               )}
               {p.expected_salary && (
-                <div><span className="font-semibold text-brand-dark">الراتب المتوقع: </span>{toLatinDigits(p.expected_salary)} د.ك</div>
+                <div><span className="font-semibold text-brand-dark">المكافأة المتوقعة: </span>{toLatinDigits(p.expected_salary)} د.ك</div>
               )}
               {p.phone_visible && p.phone && (
                 <div><span className="font-semibold text-brand-dark">رقم التواصل: </span><span data-latin>{p.phone}</span></div>

@@ -210,7 +210,7 @@ function JobsTab() {
               </select>
             </div>
             <div>
-              <label className="label">الراتب (د.ك)</label>
+              <label className="label">المكافأة (د.ك)</label>
               <div className="relative">
                 <input type="number" min={0} step="0.5" className="input pl-12" value={form.salary} onChange={(e) => setForm({ ...form, salary: e.target.value })} placeholder="مثال: 30" />
                 <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm font-semibold text-brand">د.ك</span>
