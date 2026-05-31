@@ -54,36 +54,34 @@ export function Home() {
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="overflow-hidden rounded-xl border-t-4 border-gold bg-brand-darkest px-6 py-20 text-center text-white sm:py-28">
-        <div className="mx-auto max-w-3xl">
-          <span className="mb-5 inline-flex items-center gap-3 text-sm font-bold text-gold">
-            <span className="h-px w-8 bg-gold" /> منصة العمل الجزئي للكويتيين <span className="h-px w-8 bg-gold" />
-          </span>
-          <h1 className="text-4xl font-black leading-tight sm:text-6xl">
-            اشتغل بشروطك،<br className="hidden sm:block" /> واختار ساعاتك
+      <section className="overflow-hidden rounded-3xl bg-brand-darkest px-6 py-28 text-center text-white sm:py-40">
+        <div className="mx-auto max-w-4xl">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/50">Q8WORK</span>
+          <h1 className="mt-6 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
+            اشتغل بشروطك،<br /> واختار ساعاتك
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-brand-light">
-            نربط الباحثين عن دخل إضافي بأصحاب العمل بمرونة واحترافية وبدون تعقيدات العقود.
+          <p className="mx-auto mt-7 max-w-xl text-lg text-white/60 sm:text-xl">
+            منصة العمل الجزئي للكويتيين — مرونة، احترافية، وبدون تعقيدات العقود.
           </p>
           <form
             onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
-            className="mx-auto mt-8 flex max-w-lg gap-2 rounded-md bg-white p-2 shadow-lg"
+            className="mx-auto mt-10 flex max-w-lg gap-2 rounded-full bg-white p-1.5"
           >
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="ابحث عن فرصة عمل..."
-              className="flex-1 bg-transparent px-4 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none"
+              className="flex-1 bg-transparent px-5 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none"
             />
             <button type="submit" className="btn-primary">ابحث</button>
           </form>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
             {user ? (
               <Link to="/app" className="btn-secondary">الذهاب إلى لوحتي</Link>
             ) : (
               <>
                 <Link to="/register" className="btn-secondary">سجّل كباحث عن عمل</Link>
-                <Link to="/register" className="inline-flex items-center justify-center rounded-md border border-white/40 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-white/10">
+                <Link to="/register" className="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-white/10">
                   سجّل كشركة
                 </Link>
               </>
@@ -101,14 +99,14 @@ export function Home() {
 
       {/* Big tiles */}
       <section className="mt-6 grid gap-4 md:grid-cols-2">
-        <div className="flex flex-col justify-between rounded-xl border border-brand-soft border-t-4 border-t-gold bg-white p-8 shadow-sm sm:p-10">
+        <div className="flex flex-col justify-between rounded-2xl border border-brand-soft bg-white p-8 sm:p-10">
           <div>
             <h2 className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">للباحث عن عمل</h2>
             <p className="mt-3 max-w-sm text-brand">أنشئ ملفك، قدّم على الفرص، واستقبل عروض الشركات — بدخل إضافي يناسب وقتك.</p>
           </div>
           <Link to="/register" className="btn-primary mt-6 self-start">ابدأ الآن</Link>
         </div>
-        <div className="flex flex-col justify-between rounded-xl bg-brand-darkest p-8 text-white shadow-sm sm:p-10">
+        <div className="flex flex-col justify-between rounded-2xl bg-brand-darkest p-8 text-white sm:p-10">
           <div>
             <h2 className="text-2xl font-extrabold sm:text-3xl">للشركة صاحبة العمل</h2>
             <p className="mt-3 max-w-sm text-brand-light">انشر فرصك، ابحث عن الكفاءات الكويتية، واستقبل المتقدمين وأرسل عروضك مباشرة.</p>
@@ -118,12 +116,12 @@ export function Home() {
       </section>
 
       {/* Sectors */}
-      <section className="mt-16 text-center">
+      <section className="mt-24 text-center">
         <h2 className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">قطاعات متنوّعة</h2>
         <p className="mt-2 text-brand">فرص عمل في مختلف المجالات حول الكويت</p>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {SECTORS.map((s) => (
-            <div key={s} className="rounded-xl border border-brand-soft border-r-4 border-r-gold bg-white p-6 text-center font-bold text-brand-darkest">
+            <div key={s} className="rounded-2xl border border-brand-soft bg-white p-6 text-center font-bold text-brand-darkest">
               {s}
             </div>
           ))}
@@ -131,7 +129,7 @@ export function Home() {
       </section>
 
       {/* Features */}
-      <section className="mt-16">
+      <section className="mt-24">
         <h2 className="text-center text-2xl font-extrabold text-brand-darkest sm:text-3xl">لماذا Q8Work؟</h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Feature icon={Icon.clock} title="مرونة كاملة" body="اختر ساعاتك ونوع العمل الذي يناسب التزاماتك." />
@@ -142,7 +140,7 @@ export function Home() {
       </section>
 
       {/* How it works */}
-      <section className="mt-16">
+      <section className="mt-24">
         <h2 className="text-center text-2xl font-extrabold text-brand-darkest sm:text-3xl">كيف تعمل المنصة؟</h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {[
@@ -160,7 +158,7 @@ export function Home() {
       </section>
 
       {/* CTA */}
-      <section className="mt-16 rounded-[2rem] bg-brand-darkest px-6 py-16 text-center text-white">
+      <section className="mt-24 rounded-[2rem] bg-brand-darkest px-6 py-16 text-center text-white">
         <h2 className="text-3xl font-extrabold">جاهز تبدأ؟</h2>
         <p className="mt-3 text-white/70">انضم اليوم — التسجيل مجاني بالكامل في المرحلة الأولى.</p>
         <Link to={user ? "/app" : "/register"} className="btn-secondary mt-7">ابدأ الآن</Link>

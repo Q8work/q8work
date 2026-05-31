@@ -60,23 +60,18 @@
 }
 
 @theme {
-  /* whitehouse-inspired: deep navy + gold accent + cream */
-  --color-brand-darkest: #0a2342; /* deep navy: headings, dark sections, footer */
-  --color-brand-dark: #14315c;    /* navy: primary buttons, links, active */
-  --color-brand: #5b6472;         /* slate gray: secondary/muted text */
-  --color-brand-light: #aebfd4;   /* muted blue */
-  --color-brand-soft: #e7ebf1;    /* light gray-blue: surfaces / borders / chips */
-  --color-brand-bg: #f7f5ef;      /* warm cream page background */
-  --color-gold: #b8893b;          /* gold accent */
-  --color-gold-soft: #efe6d2;     /* light gold surface */
+  /* NEOM-inspired: minimal monochrome (black / white / grey) */
+  --color-brand-darkest: #0a0a0a; /* near-black: text, dark sections, buttons */
+  --color-brand-dark: #171717;    /* black: button hover, active */
+  --color-brand: #737373;         /* grey: secondary/muted text */
+  --color-brand-light: #d4d4d4;   /* light grey */
+  --color-brand-soft: #ececec;    /* surfaces / borders / chips */
+  --color-brand-bg: #ffffff;      /* white page background */
+  --color-gold: #0a0a0a;          /* (neutralized) accents → black */
+  --color-gold-soft: #f2f2f2;     /* light grey surface */
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: "ThmanyahDisplay", "Thmanyah", Georgia, serif;
-}
-
-/* Serif display for primary headings */
-h1, h2 {
-  font-family: var(--font-display);
+  --font-display: "Thmanyah", "Cairo", ui-sans-serif, sans-serif;
 }
 
 :root {
@@ -108,27 +103,27 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-md px-6 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
 }
 
 @layer components {
   .btn-primary {
-    @apply btn bg-brand-dark text-white hover:bg-brand-darkest;
+    @apply btn bg-brand-darkest text-white hover:bg-brand-dark;
   }
   .btn-secondary {
-    @apply btn bg-gold text-white hover:brightness-95;
+    @apply btn bg-white text-brand-darkest border border-brand-soft hover:bg-brand-soft;
   }
   .btn-ghost {
-    @apply btn bg-transparent text-brand-dark hover:bg-brand-soft;
+    @apply btn bg-transparent text-brand-darkest hover:bg-brand-soft;
   }
   .btn-danger {
-    @apply btn bg-red-700 text-white hover:bg-red-800;
+    @apply btn bg-red-600 text-white hover:bg-red-700;
   }
   .card {
-    @apply rounded-xl bg-white p-6 border border-brand-soft shadow-sm;
+    @apply rounded-2xl bg-white p-6 border border-brand-soft;
   }
   .input {
-    @apply w-full rounded-md border border-brand-light bg-white px-4 py-2.5 text-sm text-brand-darkest placeholder:text-brand/60 focus:border-brand-dark focus:ring-2 focus:ring-brand-soft focus:outline-none;
+    @apply w-full rounded-full border border-brand-light bg-white px-5 py-2.5 text-sm text-brand-darkest placeholder:text-brand/60 focus:border-brand-darkest focus:outline-none;
   }
   .label {
     @apply mb-1.5 block text-sm font-bold text-brand-dark;
