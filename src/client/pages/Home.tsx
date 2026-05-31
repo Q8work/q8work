@@ -4,6 +4,7 @@ import { Layout } from "../components/Layout";
 import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
 import { SECTORS } from "../lib/constants";
+import { KuwaitTowers, Skyline } from "../components/KuwaitArt";
 
 interface Stats {
   companies: number;
@@ -65,35 +66,47 @@ export function Home() {
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-50 to-white px-6 py-16 text-center sm:py-24">
-        <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-6xl">
-          اشتغل بشروطك،<br className="hidden sm:block" /> واختار ساعاتك
-        </h1>
-        <p className="mx-auto mt-5 max-w-xl text-lg text-brand">
-          منصة العمل الجزئي للكويتيين — تربط الباحثين عن دخل إضافي بأصحاب العمل بمرونة واحترافية.
-        </p>
-        <form
-          onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
-          className="mx-auto mt-8 flex max-w-lg gap-2 rounded-full bg-white p-2 shadow-md ring-1 ring-black/5"
-        >
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="ابحث عن فرصة عمل..."
-            className="flex-1 bg-transparent px-4 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none"
-          />
-          <button type="submit" className="btn-primary">ابحث</button>
-        </form>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          {user ? (
-            <Link to="/app" className="btn-primary">الذهاب إلى لوحتي</Link>
-          ) : (
-            <>
-              <Link to="/register" className="btn-primary">سجّل كباحث عن عمل</Link>
-              <Link to="/register" className="btn-secondary">سجّل كشركة</Link>
-            </>
-          )}
+      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-50 to-white px-6 pt-14 sm:px-10">
+        <div className="grid items-center gap-8 md:grid-cols-2">
+          <div className="pb-32 text-center md:pb-16 md:text-right">
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-5xl">
+              اشتغل بشروطك،<br /> واختار ساعاتك
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-lg text-brand md:mx-0">
+              منصة العمل الجزئي للكويتيين — تربط الباحثين عن دخل إضافي بأصحاب العمل بمرونة واحترافية.
+            </p>
+            <form
+              onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
+              className="mx-auto mt-8 flex max-w-lg gap-2 rounded-full bg-white p-2 shadow-md ring-1 ring-black/5 md:mx-0"
+            >
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="ابحث عن فرصة عمل..."
+                className="flex-1 bg-transparent px-4 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none"
+              />
+              <button type="submit" className="btn-primary">ابحث</button>
+            </form>
+            <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
+              {user ? (
+                <Link to="/app" className="btn-primary">الذهاب إلى لوحتي</Link>
+              ) : (
+                <>
+                  <Link to="/register" className="btn-primary">سجّل كباحث عن عمل</Link>
+                  <Link to="/register" className="btn-secondary">سجّل كشركة</Link>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Kuwait Towers illustration */}
+          <div className="relative hidden justify-center md:flex">
+            <KuwaitTowers className="h-72 w-auto drop-shadow-sm" />
+          </div>
         </div>
+
+        {/* Skyline silhouette band */}
+        <Skyline className="pointer-events-none absolute inset-x-0 bottom-0 h-20 w-full text-blue-100/70 md:hidden" />
       </section>
 
       {/* Stats */}
