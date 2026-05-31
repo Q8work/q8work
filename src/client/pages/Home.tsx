@@ -85,6 +85,24 @@ export function Home() {
         ))}
       </section>
 
+      {/* How it works */}
+      <section className="mt-14 rounded-2xl bg-brand-darkest px-6 py-14 text-white">
+        <h2 className="text-center text-2xl font-extrabold">كيف تعمل المنصة؟</h2>
+        <div className="mx-auto mt-10 grid max-w-4xl gap-8 sm:grid-cols-3">
+          {[
+            ["١", "سجّل ملفك", "أنشئ بروفايلك وحدّد مهاراتك وأوقات توفرك."],
+            ["٢", "قدّم على الفرص", "قدّم مباشرة أو تصلك عروض من الشركات."],
+            ["٣", "اعمل وقيّم", "أنجز العمل وتبادل التقييمات لبناء سمعتك."],
+          ].map(([n, t, b]) => (
+            <div key={t} className="text-center">
+              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-sun font-extrabold text-brand-darkest">{n}</div>
+              <h3 className="mt-4 font-bold">{t}</h3>
+              <p className="mt-1 text-sm text-white/60">{b}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Latest jobs */}
       <section className="mt-14">
         <div className="flex items-end justify-between">
@@ -123,24 +141,6 @@ export function Home() {
           </div>
         </section>
       )}
-
-      {/* How it works */}
-      <section className="mt-14 rounded-2xl bg-brand-darkest px-6 py-14 text-white">
-        <h2 className="text-center text-2xl font-extrabold">كيف تعمل المنصة؟</h2>
-        <div className="mx-auto mt-10 grid max-w-4xl gap-8 sm:grid-cols-3">
-          {[
-            ["١", "سجّل ملفك", "أنشئ بروفايلك وحدّد مهاراتك وأوقات توفرك."],
-            ["٢", "قدّم على الفرص", "قدّم مباشرة أو تصلك عروض من الشركات."],
-            ["٣", "اعمل وقيّم", "أنجز العمل وتبادل التقييمات لبناء سمعتك."],
-          ].map(([n, t, b]) => (
-            <div key={t} className="text-center">
-              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-sun font-extrabold text-brand-darkest">{n}</div>
-              <h3 className="mt-4 font-bold">{t}</h3>
-              <p className="mt-1 text-sm text-white/60">{b}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Sectors */}
       <section className="mt-14">
