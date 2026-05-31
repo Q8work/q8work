@@ -52,9 +52,9 @@ export function Home() {
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="rounded-2xl bg-gradient-to-b from-azure-soft to-white px-6 py-16 text-center sm:py-20">
+      <section className="rounded-2xl bg-gradient-to-b from-brand-soft to-white px-6 py-16 text-center sm:py-20">
         <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-5xl">
-          فرصتك الجزئية القادمة <span className="text-gold">تبدأ هنا</span>
+          فرصتك الجزئية القادمة <span className="text-flame">تبدأ هنا</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-brand">
           منصة العمل الجزئي للكويتيين — تصفّح آلاف الفرص وتواصل مع الشركات مباشرة.
@@ -95,7 +95,7 @@ export function Home() {
             ["٣", "اعمل وقيّم", "أنجز العمل وتبادل التقييمات لبناء سمعتك."],
           ].map(([n, t, b]) => (
             <div key={t} className="text-center">
-              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-sun font-extrabold text-brand-darkest">{n}</div>
+              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold font-extrabold text-brand-darkest">{n}</div>
               <h3 className="mt-4 font-bold">{t}</h3>
               <p className="mt-1 text-sm text-white/60">{b}</p>
             </div>

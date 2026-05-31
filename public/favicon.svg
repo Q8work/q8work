@@ -1,18 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3a6684"/>
-      <stop offset="1" stop-color="#60a9dc"/>
-    </linearGradient>
-  </defs>
-  <rect width="48" height="48" rx="13" fill="url(#bg)"/>
+  <rect width="48" height="48" rx="13" fill="#030d4f"/>
   <!-- secondary tower -->
   <rect x="14.4" y="21" width="3" height="17" rx="1.5" fill="#ffffff" opacity="0.9"/>
   <path d="M15.9 15 L17.4 21 H14.4 Z" fill="#ffffff" opacity="0.9"/>
-  <circle cx="15.9" cy="25" r="3.9" fill="#ffdd63"/>
+  <circle cx="15.9" cy="25" r="3.9" fill="#ffc52c"/>
   <!-- main tower -->
   <rect x="28" y="13" width="4" height="25" rx="2" fill="#ffffff"/>
   <path d="M30 7 L33 13 H27 Z" fill="#ffffff"/>
   <circle cx="30" cy="27.5" r="6.6" fill="#ffffff"/>
-  <circle cx="30" cy="16.5" r="3.2" fill="#ff9b65"/>
+  <circle cx="30" cy="16.5" r="3.2" fill="#fb0c06"/>
 </svg>
