@@ -108,11 +108,13 @@ export function Footer() {
   );
 }
 
-export function Layout({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
+export function Layout({ children, wide = false, bare = false }: { children: ReactNode; wide?: boolean; bare?: boolean }) {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className={`mx-auto w-full flex-1 px-4 py-8 ${wide ? "max-w-6xl" : "max-w-4xl"}`}>{children}</main>
+      <main className={bare ? "w-full flex-1" : `mx-auto w-full flex-1 px-4 py-8 ${wide ? "max-w-6xl" : "max-w-4xl"}`}>
+        {children}
+      </main>
       <Footer />
     </div>
   );
