@@ -3,6 +3,7 @@ import { api, fileUrl } from "../lib/api";
 import { Avatar, Badge, Spinner, StarRating, VerifiedBadge } from "./ui";
 import { WORK_TYPES, COMMITMENTS, AVAILABILITY, labelOf } from "../lib/constants";
 import { IconPin } from "./icons";
+import { toLatinDigits } from "../lib/format";
 
 interface WorkerProfile {
   user_id: string;
@@ -88,7 +89,7 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                 <div><span className="font-semibold text-brand-dark">الالتزام: </span>{labelOf(COMMITMENTS, p.commitment)}</div>
               )}
               {p.expected_salary && (
-                <div><span className="font-semibold text-brand-dark">الراتب المتوقع: </span>{p.expected_salary} د.ك</div>
+                <div><span className="font-semibold text-brand-dark">الراتب المتوقع: </span>{toLatinDigits(p.expected_salary)} د.ك</div>
               )}
               {p.phone_visible && p.phone && (
                 <div><span className="font-semibold text-brand-dark">رقم التواصل: </span><span data-latin>{p.phone}</span></div>

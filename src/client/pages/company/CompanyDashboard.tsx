@@ -6,6 +6,7 @@ import { MessagesPanel } from "../../components/Messages";
 import { WorkerProfileModal } from "../../components/WorkerProfileModal";
 import { IconPin, IconClock, IconCash } from "../../components/icons";
 import { api, fileUrl } from "../../lib/api";
+import { toLatinDigits } from "../../lib/format";
 import {
   SKILLS,
   AREAS,
@@ -264,7 +265,7 @@ function JobsTab() {
             <div className="mt-2 flex flex-wrap gap-2 text-xs">
               {j.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {j.area}</span>}
               {j.duration && <span className="chip gap-1"><IconClock className="h-3.5 w-3.5" /> {labelOf(DURATIONS, j.duration)}</span>}
-              {j.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {j.salary} د.ك</span>}
+              {j.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {toLatinDigits(j.salary)} د.ك</span>}
               <span className="chip">العدد: {j.headcount}</span>
             </div>
             <button className="btn-ghost mt-3" onClick={() => toggleStatus(j)}>
@@ -444,7 +445,7 @@ function TalentTab() {
               <div className="mt-2 flex flex-wrap gap-2 text-xs text-brand">
                 {w.area && <span className="inline-flex items-center gap-1"><IconPin className="h-3 w-3" /> {w.area}</span>}
                 {w.work_type && <span>· {labelOf(WORK_TYPES, w.work_type)}</span>}
-                {w.expected_salary && <span>· {w.expected_salary} د.ك</span>}
+                {w.expected_salary && <span>· {toLatinDigits(w.expected_salary)} د.ك</span>}
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button className="btn-secondary" onClick={() => setProfileId(w.user_id)}>عرض البروفايل</button>

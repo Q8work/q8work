@@ -6,6 +6,7 @@ import { api, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
 import { IconPin, IconBriefcase, IconClock, IconUsers } from "../components/icons";
+import { toLatinDigits } from "../lib/format";
 
 interface Job {
   id: string;
@@ -227,7 +228,7 @@ export function JobDetail() {
               <div className="mb-2 border-b border-brand-soft pb-3">
                 <div className="text-xs text-brand">الراتب</div>
                 <div className="text-2xl font-extrabold text-brand-darkest">
-                  {job.salary} <span className="text-base font-bold">د.ك</span>
+                  {toLatinDigits(job.salary)} <span className="text-base font-bold">د.ك</span>
                 </div>
                 {job.duration && <div className="text-xs text-brand">{labelOf(DURATIONS, job.duration)}</div>}
               </div>

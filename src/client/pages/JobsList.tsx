@@ -5,6 +5,7 @@ import { EmptyState, PageLoader, VerifiedBadge } from "../components/ui";
 import { api } from "../lib/api";
 import { AREAS, WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
 import { IconPin, IconBriefcase, IconClock, IconCash } from "../components/icons";
+import { toLatinDigits } from "../lib/format";
 
 interface Job {
   id: string;
@@ -98,7 +99,7 @@ export function JobsList() {
                 {job.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {job.area}</span>}
                 {job.work_type && <span className="chip gap-1"><IconBriefcase className="h-3.5 w-3.5" /> {labelOf(WORK_TYPES, job.work_type)}</span>}
                 {job.duration && <span className="chip gap-1"><IconClock className="h-3.5 w-3.5" /> {labelOf(DURATIONS, job.duration)}</span>}
-                {job.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {job.salary} د.ك</span>}
+                {job.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {toLatinDigits(job.salary)} د.ك</span>}
               </div>
               {job.skills_required.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">
