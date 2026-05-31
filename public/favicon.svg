@@ -1,9 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <rect width="48" height="48" rx="10" fill="#2C3B30"/>
-  <g fill="none" stroke="#D6E6DC" stroke-width="3.2" stroke-linecap="round">
-    <path d="M24 13 L14 38"/>
-    <path d="M24 13 L34 38"/>
-  </g>
-  <circle cx="24" cy="11" r="4" fill="#9DBDA6"/>
-  <path d="M34 38 l3 4 -5 -1 z" fill="#D6E6DC"/>
+  <defs>
+    <linearGradient id="s" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="ss" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="11" fill="#202124"/>
+  <!-- secondary tower -->
+  <rect x="14" y="19" width="3.4" height="22" rx="1.7" fill="#ffffff" opacity="0.8"/>
+  <path d="M15.7 13 L17.7 19 H13.7 Z" fill="#ffffff" opacity="0.8"/>
+  <circle cx="15.7" cy="25" r="5.6" fill="url(#ss)"/>
+  <!-- main tower -->
+  <rect x="27" y="12" width="4.2" height="29" rx="2.1" fill="#ffffff"/>
+  <path d="M29.1 6 L32 12 H26.2 Z" fill="#ffffff"/>
+  <circle cx="29.1" cy="29" r="8.4" fill="url(#s)"/>
+  <circle cx="29.1" cy="17.5" r="4.2" fill="url(#ss)"/>
 </svg>
