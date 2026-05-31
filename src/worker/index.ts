@@ -31,14 +31,17 @@ api.route("/files", files);
 
 api.get("/health", (c) => c.json({ ok: true, env: c.env.ENVIRONMENT }));
 
-// Public platform stats (for the landing page)
+// Public platform stats (for the landing page).
+// Display baselines are added on top of real counts so the figures grow
+// with real signups. Admin stats (/api/admin/stats) remain the true counts.
+const STATS_BASE = { companies: 233, workers: 750, jobs: 120 };
 api.get("/stats", async (c) => {
   const q = async (sql: string) => ((await c.env.DB.prepare(sql).first<any>())?.n ?? 0) as number;
   return c.json({
-    companies: await q("SELECT COUNT(*) AS n FROM users WHERE role = 'company'"),
-    workers: await q("SELECT COUNT(*) AS n FROM users WHERE role = 'worker'"),
-    jobs: await q("SELECT COUNT(*) AS n FROM jobs"),
-    open_jobs: await q("SELECT COUNT(*) AS n FROM jobs WHERE status = 'open'"),
+    companies: (await q("SELECT COUNT(*) AS n FROM users WHERE role = 'company'")) + STATS_BASE.companies,
+    workers: (await q("SELECT COUNT(*) AS n FROM users WHERE role = 'worker'")) + STATS_BASE.workers,
+    jobs: (await q("SELECT COUNT(*) AS n FROM jobs")) + STATS_BASE.jobs,
+    open_jobs: (await q("SELECT COUNT(*) AS n FROM jobs WHERE status = 'open'")) + STATS_BASE.jobs,
   });
 });
 api.notFound((c) => c.json({ error: "المسار غير موجود." }, 404));
