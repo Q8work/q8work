@@ -52,9 +52,11 @@ function JobBigCard({ job, scheme }: { job: Job; scheme: { bg: string; fg: strin
   return (
     <Link
       to={`/jobs/${job.id}`}
-      className="flex flex-col rounded-2xl p-7 transition hover:brightness-[0.98] sm:p-9"
+      className="group relative flex flex-col overflow-hidden rounded-2xl p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-9"
       style={{ backgroundColor: scheme.bg, color: scheme.fg }}
     >
+      {/* flash / shine sweep on hover */}
+      <span className="pointer-events-none absolute inset-y-0 -left-1/3 z-10 w-1/3 -skew-x-12 bg-white/40 blur-md transition-[transform,opacity] duration-700 ease-out group-hover:translate-x-[450%] group-hover:opacity-0" />
       <h3 className="text-2xl font-extrabold leading-tight sm:text-3xl">{job.title}</h3>
       <p className="mt-3 leading-relaxed opacity-90">
         {job.company_name}
@@ -63,7 +65,7 @@ function JobBigCard({ job, scheme }: { job: Job; scheme: { bg: string; fg: strin
       </p>
       <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold">
         عرض والتقديم
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
       </span>
     </Link>
   );
