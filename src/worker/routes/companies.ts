@@ -25,6 +25,7 @@ companies.get("/:id", async (c) => {
   const id = c.req.param("id");
   const company = await c.env.DB.prepare(
     `SELECT u.id AS user_id, cp.company_name, cp.logo_key, cp.description, cp.sector,
+            cp.website, cp.public_email, cp.instagram, cp.twitter, cp.linkedin,
             cp.verified, cp.created_at,
             (SELECT ROUND(AVG(stars),1) FROM ratings r WHERE r.ratee_user_id = u.id) AS rating,
             (SELECT COUNT(*) FROM ratings r WHERE r.ratee_user_id = u.id) AS rating_count

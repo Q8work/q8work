@@ -28,6 +28,11 @@ interface CompanyProfile {
   contact_name: string;
   contact_phone: string;
   sector: string;
+  website: string;
+  public_email: string;
+  instagram: string;
+  twitter: string;
+  linkedin: string;
   verified: number;
 }
 
@@ -97,6 +102,32 @@ function ProfileTab() {
             <input className="input" value={p.contact_phone} onChange={(e) => set({ contact_phone: e.target.value })} />
           </div>
         </div>
+        <div className="rounded-2xl bg-brand-bg p-4">
+          <h3 className="mb-3 text-sm font-extrabold text-brand-darkest">وسائل التواصل العامة <span className="font-normal text-brand">(تظهر في بروفايل شركتك للزوّار)</span></h3>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="label">الموقع الإلكتروني</label>
+              <input className="input" value={p.website} onChange={(e) => set({ website: e.target.value })} placeholder="https://example.com" dir="ltr" />
+            </div>
+            <div>
+              <label className="label">إيميل التواصل</label>
+              <input className="input" type="email" value={p.public_email} onChange={(e) => set({ public_email: e.target.value })} placeholder="info@example.com" dir="ltr" />
+            </div>
+            <div>
+              <label className="label">إنستغرام</label>
+              <input className="input" value={p.instagram} onChange={(e) => set({ instagram: e.target.value })} placeholder="@username أو رابط" dir="ltr" />
+            </div>
+            <div>
+              <label className="label">إكس (تويتر)</label>
+              <input className="input" value={p.twitter} onChange={(e) => set({ twitter: e.target.value })} placeholder="@username أو رابط" dir="ltr" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="label">لينكدإن</label>
+              <input className="input" value={p.linkedin} onChange={(e) => set({ linkedin: e.target.value })} placeholder="رابط الصفحة" dir="ltr" />
+            </div>
+          </div>
+        </div>
+
         <div>
           <label className="label">السجل التجاري <span className="font-normal text-brand">(للتوثيق)</span></label>
           <div className="flex items-center gap-3">

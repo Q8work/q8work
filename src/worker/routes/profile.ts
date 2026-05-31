@@ -65,7 +65,8 @@ profile.put("/company", requireAuth("company"), async (c) => {
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
   await c.env.DB.prepare(
     `UPDATE company_profiles SET
-       company_name = ?, description = ?, contact_name = ?, contact_phone = ?, sector = ?
+       company_name = ?, description = ?, contact_name = ?, contact_phone = ?, sector = ?,
+       website = ?, public_email = ?, instagram = ?, twitter = ?, linkedin = ?
      WHERE user_id = ?`
   )
     .bind(
@@ -74,6 +75,11 @@ profile.put("/company", requireAuth("company"), async (c) => {
       String(b.contact_name ?? ""),
       String(b.contact_phone ?? ""),
       String(b.sector ?? ""),
+      String(b.website ?? ""),
+      String(b.public_email ?? ""),
+      String(b.instagram ?? ""),
+      String(b.twitter ?? ""),
+      String(b.linkedin ?? ""),
       user.id
     )
     .run();

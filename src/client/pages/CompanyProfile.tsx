@@ -11,10 +11,32 @@ interface Company {
   logo_key: string | null;
   description: string;
   sector: string;
+  website: string;
+  public_email: string;
+  instagram: string;
+  twitter: string;
+  linkedin: string;
   verified: number;
   created_at: number;
   rating: number | null;
   rating_count: number;
+}
+
+const withHttp = (u: string) => (/^https?:\/\//i.test(u) ? u : `https://${u}`);
+const handleUrl = (base: string, v: string) =>
+  /^https?:\/\//i.test(v) ? v : `${base}/${v.replace(/^@/, "")}`;
+
+function ContactLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-4 py-2 text-sm font-bold text-brand-dark hover:bg-brand-light"
+    >
+      {label}
+    </a>
+  );
 }
 
 interface CompanyJob {
@@ -77,6 +99,16 @@ export function CompanyProfile() {
         </div>
         {company.description && (
           <p className="mt-4 whitespace-pre-line leading-relaxed text-brand-dark">{company.description}</p>
+        )}
+
+        {(company.website || company.public_email || company.instagram || company.twitter || company.linkedin) && (
+          <div className="mt-4 flex flex-wrap gap-2 border-t border-brand-soft pt-4">
+            {company.website && <ContactLink href={withHttp(company.website)} label="🌐 الموقع" />}
+            {company.public_email && <ContactLink href={`mailto:${company.public_email}`} label="✉️ البريد" />}
+            {company.instagram && <ContactLink href={handleUrl("https://instagram.com", company.instagram)} label="إنستغرام" />}
+            {company.twitter && <ContactLink href={handleUrl("https://x.com", company.twitter)} label="X" />}
+            {company.linkedin && <ContactLink href={withHttp(company.linkedin)} label="لينكدإن" />}
+          </div>
         )}
       </div>
 

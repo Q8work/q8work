@@ -50,6 +50,11 @@ CREATE TABLE IF NOT EXISTS company_profiles (
   contact_name             TEXT NOT NULL DEFAULT '',
   contact_phone            TEXT NOT NULL DEFAULT '',
   sector                   TEXT NOT NULL DEFAULT '',
+  website                  TEXT NOT NULL DEFAULT '',   -- public website
+  public_email             TEXT NOT NULL DEFAULT '',   -- public contact email
+  instagram                TEXT NOT NULL DEFAULT '',
+  twitter                  TEXT NOT NULL DEFAULT '',   -- X
+  linkedin                 TEXT NOT NULL DEFAULT '',
   verified                 INTEGER NOT NULL DEFAULT 0,
   created_at               INTEGER NOT NULL
 );
