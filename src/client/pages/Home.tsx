@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { Avatar, VerifiedBadge } from "../components/ui";
+import { VerifiedBadge } from "../components/ui";
 import { IconPin, IconBriefcase, IconCash } from "../components/icons";
 import { useAuth } from "../lib/auth";
-import { api, fileUrl } from "../lib/api";
-import { WORK_TYPES, SECTORS, labelOf } from "../lib/constants";
+import { api } from "../lib/api";
+import { labelOf, WORK_TYPES } from "../lib/constants";
 import { toLatinDigits } from "../lib/format";
 
 interface Stats { companies: number; workers: number; jobs: number; open_jobs: number; }
@@ -18,17 +18,39 @@ interface CompanyCard {
   verified: number; open_jobs: number;
 }
 
-function JobCard({ job }: { job: Job }) {
+const PALETTE = ["#FB0C06", "#FFC52C", "#10B5A4", "#1F6FEB", "#030D4F"];
+
+// ---- mini job card used in previews & hero ----
+function MiniJob({ job }: { job: Job }) {
   return (
-    <Link to={`/jobs/${job.id}`} className="group flex flex-col rounded-xl border border-brand-soft bg-white p-5 transition hover:border-brand-light hover:shadow-sm">
-      <h3 className="font-bold text-brand-darkest group-hover:text-brand-dark">{job.title}</h3>
-      <p className="mt-0.5 text-sm font-semibold text-brand">{job.company_name}</p>
-      <div className="mt-3 flex flex-wrap gap-2 text-xs">
-        {job.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {job.area}</span>}
-        {job.work_type && <span className="chip gap-1"><IconBriefcase className="h-3.5 w-3.5" /> {labelOf(WORK_TYPES, job.work_type)}</span>}
-        {job.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {toLatinDigits(job.salary)} د.ك</span>}
+    <div className="rounded-xl border border-brand-soft bg-white p-4 text-right shadow-sm">
+      <div className="flex items-center justify-between gap-2">
+        <h4 className="text-sm font-bold text-brand-darkest">{job.title}</h4>
+        <VerifiedBadge verified={job.company_verified} />
       </div>
-    </Link>
+      <p className="mt-0.5 text-xs font-semibold text-brand">{job.company_name}</p>
+      <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
+        {job.area && <span className="chip gap-1"><IconPin className="h-3 w-3" /> {job.area}</span>}
+        {job.work_type && <span className="chip gap-1"><IconBriefcase className="h-3 w-3" /> {labelOf(WORK_TYPES, job.work_type)}</span>}
+        {job.salary && <span className="chip gap-1"><IconCash className="h-3 w-3" /> {toLatinDigits(job.salary)} د.ك</span>}
+      </div>
+    </div>
+  );
+}
+
+function FeatureRow({ reverse, eyebrow, title, body, cta, to, preview }: {
+  reverse?: boolean; eyebrow: string; title: string; body: string; cta: string; to: string; preview: React.ReactNode;
+}) {
+  return (
+    <section className="grid items-center gap-10 md:grid-cols-2">
+      <div className={reverse ? "md:order-2" : ""}>
+        <span className="text-xs font-bold uppercase tracking-widest text-brand">{eyebrow}</span>
+        <h2 className="mt-3 text-3xl font-extrabold leading-tight text-brand-darkest sm:text-4xl">{title}</h2>
+        <p className="mt-4 text-lg leading-relaxed text-brand">{body}</p>
+        <Link to={to} className="btn-primary mt-6">{cta}</Link>
+      </div>
+      <div className={reverse ? "md:order-1" : ""}>{preview}</div>
+    </section>
   );
 }
 
@@ -42,34 +64,22 @@ export function Home() {
 
   useEffect(() => {
     api.get<Stats>("/stats").then(setStats).catch(() => {});
-    api.get<{ jobs: Job[] }>("/jobs").then((r) => setJobs(r.jobs.slice(0, 6))).catch(() => {});
-    api.get<{ companies: CompanyCard[] }>("/companies").then((r) => setCompanies(r.companies.slice(0, 6))).catch(() => {});
+    api.get<{ jobs: Job[] }>("/jobs").then((r) => setJobs(r.jobs)).catch(() => {});
+    api.get<{ companies: CompanyCard[] }>("/companies").then((r) => setCompanies(r.companies)).catch(() => {});
   }, []);
 
   const num = (v?: number) => (v == null ? "—" : v.toLocaleString("en-US"));
-  const popular = ["مبيعات", "كاشير", "تسويق", "تصميم", "خدمة عملاء"];
-  const palette = ["#030D4F", "#1F6FEB", "#10B5A4", "#FFC52C", "#FB0C06"];
 
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="rounded-2xl border border-brand-soft bg-white px-6 py-14 text-center sm:py-16">
-        <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-6xl">
+      <section className="px-2 pt-10 text-center sm:pt-16">
+        <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-brand-darkest sm:text-6xl">
           فرصتك الجزئية القادمة <span className="text-flame">تبدأ هنا</span>
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-lg text-brand">
+        <p className="mx-auto mt-5 max-w-xl text-lg text-brand">
           منصة العمل الجزئي للكويتيين — تصفّح آلاف الفرص وتواصل مع الشركات مباشرة.
         </p>
-
-        {/* coolors-style palette bar */}
-        <div className="mx-auto mt-8 flex h-24 max-w-2xl overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 sm:h-28">
-          {palette.map((c) => (
-            <div key={c} className="group relative flex-1 transition-[flex] duration-300 hover:flex-[1.4]" style={{ background: c }}>
-              <span className="absolute inset-x-0 bottom-2 text-center font-mono text-[10px] font-bold uppercase text-white/0 transition-colors group-hover:text-white/90" data-latin>{c}</span>
-            </div>
-          ))}
-        </div>
-
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
           className="mx-auto mt-8 flex max-w-xl gap-2 rounded-xl border border-brand-soft bg-white p-2 shadow-sm"
@@ -78,98 +88,111 @@ export function Home() {
             className="flex-1 bg-transparent px-3 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none" />
           <button type="submit" className="btn-primary">ابحث</button>
         </form>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
-          <span className="text-brand">شائع:</span>
-          {popular.map((p) => (
-            <Link key={p} to={`/jobs?q=${encodeURIComponent(p)}`} className="rounded-full border border-brand-soft bg-white px-3 py-1 font-semibold text-brand-dark hover:border-brand-light">{p}</Link>
-          ))}
+        <div className="mt-4 flex flex-wrap justify-center gap-3">
+          <Link to="/register" className="btn-primary">سجّل مجاناً</Link>
+          <Link to="/jobs" className="btn-secondary">استكشف الفرص</Link>
+        </div>
+
+        {/* Big product preview */}
+        <div className="relative mx-auto mt-14 max-w-4xl overflow-hidden rounded-3xl border border-brand-soft bg-brand-bg p-4 shadow-xl sm:p-6">
+          <div className="flex h-3 overflow-hidden rounded-full">
+            {PALETTE.map((c) => <div key={c} className="flex-1" style={{ background: c }} />)}
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {(jobs.length ? jobs.slice(0, 3) : Array.from({ length: 3 })).map((j, i) =>
+              j ? <MiniJob key={(j as Job).id} job={j as Job} /> : <div key={i} className="h-28 rounded-xl border border-brand-soft bg-white" />
+            )}
+          </div>
         </div>
       </section>
 
-      {/* Stats row */}
-      <section className="mt-6 grid grid-cols-3 gap-4 rounded-xl border border-brand-soft bg-white p-6 text-center">
-        {[[num(stats?.companies), "شركة"], [num(stats?.workers), "باحث عن عمل"], [num(stats?.open_jobs), "فرصة متاحة"]].map(([v, l]) => (
-          <div key={l}>
-            <div className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">{v}</div>
-            <div className="mt-1 text-xs font-semibold text-brand sm:text-sm">{l}</div>
+      {/* Trusted by */}
+      <section className="mt-16 border-y border-brand-soft py-8">
+        <p className="text-center text-sm font-semibold uppercase tracking-widest text-brand">شركات تثق بـ Q8Work</p>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+          {(companies.length ? companies.slice(0, 6) : []).map((c) => (
+            <Link key={c.user_id} to={`/companies/${c.user_id}`} className="text-lg font-extrabold text-brand-light transition hover:text-brand-darkest">
+              {c.company_name}
+            </Link>
+          ))}
+          {companies.length === 0 && <span className="text-brand">انضم كأول الشركات على المنصة</span>}
+        </div>
+      </section>
+
+      {/* Stat strip */}
+      <section className="mt-16 grid grid-cols-3 gap-4 text-center">
+        {[[num(stats?.companies), "شركة مسجّلة"], [num(stats?.workers), "باحث عن عمل"], [num(stats?.open_jobs), "فرصة متاحة"]].map(([v, l]) => (
+          <div key={l} className="rounded-2xl border border-brand-soft bg-white py-8">
+            <div className="text-3xl font-extrabold text-brand-darkest sm:text-4xl">{v}</div>
+            <div className="mt-1 text-sm font-semibold text-brand">{l}</div>
           </div>
         ))}
       </section>
 
-      {/* How it works */}
-      <section className="mt-14 rounded-2xl bg-brand-darkest px-6 py-14 text-white">
-        <h2 className="text-center text-2xl font-extrabold">كيف تعمل المنصة؟</h2>
-        <div className="mx-auto mt-10 grid max-w-4xl gap-8 sm:grid-cols-3">
-          {[
-            ["١", "سجّل ملفك", "أنشئ بروفايلك وحدّد مهاراتك وأوقات توفرك."],
-            ["٢", "قدّم على الفرص", "قدّم مباشرة أو تصلك عروض من الشركات."],
-            ["٣", "اعمل وقيّم", "أنجز العمل وتبادل التقييمات لبناء سمعتك."],
-          ].map(([n, t, b]) => (
-            <div key={t} className="text-center">
-              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold font-extrabold text-brand-darkest">{n}</div>
-              <h3 className="mt-4 font-bold">{t}</h3>
-              <p className="mt-1 text-sm text-white/60">{b}</p>
+      {/* Feature rows */}
+      <div className="mt-20 space-y-20">
+        <FeatureRow
+          eyebrow="للباحثين عن عمل"
+          title="ابحث وقدّم على فرص تناسب وقتك"
+          body="أنشئ ملفك، تصفّح آلاف الفرص الجزئية، وقدّم بضغطة — أو دع الشركات تكتشفك وترسل لك عروضها."
+          cta="ابدأ كباحث عن عمل"
+          to="/register"
+          preview={
+            <div className="space-y-3 rounded-3xl bg-flame-soft p-5">
+              {(jobs.length ? jobs.slice(0, 2) : Array.from({ length: 2 })).map((j, i) =>
+                j ? <MiniJob key={(j as Job).id} job={j as Job} /> : <div key={i} className="h-24 rounded-xl bg-white" />
+              )}
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Latest jobs */}
-      <section className="mt-14">
-        <div className="flex items-end justify-between">
-          <h2 className="text-2xl font-extrabold text-brand-darkest">أحدث فرص العمل</h2>
-          <Link to="/jobs" className="text-sm font-bold text-brand-dark hover:underline">عرض الكل ←</Link>
-        </div>
-        {jobs.length === 0 ? (
-          <p className="mt-6 rounded-xl border border-dashed border-brand-light p-8 text-center text-brand">لا توجد فرص منشورة بعد.</p>
-        ) : (
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {jobs.map((j) => <JobCard key={j.id} job={j} />)}
-          </div>
-        )}
-      </section>
-
-      {/* Companies hiring */}
-      {companies.length > 0 && (
-        <section className="mt-14">
-          <div className="flex items-end justify-between">
-            <h2 className="text-2xl font-extrabold text-brand-darkest">شركات تُوظّف الآن</h2>
-            <Link to="/companies" className="text-sm font-bold text-brand-dark hover:underline">كل الشركات ←</Link>
-          </div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {companies.map((c) => (
-              <Link key={c.user_id} to={`/companies/${c.user_id}`} className="flex items-center gap-3 rounded-xl border border-brand-soft bg-white p-4 transition hover:border-brand-light hover:shadow-sm">
-                <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={48} />
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="truncate font-bold text-brand-darkest">{c.company_name}</span>
-                    {c.verified ? <VerifiedBadge verified={1} /> : null}
+          }
+        />
+        <FeatureRow
+          reverse
+          eyebrow="للشركات"
+          title="وظّف الكفاءات الكويتية بسرعة"
+          body="انشر فرصك، استقبل المتقدمين، وفلتر حسب المهارة والمحافظة والتقييم — ثم أرسل عرضك مباشرة."
+          cta="انشر فرصة عمل"
+          to="/register"
+          preview={
+            <div className="space-y-3 rounded-3xl bg-gold-soft p-5">
+              {(companies.length ? companies.slice(0, 3) : Array.from({ length: 3 }, () => null)).map((c, i) => (
+                <div key={i} className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-soft font-bold text-brand-dark">{c ? (c as CompanyCard).company_name.charAt(0) : "؟"}</span>
+                  <div className="flex-1">
+                    <div className="h-2.5 w-2/3 rounded bg-brand-soft" />
+                    <div className="mt-1.5 h-2 w-1/3 rounded bg-brand-soft" />
                   </div>
-                  <span className="text-xs text-brand">{c.open_jobs > 0 ? `${c.open_jobs} فرصة متاحة` : c.sector}</span>
+                  <span className="rounded-md bg-brand-darkest px-2 py-1 text-[11px] font-bold text-white">عرض</span>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Sectors */}
-      <section className="mt-14">
-        <h2 className="text-2xl font-extrabold text-brand-darkest">تصفّح حسب القطاع</h2>
-        <div className="mt-5 flex flex-wrap gap-2">
-          {SECTORS.map((s) => (
-            <Link key={s} to={`/jobs?q=${encodeURIComponent(s)}`} className="rounded-lg border border-brand-soft bg-white px-4 py-2 text-sm font-bold text-brand-darkest hover:border-brand-dark hover:text-brand-dark">{s}</Link>
-          ))}
-        </div>
-      </section>
+              ))}
+            </div>
+          }
+        />
+        <FeatureRow
+          eyebrow="آلية موثوقة"
+          title="ثلاث خطوات من التسجيل إلى العمل"
+          body="سجّل ملفك، قدّم أو استقبل العروض، ثم أنجز العمل وتبادل التقييمات لبناء سمعتك على المنصة."
+          cta="تعرّف أكثر"
+          to="/register"
+          preview={
+            <div className="grid grid-cols-3 gap-3 rounded-3xl bg-brand-darkest p-6">
+              {["١", "٢", "٣"].map((n, i) => (
+                <div key={n} className="text-center">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full font-extrabold text-brand-darkest" style={{ background: PALETTE[i + 1] }}>{n}</div>
+                  <div className="mx-auto mt-3 h-2 w-12 rounded bg-white/20" />
+                </div>
+              ))}
+            </div>
+          }
+        />
+      </div>
 
       {/* CTA */}
-      <section className="mt-14 flex flex-col items-center justify-between gap-4 rounded-2xl border border-brand-soft bg-brand-bg p-10 text-center sm:flex-row sm:text-right">
-        <div>
-          <h2 className="text-2xl font-extrabold text-brand-darkest">جاهز تبدأ؟</h2>
-          <p className="mt-1 text-brand">التسجيل مجاني بالكامل في المرحلة الأولى.</p>
-        </div>
-        <Link to={user ? "/app" : "/register"} className="btn-primary shrink-0">{user ? "الذهاب إلى لوحتي" : "أنشئ حساباً"}</Link>
+      <section className="mt-20 rounded-3xl bg-brand-darkest px-6 py-16 text-center text-white">
+        <h2 className="text-3xl font-extrabold sm:text-4xl">جاهز تبدأ؟</h2>
+        <p className="mt-3 text-white/60">انضم اليوم — التسجيل مجاني بالكامل في المرحلة الأولى.</p>
+        <Link to={user ? "/app" : "/register"} className="mt-7 inline-flex rounded-lg bg-white px-6 py-2.5 text-sm font-bold text-brand-darkest hover:bg-white/90">
+          {user ? "الذهاب إلى لوحتي" : "أنشئ حساباً"}
+        </Link>
       </section>
     </Layout>
   );
