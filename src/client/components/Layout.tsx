@@ -101,7 +101,7 @@ export function Footer() {
       </div>
       <div className="border-t border-brand-soft">
         <div className="mx-auto max-w-6xl px-4 py-4 text-center text-xs text-brand">
-          <span data-latin>© 2025 Q8Work</span> · جميع الحقوق محفوظة
+          <span data-latin>© 2026 Q8Work</span> · جميع الحقوق محفوظة
         </div>
       </div>
     </footer>
