@@ -38,6 +38,7 @@ export function Navbar() {
           <nav className="hidden items-center gap-1 md:flex">
             <NavItem to="/" end>الرئيسية</NavItem>
             <NavItem to="/jobs">فرص العمل</NavItem>
+            <NavItem to="/companies">الشركات</NavItem>
             <NavItem to="/contact">تواصل معنا</NavItem>
             {user && <NavItem to="/app">لوحتي</NavItem>}
           </nav>
@@ -84,6 +85,7 @@ export function Footer() {
         <FooterCol title="روابط سريعة">
           <li><Link to="/" className="hover:text-brand-dark">الرئيسية</Link></li>
           <li><Link to="/jobs" className="hover:text-brand-dark">فرص العمل</Link></li>
+          <li><Link to="/companies" className="hover:text-brand-dark">الشركات</Link></li>
           <li><Link to="/register" className="hover:text-brand-dark">إنشاء حساب</Link></li>
           <li><Link to="/login" className="hover:text-brand-dark">تسجيل الدخول</Link></li>
         </FooterCol>

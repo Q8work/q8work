@@ -5,6 +5,8 @@ import { PageLoader } from "./components/ui";
 import { Home } from "./pages/Home";
 import { JobsList } from "./pages/JobsList";
 import { JobDetail } from "./pages/JobDetail";
+import { CompaniesList } from "./pages/CompaniesList";
+import { CompanyProfile } from "./pages/CompanyProfile";
 import { Contact } from "./pages/Contact";
 import { Login, Register } from "./pages/Auth";
 import { WorkerDashboard } from "./pages/worker/WorkerDashboard";
@@ -37,6 +39,8 @@ export function App() {
       <Route path="/" element={<Home />} />
       <Route path="/jobs" element={<JobsList />} />
       <Route path="/jobs/:id" element={<JobDetail />} />
+      <Route path="/companies" element={<CompaniesList />} />
+      <Route path="/companies/:id" element={<CompanyProfile />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
