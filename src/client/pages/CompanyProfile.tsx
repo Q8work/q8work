@@ -4,6 +4,7 @@ import { Layout } from "../components/Layout";
 import { Avatar, PageLoader, EmptyState, StarRating, VerifiedBadge } from "../components/ui";
 import { api, fileUrl } from "../lib/api";
 import { WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
+import { IconPin, IconBriefcase, IconClock, IconCash } from "../components/icons";
 
 interface Company {
   user_id: string;
@@ -147,10 +148,10 @@ export function CompanyProfile() {
                     <h3 className="font-bold text-brand-darkest">{j.title}</h3>
                     {j.description && <p className="mt-1 line-clamp-2 text-sm text-brand-dark">{j.description}</p>}
                     <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                      {j.area && <span className="chip">📍 {j.area}</span>}
-                      {j.work_type && <span className="chip">{labelOf(WORK_TYPES, j.work_type)}</span>}
-                      {j.duration && <span className="chip">{labelOf(DURATIONS, j.duration)}</span>}
-                      {j.salary && <span className="chip">{j.salary} د.ك</span>}
+                      {j.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {j.area}</span>}
+                      {j.work_type && <span className="chip gap-1"><IconBriefcase className="h-3.5 w-3.5" /> {labelOf(WORK_TYPES, j.work_type)}</span>}
+                      {j.duration && <span className="chip gap-1"><IconClock className="h-3.5 w-3.5" /> {labelOf(DURATIONS, j.duration)}</span>}
+                      {j.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {j.salary} د.ك</span>}
                     </div>
                   </Link>
                 ))}

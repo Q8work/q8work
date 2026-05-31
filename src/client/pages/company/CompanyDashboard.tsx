@@ -4,6 +4,7 @@ import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge, VerifiedBadge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
 import { WorkerProfileModal } from "../../components/WorkerProfileModal";
+import { IconPin, IconClock, IconCash } from "../../components/icons";
 import { api, fileUrl } from "../../lib/api";
 import {
   SKILLS,
@@ -261,9 +262,9 @@ function JobsTab() {
             </div>
             {j.description && <p className="mt-1 text-sm text-brand-dark">{j.description}</p>}
             <div className="mt-2 flex flex-wrap gap-2 text-xs">
-              {j.area && <span className="chip">📍 {j.area}</span>}
-              {j.duration && <span className="chip">{labelOf(DURATIONS, j.duration)}</span>}
-              {j.salary && <span className="chip">{j.salary} د.ك</span>}
+              {j.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {j.area}</span>}
+              {j.duration && <span className="chip gap-1"><IconClock className="h-3.5 w-3.5" /> {labelOf(DURATIONS, j.duration)}</span>}
+              {j.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {j.salary} د.ك</span>}
               <span className="chip">العدد: {j.headcount}</span>
             </div>
             <button className="btn-ghost mt-3" onClick={() => toggleStatus(j)}>
@@ -331,7 +332,7 @@ function JobApplicants({ jobId }: { jobId: string }) {
                         {a.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-brand">
-                        {a.area && <span>📍 {a.area}</span>}
+                        {a.area && <span className="inline-flex items-center gap-1"><IconPin className="h-3 w-3" /> {a.area}</span>}
                         {a.rating != null && <StarRating value={a.rating} />}
                       </div>
                     </div>
@@ -441,7 +442,7 @@ function TalentTab() {
                 {w.skills.slice(0, 5).map((s) => <span key={s} className="chip">{s}</span>)}
               </div>
               <div className="mt-2 flex flex-wrap gap-2 text-xs text-brand">
-                {w.area && <span>📍 {w.area}</span>}
+                {w.area && <span className="inline-flex items-center gap-1"><IconPin className="h-3 w-3" /> {w.area}</span>}
                 {w.work_type && <span>· {labelOf(WORK_TYPES, w.work_type)}</span>}
                 {w.expected_salary && <span>· {w.expected_salary} د.ك</span>}
               </div>

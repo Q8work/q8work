@@ -5,6 +5,7 @@ import { PageLoader, EmptyState, VerifiedBadge, Badge, ErrorText, Spinner } from
 import { api, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
+import { IconPin, IconBriefcase, IconClock, IconUsers } from "../components/icons";
 
 interface Job {
   id: string;
@@ -24,11 +25,11 @@ interface Job {
   created_at: number;
 }
 
-function Fact({ label, value, icon }: { label: string; value: React.ReactNode; icon: string }) {
+function Fact({ label, value, icon }: { label: string; value: React.ReactNode; icon: React.ReactNode }) {
   if (!value) return null;
   return (
     <div className="flex items-center gap-3 py-3">
-      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm" aria-hidden>{icon}</span>
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand-dark">{icon}</span>
       <div>
         <div className="text-xs text-brand">{label}</div>
         <div className="text-sm font-bold text-brand-darkest">{value}</div>
@@ -232,10 +233,10 @@ export function JobDetail() {
               </div>
             )}
             <div className="divide-y divide-brand-soft">
-              <Fact label="المحافظة" value={job.area} icon="📍" />
-              <Fact label="نوع العمل" value={job.work_type ? labelOf(WORK_TYPES, job.work_type) : ""} icon="💼" />
-              <Fact label="المدة" value={job.duration ? labelOf(DURATIONS, job.duration) : ""} icon="🕐" />
-              <Fact label="العدد المطلوب" value={String(job.headcount)} icon="👥" />
+              <Fact label="المحافظة" value={job.area} icon={<IconPin />} />
+              <Fact label="نوع العمل" value={job.work_type ? labelOf(WORK_TYPES, job.work_type) : ""} icon={<IconBriefcase />} />
+              <Fact label="المدة" value={job.duration ? labelOf(DURATIONS, job.duration) : ""} icon={<IconClock />} />
+              <Fact label="العدد المطلوب" value={String(job.headcount)} icon={<IconUsers />} />
             </div>
           </div>
 

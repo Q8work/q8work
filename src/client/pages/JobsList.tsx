@@ -4,6 +4,7 @@ import { Layout } from "../components/Layout";
 import { EmptyState, PageLoader, VerifiedBadge } from "../components/ui";
 import { api } from "../lib/api";
 import { AREAS, WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
+import { IconPin, IconBriefcase, IconClock, IconCash } from "../components/icons";
 
 interface Job {
   id: string;
@@ -94,10 +95,10 @@ export function JobsList() {
               <p className="text-sm font-semibold text-brand">{job.company_name}</p>
               {job.description && <p className="mt-2 line-clamp-3 text-sm text-brand-dark">{job.description}</p>}
               <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                {job.area && <span className="chip">📍 {job.area}</span>}
-                {job.work_type && <span className="chip">{labelOf(WORK_TYPES, job.work_type)}</span>}
-                {job.duration && <span className="chip">{labelOf(DURATIONS, job.duration)}</span>}
-                {job.salary && <span className="chip">{job.salary} د.ك</span>}
+                {job.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {job.area}</span>}
+                {job.work_type && <span className="chip gap-1"><IconBriefcase className="h-3.5 w-3.5" /> {labelOf(WORK_TYPES, job.work_type)}</span>}
+                {job.duration && <span className="chip gap-1"><IconClock className="h-3.5 w-3.5" /> {labelOf(DURATIONS, job.duration)}</span>}
+                {job.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {job.salary} د.ك</span>}
               </div>
               {job.skills_required.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">

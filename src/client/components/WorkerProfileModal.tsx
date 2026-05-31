@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api, fileUrl } from "../lib/api";
 import { Avatar, Badge, Spinner, StarRating, VerifiedBadge } from "./ui";
 import { WORK_TYPES, COMMITMENTS, AVAILABILITY, labelOf } from "../lib/constants";
+import { IconPin } from "./icons";
 
 interface WorkerProfile {
   user_id: string;
@@ -72,7 +73,7 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                   {p.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
                 </div>
                 <div className="mt-1"><StarRating value={p.avg_rating} count={p.rating_count} /></div>
-                {p.area && <p className="mt-1 text-sm text-brand">📍 {p.area}</p>}
+                {p.area && <p className="mt-1 inline-flex items-center gap-1 text-sm text-brand"><IconPin className="h-3.5 w-3.5" /> {p.area}</p>}
               </div>
             </div>
 

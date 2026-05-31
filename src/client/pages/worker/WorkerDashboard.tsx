@@ -4,6 +4,7 @@ import { Layout } from "../../components/Layout";
 import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
 import { api, fileUrl } from "../../lib/api";
+import { IconPin, IconCash } from "../../components/icons";
 import {
   SKILLS,
   AREAS,
@@ -362,8 +363,8 @@ function ApplicationsTab() {
             <Badge className={APPLICATION_STATUS[a.status]?.cls}>{APPLICATION_STATUS[a.status]?.label}</Badge>
           </div>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
-            {a.area && <span className="chip">📍 {a.area}</span>}
-            {a.salary && <span className="chip">{a.salary} د.ك</span>}
+            {a.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {a.area}</span>}
+            {a.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {a.salary} د.ك</span>}
           </div>
           {a.message && <p className="mt-2 rounded-lg bg-brand-bg p-3 text-sm text-brand-dark">{a.message}</p>}
         </div>
