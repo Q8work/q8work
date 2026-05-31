@@ -17,11 +17,28 @@ interface Job {
   skills_required: string[];
   headcount: number;
   status: string;
+  company_user_id: string;
   company_name: string;
   company_verified: number;
   sector: string;
   created_at: number;
 }
+
+function Fact({ label, value, icon }: { label: string; value: React.ReactNode; icon: string }) {
+  if (!value) return null;
+  return (
+    <div className="flex items-center gap-3 py-3">
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm" aria-hidden>{icon}</span>
+      <div>
+        <div className="text-xs text-brand">{label}</div>
+        <div className="text-sm font-bold text-brand-darkest">{value}</div>
+      </div>
+    </div>
+  );
+}
+
+const postedDate = (ms?: number) =>
+  ms ? new Intl.DateTimeFormat("ar-KW-u-nu-latn", { dateStyle: "medium" }).format(new Date(ms)) : "";
 
 function ApplyBox({ job, onApplied }: { job: Job; onApplied: () => void }) {
   const { user, loading } = useAuth();
@@ -141,54 +158,89 @@ export function JobDetail() {
     );
   }
 
+  const isOpen = job.status === "open";
+
   return (
-    <Layout>
-      <Link to="/jobs" className="text-sm font-bold text-brand-dark underline">← كل الفرص</Link>
+    <Layout wide>
+      <Link to="/jobs" className="text-sm font-bold text-brand-dark hover:underline">← كل الفرص</Link>
 
-      <div className="mt-4 card">
-        <div className="flex flex-wrap items-start justify-between gap-2">
+      {/* Header */}
+      <div className="mt-4 overflow-hidden rounded-3xl border border-brand-soft bg-white shadow-sm">
+        <div className="h-2 w-full bg-gradient-to-l from-brand-dark to-brand-darkest" />
+        <div className="flex flex-wrap items-start justify-between gap-3 p-6 sm:p-8">
           <div>
-            <h1 className="text-2xl font-extrabold text-brand-darkest">{job.title}</h1>
-            <p className="mt-1 font-semibold text-brand">{job.company_name}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <VerifiedBadge verified={job.company_verified} />
-            <Badge className={job.status === "open" ? "bg-emerald-100 text-emerald-800" : "bg-gray-200 text-gray-600"}>
-              {job.status === "open" ? "مفتوحة" : "مغلقة"}
+            <Badge className={isOpen ? "bg-emerald-100 text-emerald-800" : "bg-gray-200 text-gray-600"}>
+              {isOpen ? "مفتوحة للتقديم" : "مغلقة"}
             </Badge>
-          </div>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2 text-sm">
-          {job.area && <span className="chip">📍 {job.area}</span>}
-          {job.work_type && <span className="chip">{labelOf(WORK_TYPES, job.work_type)}</span>}
-          {job.duration && <span className="chip">{labelOf(DURATIONS, job.duration)}</span>}
-          {job.salary && <span className="chip">{job.salary} د.ك</span>}
-          {job.sector && <span className="chip bg-brand-bg">{job.sector}</span>}
-          <span className="chip bg-brand-bg">العدد المطلوب: {job.headcount}</span>
-        </div>
-
-        {job.description && (
-          <div className="mt-4">
-            <h2 className="section-title mb-2">تفاصيل الفرصة</h2>
-            <p className="whitespace-pre-line text-brand-dark">{job.description}</p>
-          </div>
-        )}
-
-        {job.skills_required.length > 0 && (
-          <div className="mt-4">
-            <h2 className="section-title mb-2">المهارات المطلوبة</h2>
-            <div className="flex flex-wrap gap-1">
-              {job.skills_required.map((s) => (
-                <span key={s} className="chip bg-brand-bg">{s}</span>
-              ))}
+            <h1 className="mt-3 text-2xl font-extrabold text-brand-darkest sm:text-3xl">{job.title}</h1>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+              <Link to={`/companies/${job.company_user_id}`} className="font-bold text-brand-dark hover:underline">
+                {job.company_name}
+              </Link>
+              <VerifiedBadge verified={job.company_verified} />
+              {job.sector && <span className="text-brand">· {job.sector}</span>}
             </div>
+            {job.created_at ? <p className="mt-2 text-xs text-brand">نُشرت في {postedDate(job.created_at)}</p> : null}
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="mt-4">
-        <ApplyBox job={job} onApplied={() => {}} />
+      {/* Body */}
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        {/* Main */}
+        <div className="space-y-6 lg:col-span-2">
+          <div className="card">
+            <h2 className="mb-3 text-lg font-extrabold text-brand-darkest">تفاصيل الفرصة</h2>
+            {job.description ? (
+              <p className="whitespace-pre-line leading-relaxed text-brand-dark">{job.description}</p>
+            ) : (
+              <p className="text-sm text-brand">لم تضف الشركة وصفاً تفصيلياً لهذه الفرصة.</p>
+            )}
+          </div>
+
+          {job.skills_required.length > 0 && (
+            <div className="card">
+              <h2 className="mb-3 text-lg font-extrabold text-brand-darkest">المهارات المطلوبة</h2>
+              <div className="flex flex-wrap gap-2">
+                {job.skills_required.map((s) => (
+                  <span key={s} className="chip">{s}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="card">
+            <h2 className="mb-1 text-lg font-extrabold text-brand-darkest">عن الشركة</h2>
+            <p className="text-sm text-brand-dark">
+              {job.company_name}
+              {job.company_verified ? " — شركة موثّقة" : ""}
+            </p>
+            <Link to={`/companies/${job.company_user_id}`} className="btn-secondary mt-3">عرض بروفايل الشركة</Link>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <aside className="space-y-6">
+          <div className="card">
+            {job.salary && (
+              <div className="mb-2 border-b border-brand-soft pb-3">
+                <div className="text-xs text-brand">الراتب</div>
+                <div className="text-2xl font-extrabold text-brand-darkest">
+                  {job.salary} <span className="text-base font-bold">د.ك</span>
+                </div>
+                {job.duration && <div className="text-xs text-brand">{labelOf(DURATIONS, job.duration)}</div>}
+              </div>
+            )}
+            <div className="divide-y divide-brand-soft">
+              <Fact label="المحافظة" value={job.area} icon="📍" />
+              <Fact label="نوع العمل" value={job.work_type ? labelOf(WORK_TYPES, job.work_type) : ""} icon="💼" />
+              <Fact label="المدة" value={job.duration ? labelOf(DURATIONS, job.duration) : ""} icon="🕐" />
+              <Fact label="العدد المطلوب" value={String(job.headcount)} icon="👥" />
+            </div>
+          </div>
+
+          <ApplyBox job={job} onApplied={() => {}} />
+        </aside>
       </div>
     </Layout>
   );
