@@ -38,6 +38,37 @@ function MiniJob({ job }: { job: Job }) {
   );
 }
 
+const SCHEMES = [
+  { bg: "#d7f3f6", fg: "#0e8f9e" },
+  { bg: "#dde4ff", fg: "#3b5bfd" },
+  { bg: "#fde1ee", fg: "#d6336c" },
+  { bg: "#ffe2df", fg: "#e8412c" },
+  { bg: "#fdf2cc", fg: "#b9860b" },
+  { bg: "#d7f2e1", fg: "#1f9d57" },
+];
+
+// coolors-style big colorful job card
+function JobBigCard({ job, scheme }: { job: Job; scheme: { bg: string; fg: string } }) {
+  return (
+    <Link
+      to={`/jobs/${job.id}`}
+      className="flex flex-col rounded-2xl p-7 transition hover:brightness-[0.98] sm:p-9"
+      style={{ backgroundColor: scheme.bg, color: scheme.fg }}
+    >
+      <h3 className="text-2xl font-extrabold leading-tight sm:text-3xl">{job.title}</h3>
+      <p className="mt-3 leading-relaxed opacity-90">
+        {job.company_name}
+        {job.area ? ` · ${job.area}` : ""}
+        {job.salary ? ` · ${toLatinDigits(job.salary)} د.ك` : ""}
+      </p>
+      <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold">
+        عرض والتقديم
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+      </span>
+    </Link>
+  );
+}
+
 function FeatureRow({ reverse, eyebrow, title, body, cta, to, preview }: {
   reverse?: boolean; eyebrow: string; title: string; body: string; cta: string; to: string; preview: React.ReactNode;
 }) {
@@ -172,6 +203,19 @@ export function Home() {
           }
         />
       </div>
+
+      {/* Current jobs — coolors-style colorful cards */}
+      {jobs.length > 0 && (
+        <section className="mt-20">
+          <div className="flex items-end justify-between">
+            <h2 className="text-3xl font-extrabold text-brand-darkest sm:text-4xl">فرص العمل الحالية</h2>
+            <Link to="/jobs" className="text-sm font-bold text-brand-dark hover:underline">عرض الكل ←</Link>
+          </div>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            {jobs.slice(0, 6).map((j, i) => <JobBigCard key={j.id} job={j} scheme={SCHEMES[i % SCHEMES.length]} />)}
+          </div>
+        </section>
+      )}
 
       {/* Trusted by */}
       <section className="mt-20 border-y border-brand-soft py-8">
