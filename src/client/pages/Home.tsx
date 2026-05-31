@@ -185,23 +185,6 @@ export function Home() {
             </div>
           }
         />
-        <FeatureRow
-          eyebrow="آلية موثوقة"
-          title="ثلاث خطوات من التسجيل إلى العمل"
-          body="سجّل ملفك، قدّم أو استقبل العروض، ثم أنجز العمل وتبادل التقييمات لبناء سمعتك على المنصة."
-          cta="تعرّف أكثر"
-          to="/register"
-          preview={
-            <div className="grid grid-cols-3 gap-3 rounded-3xl bg-brand-darkest p-6">
-              {["١", "٢", "٣"].map((n, i) => (
-                <div key={n} className="text-center">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full font-extrabold text-brand-darkest" style={{ background: PALETTE[i + 1] }}>{n}</div>
-                  <div className="mx-auto mt-3 h-2 w-12 rounded bg-white/20" />
-                </div>
-              ))}
-            </div>
-          }
-        />
       </div>
 
       {/* Current jobs — coolors-style colorful cards */}
