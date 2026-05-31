@@ -37,16 +37,46 @@
   font-display: swap;
 }
 
+/* Thmanyah Serif Display — used for headings (whitehouse-style authority) */
+@font-face {
+  font-family: "ThmanyahDisplay";
+  src: url("/fonts/thmanyahserifdisplay-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "ThmanyahDisplay";
+  src: url("/fonts/thmanyahserifdisplay-Medium.woff2") format("woff2");
+  font-weight: 500 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "ThmanyahDisplay";
+  src: url("/fonts/thmanyahserifdisplay-Bold.woff2") format("woff2");
+  font-weight: 700 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "ThmanyahDisplay";
+  src: url("/fonts/thmanyahserifdisplay-Black.woff2") format("woff2");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
 @theme {
-  /* Google-store inspired: clean white + Google blue accent */
-  --color-brand-darkest: #202124; /* near-black: headings, dark blocks */
-  --color-brand-dark: #1a73e8;    /* Google blue: primary actions, links, active */
-  --color-brand: #5f6368;         /* gray: secondary/muted text */
-  --color-brand-light: #aecbfa;   /* light blue */
-  --color-brand-soft: #e8f0fe;    /* light blue surface / borders / chips */
-  --color-brand-bg: #ffffff;      /* white page background */
+  /* whitehouse-inspired: deep navy + gold accent + cream */
+  --color-brand-darkest: #0a2342; /* deep navy: headings, dark sections, footer */
+  --color-brand-dark: #14315c;    /* navy: primary buttons, links, active */
+  --color-brand: #5b6472;         /* slate gray: secondary/muted text */
+  --color-brand-light: #aebfd4;   /* muted blue */
+  --color-brand-soft: #e7ebf1;    /* light gray-blue: surfaces / borders / chips */
+  --color-brand-bg: #f7f5ef;      /* warm cream page background */
+  --color-gold: #b8893b;          /* gold accent */
+  --color-gold-soft: #efe6d2;     /* light gold surface */
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "ThmanyahDisplay", "Thmanyah", Georgia, serif;
+}
+
+/* Serif display for primary headings */
+h1, h2 {
+  font-family: var(--font-display);
 }
 
 :root {
@@ -78,27 +108,27 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+  @apply inline-flex items-center justify-center gap-2 rounded-md px-6 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
 }
 
 @layer components {
   .btn-primary {
-    @apply btn bg-brand-dark text-white hover:bg-[#1765cc];
+    @apply btn bg-brand-dark text-white hover:bg-brand-darkest;
   }
   .btn-secondary {
-    @apply btn bg-brand-soft text-brand-dark hover:bg-brand-light;
+    @apply btn bg-gold text-white hover:brightness-95;
   }
   .btn-ghost {
     @apply btn bg-transparent text-brand-dark hover:bg-brand-soft;
   }
   .btn-danger {
-    @apply btn bg-red-600 text-white hover:bg-red-700;
+    @apply btn bg-red-700 text-white hover:bg-red-800;
   }
   .card {
-    @apply rounded-3xl bg-white p-6 border border-brand-soft shadow-sm;
+    @apply rounded-xl bg-white p-6 border border-brand-soft shadow-sm;
   }
   .input {
-    @apply w-full rounded-xl border border-brand-soft bg-white px-4 py-2.5 text-sm text-brand-darkest placeholder:text-brand/60 focus:border-brand-dark focus:ring-2 focus:ring-brand-soft focus:outline-none;
+    @apply w-full rounded-md border border-brand-light bg-white px-4 py-2.5 text-sm text-brand-darkest placeholder:text-brand/60 focus:border-brand-dark focus:ring-2 focus:ring-brand-soft focus:outline-none;
   }
   .label {
     @apply mb-1.5 block text-sm font-bold text-brand-dark;

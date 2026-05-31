@@ -4,7 +4,6 @@ import { Layout } from "../components/Layout";
 import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
 import { SECTORS } from "../lib/constants";
-import { KuwaitTowers, Skyline } from "../components/KuwaitArt";
 
 interface Stats {
   companies: number;
@@ -43,17 +42,6 @@ function Feature({ icon, title, body }: { icon: React.ReactNode; title: string; 
   );
 }
 
-const SECTOR_COLORS = [
-  "bg-blue-50 text-blue-700",
-  "bg-emerald-50 text-emerald-700",
-  "bg-amber-50 text-amber-700",
-  "bg-rose-50 text-rose-700",
-  "bg-violet-50 text-violet-700",
-  "bg-sky-50 text-sky-700",
-  "bg-teal-50 text-teal-700",
-  "bg-orange-50 text-orange-700",
-];
-
 export function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -66,71 +54,66 @@ export function Home() {
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-50 to-white px-6 pt-14 sm:px-10">
-        <div className="grid items-center gap-8 md:grid-cols-2">
-          <div className="pb-32 text-center md:pb-16 md:text-right">
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-5xl">
-              اشتغل بشروطك،<br /> واختار ساعاتك
-            </h1>
-            <p className="mx-auto mt-5 max-w-xl text-lg text-brand md:mx-0">
-              منصة العمل الجزئي للكويتيين — تربط الباحثين عن دخل إضافي بأصحاب العمل بمرونة واحترافية.
-            </p>
-            <form
-              onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
-              className="mx-auto mt-8 flex max-w-lg gap-2 rounded-full bg-white p-2 shadow-md ring-1 ring-black/5 md:mx-0"
-            >
-              <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="ابحث عن فرصة عمل..."
-                className="flex-1 bg-transparent px-4 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none"
-              />
-              <button type="submit" className="btn-primary">ابحث</button>
-            </form>
-            <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
-              {user ? (
-                <Link to="/app" className="btn-primary">الذهاب إلى لوحتي</Link>
-              ) : (
-                <>
-                  <Link to="/register" className="btn-primary">سجّل كباحث عن عمل</Link>
-                  <Link to="/register" className="btn-secondary">سجّل كشركة</Link>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Kuwait Towers illustration */}
-          <div className="relative hidden justify-center md:flex">
-            <KuwaitTowers className="h-72 w-auto drop-shadow-sm" />
+      <section className="overflow-hidden rounded-xl border-t-4 border-gold bg-brand-darkest px-6 py-20 text-center text-white sm:py-28">
+        <div className="mx-auto max-w-3xl">
+          <span className="mb-5 inline-flex items-center gap-3 text-sm font-bold text-gold">
+            <span className="h-px w-8 bg-gold" /> منصة العمل الجزئي للكويتيين <span className="h-px w-8 bg-gold" />
+          </span>
+          <h1 className="text-4xl font-black leading-tight sm:text-6xl">
+            اشتغل بشروطك،<br className="hidden sm:block" /> واختار ساعاتك
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-lg text-brand-light">
+            نربط الباحثين عن دخل إضافي بأصحاب العمل بمرونة واحترافية وبدون تعقيدات العقود.
+          </p>
+          <form
+            onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
+            className="mx-auto mt-8 flex max-w-lg gap-2 rounded-md bg-white p-2 shadow-lg"
+          >
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="ابحث عن فرصة عمل..."
+              className="flex-1 bg-transparent px-4 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none"
+            />
+            <button type="submit" className="btn-primary">ابحث</button>
+          </form>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {user ? (
+              <Link to="/app" className="btn-secondary">الذهاب إلى لوحتي</Link>
+            ) : (
+              <>
+                <Link to="/register" className="btn-secondary">سجّل كباحث عن عمل</Link>
+                <Link to="/register" className="inline-flex items-center justify-center rounded-md border border-white/40 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-white/10">
+                  سجّل كشركة
+                </Link>
+              </>
+            )}
           </div>
         </div>
-
-        {/* Skyline silhouette band */}
-        <Skyline className="pointer-events-none absolute inset-x-0 bottom-0 h-20 w-full text-blue-100/70 md:hidden" />
       </section>
 
       {/* Stats */}
       <section className="mt-6 grid gap-4 sm:grid-cols-3">
-        <StatTile value={num(stats?.companies)} label="شركة مسجّلة" icon={Icon.building} color="bg-blue-100 text-blue-700" />
-        <StatTile value={num(stats?.workers)} label="باحث عن عمل مسجّل" icon={Icon.users} color="bg-emerald-100 text-emerald-700" />
-        <StatTile value={num(stats?.open_jobs)} label="فرصة عمل متاحة" icon={Icon.briefcase} color="bg-amber-100 text-amber-700" />
+        <StatTile value={num(stats?.companies)} label="شركة مسجّلة" icon={Icon.building} color="bg-brand-soft text-brand-dark" />
+        <StatTile value={num(stats?.workers)} label="باحث عن عمل مسجّل" icon={Icon.users} color="bg-gold-soft text-gold" />
+        <StatTile value={num(stats?.open_jobs)} label="فرصة عمل متاحة" icon={Icon.briefcase} color="bg-brand-soft text-brand-dark" />
       </section>
 
       {/* Big tiles */}
       <section className="mt-6 grid gap-4 md:grid-cols-2">
-        <div className="flex flex-col justify-between rounded-[2rem] bg-blue-50 p-8 sm:p-10">
+        <div className="flex flex-col justify-between rounded-xl border border-brand-soft border-t-4 border-t-gold bg-white p-8 shadow-sm sm:p-10">
           <div>
             <h2 className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">للباحث عن عمل</h2>
             <p className="mt-3 max-w-sm text-brand">أنشئ ملفك، قدّم على الفرص، واستقبل عروض الشركات — بدخل إضافي يناسب وقتك.</p>
           </div>
           <Link to="/register" className="btn-primary mt-6 self-start">ابدأ الآن</Link>
         </div>
-        <div className="flex flex-col justify-between rounded-[2rem] bg-emerald-50 p-8 sm:p-10">
+        <div className="flex flex-col justify-between rounded-xl bg-brand-darkest p-8 text-white shadow-sm sm:p-10">
           <div>
-            <h2 className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">للشركة صاحبة العمل</h2>
-            <p className="mt-3 max-w-sm text-brand">انشر فرصك، ابحث عن الكفاءات الكويتية، واستقبل المتقدمين وأرسل عروضك مباشرة.</p>
+            <h2 className="text-2xl font-extrabold sm:text-3xl">للشركة صاحبة العمل</h2>
+            <p className="mt-3 max-w-sm text-brand-light">انشر فرصك، ابحث عن الكفاءات الكويتية، واستقبل المتقدمين وأرسل عروضك مباشرة.</p>
           </div>
-          <Link to="/register" className="btn-primary mt-6 self-start">انشر فرصة</Link>
+          <Link to="/register" className="btn-secondary mt-6 self-start">انشر فرصة</Link>
         </div>
       </section>
 
@@ -139,8 +122,8 @@ export function Home() {
         <h2 className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">قطاعات متنوّعة</h2>
         <p className="mt-2 text-brand">فرص عمل في مختلف المجالات حول الكويت</p>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {SECTORS.map((s, i) => (
-            <div key={s} className={`rounded-3xl p-6 text-center font-bold ${SECTOR_COLORS[i % SECTOR_COLORS.length]}`}>
+          {SECTORS.map((s) => (
+            <div key={s} className="rounded-xl border border-brand-soft border-r-4 border-r-gold bg-white p-6 text-center font-bold text-brand-darkest">
               {s}
             </div>
           ))}
