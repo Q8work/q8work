@@ -211,7 +211,7 @@ export function Home() {
       )}
 
       {/* CTA */}
-      <section className="mt-20 rounded-3xl bg-brand-darkest px-6 py-16 text-center text-white">
+      <section className="mt-20 rounded-3xl bg-brand-dark px-6 py-16 text-center text-white">
         <h2 className="text-3xl font-extrabold sm:text-4xl">جاهز تبدأ؟</h2>
         <p className="mt-3 text-white/60">انضم اليوم — التسجيل مجاني بالكامل في المرحلة الأولى.</p>
         <Link to={user ? "/app" : "/register"} className="mt-7 inline-flex rounded-lg bg-white px-6 py-2.5 text-sm font-bold text-brand-darkest hover:bg-white/90">
