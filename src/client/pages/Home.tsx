@@ -189,18 +189,26 @@ export function Home() {
         </section>
       )}
 
-      {/* Trusted by */}
-      <section className="mt-20 border-y border-brand-soft py-8">
-        <p className="text-center text-sm font-semibold uppercase tracking-widest text-brand">شركات تثق بـ Q8Work</p>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-          {(companies.length ? companies.slice(0, 6) : []).map((c) => (
-            <Link key={c.user_id} to={`/companies/${c.user_id}`} className="text-lg font-extrabold text-brand-light transition hover:text-brand-darkest">
-              {c.company_name}
-            </Link>
-          ))}
-          {companies.length === 0 && <span className="text-brand">انضم كأول الشركات على المنصة</span>}
-        </div>
-      </section>
+      {/* Trusted by — resource-style cards */}
+      {companies.length > 0 && (
+        <section className="mt-20">
+          <p className="text-center text-sm font-bold uppercase tracking-[0.25em] text-brand">شركات تثق بـ Q8WORK</p>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {companies.slice(0, 6).map((c) => (
+              <Link
+                key={c.user_id}
+                to={`/companies/${c.user_id}`}
+                className="rounded-2xl bg-brand-soft p-8 transition-colors hover:bg-brand-light/50"
+              >
+                <h3 className="text-2xl font-extrabold text-brand-darkest">{c.company_name}</h3>
+                <p className="mt-2 leading-relaxed text-brand">
+                  {c.open_jobs > 0 ? `${c.open_jobs} فرصة عمل متاحة الآن` : (c.sector || "شركة مسجّلة على المنصة")}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="mt-20 rounded-3xl bg-brand-darkest px-6 py-16 text-center text-white">
