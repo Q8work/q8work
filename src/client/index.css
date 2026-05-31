@@ -111,7 +111,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply btn bg-brand-dark text-white hover:bg-brand-darkest;
+    @apply btn bg-gold text-brand-darkest hover:brightness-95;
   }
   .btn-secondary {
     @apply btn bg-white text-brand-darkest border border-brand-light hover:bg-brand-soft;

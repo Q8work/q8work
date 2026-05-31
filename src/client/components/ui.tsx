@@ -111,12 +111,12 @@ export function Tabs<T extends string>({
           key={t.id}
           onClick={() => onChange(t.id)}
           className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-colors cursor-pointer ${
-            active === t.id ? "bg-brand-dark text-white" : "text-brand-dark hover:bg-brand-soft"
+            active === t.id ? "bg-gold text-brand-darkest" : "text-brand-dark hover:bg-brand-soft"
           }`}
         >
           {t.label}
           {t.badge ? (
-            <span className={`rounded-full px-1.5 text-xs ${active === t.id ? "bg-white/25" : "bg-brand-soft"}`}>
+            <span className={`rounded-full px-1.5 text-xs ${active === t.id ? "bg-black/15" : "bg-brand-soft"}`}>
               {t.badge}
             </span>
           ) : null}
