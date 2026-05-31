@@ -21,7 +21,7 @@ interface CompanyCard {
 function JobCard({ job }: { job: Job }) {
   return (
     <Link to={`/jobs/${job.id}`} className="group flex flex-col rounded-xl border border-brand-soft bg-white p-5 transition hover:border-brand-light hover:shadow-sm">
-      <h3 className="font-bold text-brand-darkest group-hover:text-gold">{job.title}</h3>
+      <h3 className="font-bold text-brand-darkest group-hover:text-brand-dark">{job.title}</h3>
       <p className="mt-0.5 text-sm font-semibold text-brand">{job.company_name}</p>
       <div className="mt-3 flex flex-wrap gap-2 text-xs">
         {job.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {job.area}</span>}
@@ -52,7 +52,7 @@ export function Home() {
   return (
     <Layout wide>
       {/* Hero */}
-      <section className="rounded-2xl bg-gradient-to-b from-brand-soft/70 to-white px-6 py-16 text-center sm:py-20">
+      <section className="rounded-2xl bg-gradient-to-b from-azure-soft to-white px-6 py-16 text-center sm:py-20">
         <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-5xl">
           فرصتك الجزئية القادمة <span className="text-gold">تبدأ هنا</span>
         </h1>
@@ -89,7 +89,7 @@ export function Home() {
       <section className="mt-14">
         <div className="flex items-end justify-between">
           <h2 className="text-2xl font-extrabold text-brand-darkest">أحدث فرص العمل</h2>
-          <Link to="/jobs" className="text-sm font-bold text-gold hover:underline">عرض الكل ←</Link>
+          <Link to="/jobs" className="text-sm font-bold text-brand-dark hover:underline">عرض الكل ←</Link>
         </div>
         {jobs.length === 0 ? (
           <p className="mt-6 rounded-xl border border-dashed border-brand-light p-8 text-center text-brand">لا توجد فرص منشورة بعد.</p>
@@ -105,7 +105,7 @@ export function Home() {
         <section className="mt-14">
           <div className="flex items-end justify-between">
             <h2 className="text-2xl font-extrabold text-brand-darkest">شركات تُوظّف الآن</h2>
-            <Link to="/companies" className="text-sm font-bold text-gold hover:underline">كل الشركات ←</Link>
+            <Link to="/companies" className="text-sm font-bold text-brand-dark hover:underline">كل الشركات ←</Link>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {companies.map((c) => (
@@ -134,7 +134,7 @@ export function Home() {
             ["٣", "اعمل وقيّم", "أنجز العمل وتبادل التقييمات لبناء سمعتك."],
           ].map(([n, t, b]) => (
             <div key={t} className="text-center">
-              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-white/10 font-extrabold text-gold">{n}</div>
+              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-sun font-extrabold text-brand-darkest">{n}</div>
               <h3 className="mt-4 font-bold">{t}</h3>
               <p className="mt-1 text-sm text-white/60">{b}</p>
             </div>
@@ -147,7 +147,7 @@ export function Home() {
         <h2 className="text-2xl font-extrabold text-brand-darkest">تصفّح حسب القطاع</h2>
         <div className="mt-5 flex flex-wrap gap-2">
           {SECTORS.map((s) => (
-            <Link key={s} to={`/jobs?q=${encodeURIComponent(s)}`} className="rounded-lg border border-brand-soft bg-white px-4 py-2 text-sm font-bold text-brand-darkest hover:border-brand-light hover:text-gold">{s}</Link>
+            <Link key={s} to={`/jobs?q=${encodeURIComponent(s)}`} className="rounded-lg border border-brand-soft bg-white px-4 py-2 text-sm font-bold text-brand-darkest hover:border-brand-dark hover:text-brand-dark">{s}</Link>
           ))}
         </div>
       </section>

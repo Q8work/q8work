@@ -60,15 +60,19 @@
 }
 
 @theme {
-  /* wellfound layout with a fresh light-green identity */
-  --color-brand-darkest: #14432f; /* dark green: headings, dark sections, button hover */
-  --color-brand-dark: #16a34a;    /* green: primary buttons, active */
-  --color-brand: #5f7268;         /* muted green-gray: secondary text */
-  --color-brand-light: #b7e4c7;   /* light green */
-  --color-brand-soft: #e6f6ec;    /* very light green: surfaces / borders / chips */
-  --color-brand-bg: #f6fcf8;      /* faint green-tinted background */
-  --color-gold: #16a34a;          /* green accent (links, highlights) */
-  --color-gold-soft: #dcfce7;     /* light green surface */
+  /* Brand palette: deep blue + orange accent + light-blue & yellow touches */
+  --color-brand-darkest: #2f5570; /* deep blue: headings, dark sections, button hover */
+  --color-brand-dark: #3a6684;    /* blue: primary buttons, active */
+  --color-brand: #5f7488;         /* muted blue-gray: secondary text */
+  --color-brand-light: #a9d2ef;   /* pale blue: soft borders */
+  --color-brand-soft: #e9f2f9;    /* very light blue: surfaces / chips */
+  --color-brand-bg: #f7fafd;      /* faint blue-tinted background */
+  --color-gold: #ff9b65;          /* orange accent (links, highlights) */
+  --color-gold-soft: #ffe9dc;     /* light orange surface */
+  --color-azure: #60a9dc;         /* light blue accent */
+  --color-azure-soft: #e3f1fb;
+  --color-sun: #ffdd63;           /* yellow accent */
+  --color-sun-soft: #fff6d1;
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Thmanyah", "Cairo", ui-sans-serif, sans-serif;
