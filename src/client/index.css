@@ -60,15 +60,15 @@
 }
 
 @theme {
-  /* NEOM-inspired: minimal monochrome (black / white / grey) */
-  --color-brand-darkest: #0a0a0a; /* near-black: text, dark sections, buttons */
-  --color-brand-dark: #171717;    /* black: button hover, active */
-  --color-brand: #737373;         /* grey: secondary/muted text */
-  --color-brand-light: #d4d4d4;   /* light grey */
-  --color-brand-soft: #ececec;    /* surfaces / borders / chips */
+  /* wellfound-inspired: clean light, near-black, teal accent */
+  --color-brand-darkest: #0f1216; /* near-black: headings, dark sections, button hover */
+  --color-brand-dark: #1f242e;    /* primary button bg, active */
+  --color-brand: #687385;         /* gray: secondary/muted text */
+  --color-brand-light: #cdd2da;   /* light gray */
+  --color-brand-soft: #eef0f3;    /* surfaces / borders / chips */
   --color-brand-bg: #ffffff;      /* white page background */
-  --color-gold: #0a0a0a;          /* (neutralized) accents → black */
-  --color-gold-soft: #f2f2f2;     /* light grey surface */
+  --color-gold: #0e9384;          /* teal accent (links, highlights) */
+  --color-gold-soft: #d7f0ec;     /* light teal surface */
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Thmanyah", "Cairo", ui-sans-serif, sans-serif;
@@ -103,15 +103,15 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
 }
 
 @layer components {
   .btn-primary {
-    @apply btn bg-brand-darkest text-white hover:bg-brand-dark;
+    @apply btn bg-brand-dark text-white hover:bg-brand-darkest;
   }
   .btn-secondary {
-    @apply btn bg-white text-brand-darkest border border-brand-soft hover:bg-brand-soft;
+    @apply btn bg-white text-brand-darkest border border-brand-light hover:bg-brand-soft;
   }
   .btn-ghost {
     @apply btn bg-transparent text-brand-darkest hover:bg-brand-soft;
@@ -120,10 +120,10 @@ body {
     @apply btn bg-red-600 text-white hover:bg-red-700;
   }
   .card {
-    @apply rounded-2xl bg-white p-6 border border-brand-soft;
+    @apply rounded-xl bg-white p-6 border border-brand-soft;
   }
   .input {
-    @apply w-full rounded-full border border-brand-light bg-white px-5 py-2.5 text-sm text-brand-darkest placeholder:text-brand/60 focus:border-brand-darkest focus:outline-none;
+    @apply w-full rounded-lg border border-brand-light bg-white px-4 py-2.5 text-sm text-brand-darkest placeholder:text-brand/60 focus:border-brand-dark focus:ring-2 focus:ring-brand-soft focus:outline-none;
   }
   .label {
     @apply mb-1.5 block text-sm font-bold text-brand-dark;

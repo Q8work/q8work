@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
+import { Avatar, VerifiedBadge } from "../components/ui";
+import { IconPin, IconBriefcase, IconCash } from "../components/icons";
 import { useAuth } from "../lib/auth";
-import { api } from "../lib/api";
-import { SECTORS } from "../lib/constants";
+import { api, fileUrl } from "../lib/api";
+import { WORK_TYPES, SECTORS, labelOf } from "../lib/constants";
+import { toLatinDigits } from "../lib/format";
 
 interface Stats { companies: number; workers: number; jobs: number; open_jobs: number; }
+interface Job {
+  id: string; title: string; area: string; work_type: string; salary: string;
+  company_name: string; company_verified: number;
+}
+interface CompanyCard {
+  user_id: string; company_name: string; logo_key: string | null; sector: string;
+  verified: number; open_jobs: number;
+}
 
-const Icon = {
-  users: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-40 w-40"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-  building: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-40 w-40"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/></svg>,
-};
-
-function ArrowLink({ to, children, light }: { to: string; children: React.ReactNode; light?: boolean }) {
+function JobCard({ job }: { job: Job }) {
   return (
-    <Link to={to} className={`group mt-8 inline-flex items-center gap-3 text-sm font-bold ${light ? "text-white" : "text-brand-darkest"}`}>
-      <span className={`flex h-10 w-10 items-center justify-center rounded-full border transition-transform group-hover:-translate-x-1 ${light ? "border-white/40" : "border-brand-darkest/30"}`}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      </span>
-      {children}
+    <Link to={`/jobs/${job.id}`} className="group flex flex-col rounded-xl border border-brand-soft bg-white p-5 transition hover:border-brand-light hover:shadow-sm">
+      <h3 className="font-bold text-brand-darkest group-hover:text-gold">{job.title}</h3>
+      <p className="mt-0.5 text-sm font-semibold text-brand">{job.company_name}</p>
+      <div className="mt-3 flex flex-wrap gap-2 text-xs">
+        {job.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {job.area}</span>}
+        {job.work_type && <span className="chip gap-1"><IconBriefcase className="h-3.5 w-3.5" /> {labelOf(WORK_TYPES, job.work_type)}</span>}
+        {job.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {toLatinDigits(job.salary)} د.ك</span>}
+      </div>
     </Link>
   );
 }
@@ -28,126 +37,128 @@ export function Home() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [stats, setStats] = useState<Stats | null>(null);
-  useEffect(() => { api.get<Stats>("/stats").then(setStats).catch(() => {}); }, []);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [companies, setCompanies] = useState<CompanyCard[]>([]);
+
+  useEffect(() => {
+    api.get<Stats>("/stats").then(setStats).catch(() => {});
+    api.get<{ jobs: Job[] }>("/jobs").then((r) => setJobs(r.jobs.slice(0, 6))).catch(() => {});
+    api.get<{ companies: CompanyCard[] }>("/companies").then((r) => setCompanies(r.companies.slice(0, 6))).catch(() => {});
+  }, []);
+
   const num = (v?: number) => (v == null ? "—" : v.toLocaleString("en-US"));
+  const popular = ["مبيعات", "كاشير", "تسويق", "تصميم", "خدمة عملاء"];
 
   return (
-    <Layout bare>
-      {/* Hero — full viewport */}
-      <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-brand-darkest px-6 text-center text-white">
-        <div className="mx-auto max-w-4xl">
-          <span className="text-xs font-bold uppercase tracking-[0.3em] text-white/45">Q8WORK</span>
-          <h1 className="mt-6 text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-8xl">
-            اشتغل بشروطك،<br /> واختار ساعاتك
-          </h1>
-          <p className="mx-auto mt-8 max-w-xl text-lg text-white/60 sm:text-xl">
-            منصة العمل الجزئي للكويتيين — مرونة، احترافية، وبدون تعقيدات العقود.
-          </p>
-          <form
-            onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
-            className="mx-auto mt-10 flex max-w-lg gap-2 rounded-full bg-white p-1.5"
-          >
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث عن فرصة عمل..."
-              className="flex-1 bg-transparent px-5 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none" />
-            <button type="submit" className="btn-primary">ابحث</button>
-          </form>
-          {!user && (
-            <div className="mt-7 flex flex-wrap justify-center gap-3">
-              <Link to="/register" className="btn-secondary">سجّل كباحث عن عمل</Link>
-              <Link to="/register" className="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-2.5 text-sm font-bold text-white hover:bg-white/10">سجّل كشركة</Link>
-            </div>
-          )}
+    <Layout wide>
+      {/* Hero */}
+      <section className="rounded-2xl bg-gradient-to-b from-brand-soft/70 to-white px-6 py-16 text-center sm:py-20">
+        <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-brand-darkest sm:text-5xl">
+          فرصتك الجزئية القادمة <span className="text-gold">تبدأ هنا</span>
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-lg text-brand">
+          منصة العمل الجزئي للكويتيين — تصفّح آلاف الفرص وتواصل مع الشركات مباشرة.
+        </p>
+        <form
+          onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
+          className="mx-auto mt-8 flex max-w-xl gap-2 rounded-xl border border-brand-soft bg-white p-2 shadow-sm"
+        >
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث عن فرصة عمل أو مهارة..."
+            className="flex-1 bg-transparent px-3 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none" />
+          <button type="submit" className="btn-primary">ابحث</button>
+        </form>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
+          <span className="text-brand">شائع:</span>
+          {popular.map((p) => (
+            <Link key={p} to={`/jobs?q=${encodeURIComponent(p)}`} className="rounded-full border border-brand-soft bg-white px-3 py-1 font-semibold text-brand-dark hover:border-brand-light">{p}</Link>
+          ))}
         </div>
-        <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
-        </span>
       </section>
 
-      {/* Stats band — full bleed */}
-      <section className="border-y border-brand-soft bg-white">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-brand-soft sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:divide-x-reverse">
+      {/* Stats row */}
+      <section className="mt-6 grid grid-cols-3 gap-4 rounded-xl border border-brand-soft bg-white p-6 text-center">
+        {[[num(stats?.companies), "شركة"], [num(stats?.workers), "باحث عن عمل"], [num(stats?.open_jobs), "فرصة متاحة"]].map(([v, l]) => (
+          <div key={l}>
+            <div className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">{v}</div>
+            <div className="mt-1 text-xs font-semibold text-brand sm:text-sm">{l}</div>
+          </div>
+        ))}
+      </section>
+
+      {/* Latest jobs */}
+      <section className="mt-14">
+        <div className="flex items-end justify-between">
+          <h2 className="text-2xl font-extrabold text-brand-darkest">أحدث فرص العمل</h2>
+          <Link to="/jobs" className="text-sm font-bold text-gold hover:underline">عرض الكل ←</Link>
+        </div>
+        {jobs.length === 0 ? (
+          <p className="mt-6 rounded-xl border border-dashed border-brand-light p-8 text-center text-brand">لا توجد فرص منشورة بعد.</p>
+        ) : (
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {jobs.map((j) => <JobCard key={j.id} job={j} />)}
+          </div>
+        )}
+      </section>
+
+      {/* Companies hiring */}
+      {companies.length > 0 && (
+        <section className="mt-14">
+          <div className="flex items-end justify-between">
+            <h2 className="text-2xl font-extrabold text-brand-darkest">شركات تُوظّف الآن</h2>
+            <Link to="/companies" className="text-sm font-bold text-gold hover:underline">كل الشركات ←</Link>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {companies.map((c) => (
+              <Link key={c.user_id} to={`/companies/${c.user_id}`} className="flex items-center gap-3 rounded-xl border border-brand-soft bg-white p-4 transition hover:border-brand-light hover:shadow-sm">
+                <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={48} />
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="truncate font-bold text-brand-darkest">{c.company_name}</span>
+                    {c.verified ? <VerifiedBadge verified={1} /> : null}
+                  </div>
+                  <span className="text-xs text-brand">{c.open_jobs > 0 ? `${c.open_jobs} فرصة متاحة` : c.sector}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* How it works */}
+      <section className="mt-14 rounded-2xl bg-brand-darkest px-6 py-14 text-white">
+        <h2 className="text-center text-2xl font-extrabold">كيف تعمل المنصة؟</h2>
+        <div className="mx-auto mt-10 grid max-w-4xl gap-8 sm:grid-cols-3">
           {[
-            [num(stats?.companies), "شركة مسجّلة"],
-            [num(stats?.workers), "باحث عن عمل مسجّل"],
-            [num(stats?.open_jobs), "فرصة عمل متاحة"],
-          ].map(([v, l]) => (
-            <div key={l} className="px-6 py-14 text-center">
-              <div className="text-5xl font-extrabold tracking-tight text-brand-darkest sm:text-6xl">{v}</div>
-              <div className="mt-3 text-sm font-semibold uppercase tracking-widest text-brand">{l}</div>
+            ["١", "سجّل ملفك", "أنشئ بروفايلك وحدّد مهاراتك وأوقات توفرك."],
+            ["٢", "قدّم على الفرص", "قدّم مباشرة أو تصلك عروض من الشركات."],
+            ["٣", "اعمل وقيّم", "أنجز العمل وتبادل التقييمات لبناء سمعتك."],
+          ].map(([n, t, b]) => (
+            <div key={t} className="text-center">
+              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-white/10 font-extrabold text-gold">{n}</div>
+              <h3 className="mt-4 font-bold">{t}</h3>
+              <p className="mt-1 text-sm text-white/60">{b}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Band 1 — job seekers */}
-      <section className="grid md:grid-cols-2">
-        <div className="flex min-h-[70vh] items-center justify-center bg-brand-darkest text-white/15">{Icon.users}</div>
-        <div className="flex min-h-[70vh] items-center bg-white px-8 py-20 sm:px-16">
-          <div className="max-w-md">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-brand">للباحث عن عمل</span>
-            <h2 className="mt-4 text-4xl font-extrabold leading-tight text-brand-darkest sm:text-5xl">دخل إضافي يناسب وقتك</h2>
-            <p className="mt-5 text-lg text-brand">أنشئ ملفك، قدّم على الفرص، واستقبل عروض الشركات مباشرة — أنت من يختار متى وأين تعمل.</p>
-            <ArrowLink to="/register">سجّل كباحث عن عمل</ArrowLink>
-          </div>
+      {/* Sectors */}
+      <section className="mt-14">
+        <h2 className="text-2xl font-extrabold text-brand-darkest">تصفّح حسب القطاع</h2>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {SECTORS.map((s) => (
+            <Link key={s} to={`/jobs?q=${encodeURIComponent(s)}`} className="rounded-lg border border-brand-soft bg-white px-4 py-2 text-sm font-bold text-brand-darkest hover:border-brand-light hover:text-gold">{s}</Link>
+          ))}
         </div>
       </section>
 
-      {/* Band 2 — companies (reversed) */}
-      <section className="grid md:grid-cols-2">
-        <div className="order-1 flex min-h-[70vh] items-center bg-brand-darkest px-8 py-20 text-white sm:px-16 md:order-none">
-          <div className="max-w-md">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/50">للشركة صاحبة العمل</span>
-            <h2 className="mt-4 text-4xl font-extrabold leading-tight sm:text-5xl">وظّف الكفاءات الكويتية</h2>
-            <p className="mt-5 text-lg text-white/60">انشر فرصك، ابحث وفلتر حسب المهارة والمحافظة والتقييم، واستقبل المتقدمين وأرسل عروضك مباشرة.</p>
-            <ArrowLink to="/register" light>انشر فرصة عمل</ArrowLink>
-          </div>
+      {/* CTA */}
+      <section className="mt-14 flex flex-col items-center justify-between gap-4 rounded-2xl border border-brand-soft bg-brand-bg p-10 text-center sm:flex-row sm:text-right">
+        <div>
+          <h2 className="text-2xl font-extrabold text-brand-darkest">جاهز تبدأ؟</h2>
+          <p className="mt-1 text-brand">التسجيل مجاني بالكامل في المرحلة الأولى.</p>
         </div>
-        <div className="flex min-h-[70vh] items-center justify-center bg-brand-soft text-brand-darkest/15">{Icon.building}</div>
-      </section>
-
-      {/* How it works — full bleed light */}
-      <section className="bg-brand-bg px-6 py-24">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-extrabold text-brand-darkest sm:text-4xl">كيف تعمل المنصة؟</h2>
-          <div className="mt-14 grid gap-12 md:grid-cols-3">
-            {[
-              ["01", "سجّل ملفك", "أنشئ بروفايلك وحدّد مهاراتك وأوقات توفرك ونوع العمل المفضل."],
-              ["02", "قدّم أو استقبل العروض", "قدّم على الفرص المنشورة أو تصلك عروض من الشركات مباشرة."],
-              ["03", "اعمل وقيّم", "تواصل، أنجز العمل، وتبادل التقييمات لبناء سمعتك."],
-            ].map(([n, t, b]) => (
-              <div key={n}>
-                <div className="text-5xl font-extrabold text-brand-light">{n}</div>
-                <div className="mt-4 h-px w-12 bg-brand-darkest" />
-                <h3 className="mt-4 text-xl font-bold text-brand-darkest">{t}</h3>
-                <p className="mt-2 text-brand">{b}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Sectors — horizontal scroll */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex items-end justify-between">
-            <h2 className="text-3xl font-extrabold text-brand-darkest sm:text-4xl">قطاعات متنوّعة</h2>
-            <Link to="/jobs" className="text-sm font-bold text-brand-darkest underline">كل الفرص</Link>
-          </div>
-          <div className="mt-10 flex gap-4 overflow-x-auto pb-4">
-            {SECTORS.map((s) => (
-              <div key={s} className="flex h-40 w-56 shrink-0 items-end rounded-2xl border border-brand-soft bg-white p-6 text-xl font-extrabold text-brand-darkest">
-                {s}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA — full bleed dark */}
-      <section className="bg-brand-darkest px-6 py-28 text-center text-white">
-        <h2 className="mx-auto max-w-2xl text-4xl font-extrabold leading-tight sm:text-5xl">جاهز تبدأ رحلتك مع Q8Work؟</h2>
-        <p className="mt-5 text-white/60">انضم اليوم — التسجيل مجاني بالكامل في المرحلة الأولى.</p>
-        <Link to={user ? "/app" : "/register"} className="btn-secondary mt-8">ابدأ الآن</Link>
+        <Link to={user ? "/app" : "/register"} className="btn-primary shrink-0">{user ? "الذهاب إلى لوحتي" : "أنشئ حساباً"}</Link>
       </section>
     </Layout>
   );
