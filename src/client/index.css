@@ -76,6 +76,7 @@
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Thmanyah", "Cairo", ui-sans-serif, sans-serif;
+  --font-logo: "Space Grotesk", "Thmanyah", ui-sans-serif, sans-serif;
 }
 
 :root {
