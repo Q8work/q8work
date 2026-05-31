@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <rect width="48" height="48" rx="13" fill="#030d4f"/>
+  <rect width="48" height="48" rx="13" fill="#3b5bfd"/>
   <!-- secondary tower -->
   <rect x="14.4" y="21" width="3" height="17" rx="1.5" fill="#ffffff" opacity="0.9"/>
   <path d="M15.9 15 L17.4 21 H14.4 Z" fill="#ffffff" opacity="0.9"/>

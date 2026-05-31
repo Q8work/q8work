@@ -61,8 +61,8 @@
 
 @theme {
   /* coolors-style: clean black & white, color expressed via palette bars */
-  --color-brand-darkest: #0b0b0d; /* near-black: headings, dark sections, button hover */
-  --color-brand-dark: #17191f;    /* near-black: primary buttons, active */
+  --color-brand-darkest: #0b0b0d; /* near-black: headings, dark sections */
+  --color-brand-dark: #3b5bfd;    /* coolors blue: primary buttons, links, active */
   --color-brand: #6b7280;         /* gray: secondary/muted text */
   --color-brand-light: #d6d8dc;   /* light gray */
   --color-brand-soft: #eef0f2;    /* surfaces / borders / chips */
@@ -74,7 +74,7 @@
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Thmanyah", "Cairo", ui-sans-serif, sans-serif;
-  --font-logo: "Space Grotesk", "Thmanyah", ui-sans-serif, sans-serif;
+  --font-logo: "Poppins", "Thmanyah", ui-sans-serif, sans-serif;
 }
 
 :root {
@@ -111,7 +111,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply btn bg-brand-dark text-white hover:bg-brand-darkest;
+    @apply btn bg-brand-dark text-white hover:bg-[#2c46e0];
   }
   .btn-secondary {
     @apply btn bg-white text-brand-darkest border border-brand-light hover:bg-brand-soft;
