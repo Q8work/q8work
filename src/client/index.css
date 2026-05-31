@@ -38,13 +38,13 @@
 }
 
 @theme {
-  /* Corporate navy palette */
-  --color-brand-darkest: #0b1f3a;
-  --color-brand-dark: #1b3a6b;
-  --color-brand: #3066a8;
-  --color-brand-light: #9cc1e6;
-  --color-brand-soft: #e6eef6;
-  --color-brand-bg: #f5f8fc;
+  /* Google-store inspired: clean white + Google blue accent */
+  --color-brand-darkest: #202124; /* near-black: headings, dark blocks */
+  --color-brand-dark: #1a73e8;    /* Google blue: primary actions, links, active */
+  --color-brand: #5f6368;         /* gray: secondary/muted text */
+  --color-brand-light: #aecbfa;   /* light blue */
+  --color-brand-soft: #e8f0fe;    /* light blue surface / borders / chips */
+  --color-brand-bg: #ffffff;      /* white page background */
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
@@ -59,9 +59,9 @@ body {
   padding: 0;
 }
 
-/* Keep anchored/scrolled content clear of the sticky multi-tier header */
+/* Keep anchored/scrolled content clear of the sticky header */
 html {
-  scroll-padding-top: 9rem;
+  scroll-padding-top: 6rem;
 }
 
 body {
@@ -78,15 +78,15 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
 }
 
 @layer components {
   .btn-primary {
-    @apply btn bg-brand-dark text-white hover:bg-brand-darkest;
+    @apply btn bg-brand-dark text-white hover:bg-[#1765cc];
   }
   .btn-secondary {
-    @apply btn bg-brand-soft text-brand-darkest hover:bg-brand-light;
+    @apply btn bg-brand-soft text-brand-dark hover:bg-brand-light;
   }
   .btn-ghost {
     @apply btn bg-transparent text-brand-dark hover:bg-brand-soft;
@@ -95,10 +95,10 @@ body {
     @apply btn bg-red-600 text-white hover:bg-red-700;
   }
   .card {
-    @apply rounded-lg bg-white p-6 border border-brand-soft shadow-sm;
+    @apply rounded-3xl bg-white p-6 border border-brand-soft shadow-sm;
   }
   .input {
-    @apply w-full rounded-lg border border-brand-light bg-white px-4 py-2.5 text-sm text-brand-darkest placeholder:text-brand-light/80 focus:border-brand focus:ring-2 focus:ring-brand-soft focus:outline-none;
+    @apply w-full rounded-xl border border-brand-soft bg-white px-4 py-2.5 text-sm text-brand-darkest placeholder:text-brand/60 focus:border-brand-dark focus:ring-2 focus:ring-brand-soft focus:outline-none;
   }
   .label {
     @apply mb-1.5 block text-sm font-bold text-brand-dark;
