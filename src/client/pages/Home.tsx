@@ -18,7 +18,6 @@ interface CompanyCard {
   verified: number; open_jobs: number;
 }
 
-const PALETTE = ["#FB0C06", "#FFC52C", "#10B5A4", "#1F6FEB", "#030D4F"];
 
 // ---- mini job card used in previews & hero ----
 function MiniJob({ job }: { job: Job }) {
@@ -124,18 +123,6 @@ export function Home() {
         <div className="mt-4 flex flex-wrap justify-center gap-3">
           <Link to="/register" className="btn-primary">سجّل مجاناً</Link>
           <Link to="/jobs" className="btn-secondary">استكشف الفرص</Link>
-        </div>
-
-        {/* Big product preview */}
-        <div className="relative mx-auto mt-14 max-w-4xl overflow-hidden rounded-3xl border border-brand-soft bg-brand-bg p-4 shadow-xl sm:p-6">
-          <div className="flex h-3 overflow-hidden rounded-full">
-            {PALETTE.map((c) => <div key={c} className="flex-1" style={{ background: c }} />)}
-          </div>
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            {(jobs.length ? jobs.slice(0, 3) : Array.from({ length: 3 })).map((j, i) =>
-              j ? <MiniJob key={(j as Job).id} job={j as Job} /> : <div key={i} className="h-28 rounded-xl border border-brand-soft bg-white" />
-            )}
-          </div>
         </div>
       </section>
 
