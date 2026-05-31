@@ -60,15 +60,15 @@
 }
 
 @theme {
-  /* wellfound-inspired: clean light, near-black, teal accent */
-  --color-brand-darkest: #0f1216; /* near-black: headings, dark sections, button hover */
-  --color-brand-dark: #1f242e;    /* primary button bg, active */
-  --color-brand: #687385;         /* gray: secondary/muted text */
-  --color-brand-light: #cdd2da;   /* light gray */
-  --color-brand-soft: #eef0f3;    /* surfaces / borders / chips */
-  --color-brand-bg: #ffffff;      /* white page background */
-  --color-gold: #0e9384;          /* teal accent (links, highlights) */
-  --color-gold-soft: #d7f0ec;     /* light teal surface */
+  /* wellfound layout with a fresh light-green identity */
+  --color-brand-darkest: #14432f; /* dark green: headings, dark sections, button hover */
+  --color-brand-dark: #16a34a;    /* green: primary buttons, active */
+  --color-brand: #5f7268;         /* muted green-gray: secondary text */
+  --color-brand-light: #b7e4c7;   /* light green */
+  --color-brand-soft: #e6f6ec;    /* very light green: surfaces / borders / chips */
+  --color-brand-bg: #f6fcf8;      /* faint green-tinted background */
+  --color-gold: #16a34a;          /* green accent (links, highlights) */
+  --color-gold-soft: #dcfce7;     /* light green surface */
 
   --font-sans: "Thmanyah", "Cairo", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Thmanyah", "Cairo", ui-sans-serif, sans-serif;
