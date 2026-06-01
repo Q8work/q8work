@@ -28,13 +28,41 @@ export function JobBigCard({ job, scheme }: { job: BigJob; scheme: { bg: string;
     >
       {/* flash / shine sweep on hover */}
       <span className="pointer-events-none absolute inset-y-0 -left-1/3 z-10 w-1/3 -skew-x-12 bg-white/40 blur-md transition-[transform,opacity] duration-700 ease-out group-hover:translate-x-[450%] group-hover:opacity-0" />
-      <h3 className="text-2xl font-extrabold leading-tight sm:text-3xl">{job.title}</h3>
-      <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
-        {job.company_name && <span className="rounded-full bg-white/75 px-3 py-1.5">{job.company_name}</span>}
-        {job.area && <span className="rounded-full bg-white/75 px-3 py-1.5">{job.area}</span>}
-        {job.salary && <span className="rounded-full bg-white/75 px-3 py-1.5">{toLatinDigits(job.salary)} د.ك</span>}
-      </div>
-      <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold">
+
+      {/* company identity */}
+      {job.company_name && (
+        <div className="flex items-center gap-2.5">
+          <span
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-extrabold"
+            style={{ backgroundColor: scheme.fg, color: scheme.bg }}
+          >
+            {job.company_name.charAt(0)}
+          </span>
+          <span className="truncate text-sm font-bold opacity-80">{job.company_name}</span>
+        </div>
+      )}
+
+      <h3 className="mt-4 text-2xl font-extrabold leading-tight sm:text-3xl">{job.title}</h3>
+
+      {/* meta footer */}
+      {(job.area || job.salary) && (
+        <div className="mt-5 flex items-center gap-3 border-t border-current/15 pt-4 text-sm font-semibold opacity-80">
+          {job.area && (
+            <span className="inline-flex items-center gap-1.5">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" /><circle cx="12" cy="10" r="3" /></svg>
+              {job.area}
+            </span>
+          )}
+          {job.salary && (
+            <span className="inline-flex items-center gap-1.5">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><circle cx="12" cy="12" r="3" /></svg>
+              {toLatinDigits(job.salary)} د.ك
+            </span>
+          )}
+        </div>
+      )}
+
+      <span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold">
         عرض والتقديم
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
       </span>
