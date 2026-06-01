@@ -52,8 +52,8 @@ export function JobsList() {
 
   return (
     <Layout wide>
-      <h1 className="mb-2 text-3xl font-extrabold text-brand-darkest">فرص العمل المتاحة</h1>
-      <p className="mb-6 text-brand-dark">تصفّح الفرص المنشورة من الشركات</p>
+      <h1 className="mb-2 text-3xl font-extrabold text-brand-darkest">اكتشف الفرص المناسبة لك</h1>
+      <p className="mb-6 text-brand-dark">فرص عمل مرنة ومكافآت واضحة من شركات تبحث عن كفاءات لفترات محددة.</p>
 
       {/* Filters */}
       <div className="mb-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-brand-soft">
