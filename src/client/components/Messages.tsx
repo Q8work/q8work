@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 import { EmptyState, Spinner } from "./ui";
 import { useAuth } from "../lib/auth";
+import { WorkerProfileModal } from "./WorkerProfileModal";
 
 interface Thread {
   offer_id: string;
@@ -31,6 +33,7 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [profileId, setProfileId] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   const loadThreads = () =>
@@ -76,6 +79,7 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
   };
 
   const otherName = (t: Thread) => (user?.role === "company" ? t.worker_name : t.company_name) || "مستخدم";
+  const activeThread = threads.find((t) => t.offer_id === active);
 
   if (loading) return <div className="py-10 text-center"><Spinner /></div>;
   if (threads.length === 0)
@@ -106,6 +110,26 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
 
       {/* Conversation */}
       <div className="flex h-[60vh] flex-col rounded-2xl bg-white shadow-sm ring-1 ring-brand-soft">
+        {activeThread && (
+          <div className="flex items-center gap-2 border-b border-brand-soft px-4 py-3">
+            {user?.role === "company" ? (
+              <button
+                type="button"
+                onClick={() => setProfileId(activeThread.worker_user_id)}
+                className="font-bold text-brand-darkest hover:text-brand-dark hover:underline"
+              >
+                {otherName(activeThread)}
+              </button>
+            ) : (
+              <Link
+                to={`/companies/${activeThread.company_user_id}`}
+                className="font-bold text-brand-darkest hover:text-brand-dark hover:underline"
+              >
+                {otherName(activeThread)}
+              </Link>
+            )}
+          </div>
+        )}
         <div className="flex-1 space-y-2 overflow-y-auto p-4">
           {messages.map((m) => {
             const mine = m.sender_user_id === user?.id;
@@ -135,6 +159,8 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
           </button>
         </form>
       </div>
+
+      {profileId && <WorkerProfileModal workerId={profileId} onClose={() => setProfileId(null)} />}
     </div>
   );
 }
