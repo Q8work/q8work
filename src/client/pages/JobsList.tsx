@@ -168,6 +168,13 @@ export function JobsList() {
           ))}
         </div>
       )}
+
+      {/* Disclaimer */}
+      <p className="mx-auto mt-12 max-w-3xl text-center text-sm leading-relaxed text-brand">
+        جميع الفرص المعروضة يتم تحديد مدتها ومكافآتها من قبل الجهات المعلنة، وتعمل
+        <span data-latin> Q8Work </span>
+        كمنصة لربط أصحاب الفرص بالأفراد الباحثين عن أعمال مرنة ودخل إضافي.
+      </p>
     </Layout>
   );
 }
