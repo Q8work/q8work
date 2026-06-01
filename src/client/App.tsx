@@ -8,6 +8,7 @@ import { JobDetail } from "./pages/JobDetail";
 import { CompaniesList } from "./pages/CompaniesList";
 import { CompanyProfile } from "./pages/CompanyProfile";
 import { Contact } from "./pages/Contact";
+import { About } from "./pages/About";
 import { Login, Register } from "./pages/Auth";
 import { WorkerDashboard } from "./pages/worker/WorkerDashboard";
 import { CompanyDashboard } from "./pages/company/CompanyDashboard";
@@ -41,6 +42,7 @@ export function App() {
       <Route path="/jobs/:id" element={<JobDetail />} />
       <Route path="/companies" element={<CompaniesList />} />
       <Route path="/companies/:id" element={<CompanyProfile />} />
+      <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

@@ -39,6 +39,7 @@ export function Navbar() {
             <NavItem to="/" end>الرئيسية</NavItem>
             <NavItem to="/jobs">فرص العمل</NavItem>
             <NavItem to="/companies">الشركات</NavItem>
+            <NavItem to="/about">من نحن</NavItem>
             <NavItem to="/contact">تواصل معنا</NavItem>
             {user && <NavItem to="/app">لوحتي</NavItem>}
           </nav>
@@ -86,6 +87,7 @@ export function Footer() {
           <li><Link to="/" className="hover:text-brand-dark">الرئيسية</Link></li>
           <li><Link to="/jobs" className="hover:text-brand-dark">فرص العمل</Link></li>
           <li><Link to="/companies" className="hover:text-brand-dark">الشركات</Link></li>
+          <li><Link to="/about" className="hover:text-brand-dark">من نحن</Link></li>
           <li><Link to="/register" className="hover:text-brand-dark">إنشاء حساب</Link></li>
           <li><Link to="/login" className="hover:text-brand-dark">تسجيل الدخول</Link></li>
         </FooterCol>
