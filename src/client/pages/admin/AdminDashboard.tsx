@@ -8,7 +8,7 @@ type Tab = "overview" | "users" | "companies" | "jobs" | "ratings" | "contact";
 const fmtDate = (ms?: number) =>
   ms ? new Intl.DateTimeFormat("ar-KW-u-nu-latn", { dateStyle: "medium" }).format(new Date(ms)) : "—";
 
-const roleLabel = (r: string) => ({ worker: "كويتي", company: "شركة", admin: "إدارة" }[r] || r);
+const roleLabel = (r: string) => ({ worker: "باحث", company: "شركة", admin: "إدارة" }[r] || r);
 
 interface Stats {
   workers: number; companies: number; jobs: number; open_jobs: number;
@@ -46,7 +46,7 @@ interface AdminUser {
   id: string; email: string; role: string; status: string; created_at: number;
   worker_name: string | null; worker_phone: string | null;
   civil_id_image_key: string | null; civil_id_verified: number | null;
-  company_name: string | null; company_verified: number | null;
+  company_name: string | null; company_verified: number | null; company_phone: string | null;
 }
 
 function UsersTab() {
@@ -63,10 +63,6 @@ function UsersTab() {
 
   const toggleStatus = async (u: AdminUser) => {
     await api.patch(`/admin/users/${u.id}`, { status: u.status === "active" ? "suspended" : "active" });
-    load();
-  };
-  const verifyWorker = async (u: AdminUser) => {
-    await api.patch(`/admin/workers/${u.id}/verify`, { verified: true });
     load();
   };
 
@@ -90,6 +86,7 @@ function UsersTab() {
               <tr>
                 <th className="p-3 text-right">الاسم</th>
                 <th className="p-3 text-right">البريد</th>
+                <th className="p-3 text-right">الهاتف</th>
                 <th className="p-3 text-right">النوع</th>
                 <th className="p-3 text-right">الحالة</th>
                 <th className="p-3 text-right">إجراءات</th>
@@ -100,6 +97,7 @@ function UsersTab() {
                 <tr key={u.id} className="border-t border-brand-soft">
                   <td className="p-3 font-semibold text-brand-darkest">{u.worker_name || u.company_name || "—"}</td>
                   <td className="p-3 text-brand-dark">{u.email}</td>
+                  <td className="p-3 text-brand-dark"><span data-latin>{u.worker_phone || u.company_phone || "—"}</span></td>
                   <td className="p-3">{roleLabel(u.role)}</td>
                   <td className="p-3">
                     <Badge className={u.status === "active" ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-700"}>
@@ -120,11 +118,6 @@ function UsersTab() {
                           <a href={fileUrl(u.civil_id_image_key)} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-brand-soft px-2 py-1 text-xs font-bold text-brand-darkest cursor-pointer hover:bg-brand-light">
                             عرض الهوية
                           </a>
-                        )}
-                        {u.role === "worker" && (
-                          <button onClick={() => verifyWorker(u)} className="rounded-lg bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-800 cursor-pointer hover:bg-emerald-200">
-                            توثيق الجنسية
-                          </button>
                         )}
                       </>
                     )}
@@ -225,7 +218,6 @@ function UserDetailModal({ id, onClose }: { id: string; onClose: () => void }) {
                 <Row label="المحافظة" value={d.profile.area} />
                 <Row label="الهاتف" value={d.profile.phone ? <span data-latin>{d.profile.phone}</span> : ""} />
                 <Row label="الرقم المدني" value={d.profile.civil_id ? <span data-latin>{d.profile.civil_id}</span> : ""} />
-                <Row label="توثيق الجنسية" value={d.profile.civil_id_verified ? "✓ موثّق" : "غير موثّق"} />
                 <Row label="المهارات" value={(d.profile.skills || []).join("، ")} />
                 <Row label="عروض مستلمة" value={d.stats.offers_received} />
                 {d.profile.civil_id_image_key && (
