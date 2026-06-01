@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { toLatinDigits } from "../lib/format";
+import { fileUrl } from "../lib/api";
 
 export const JOB_SCHEMES = [
   { bg: "#d7f3f6", fg: "#0e8f9e" },
@@ -16,6 +17,7 @@ export interface BigJob {
   area?: string;
   salary?: string;
   company_name?: string;
+  logo_key?: string | null;
 }
 
 // coolors-style big colorful job card with a hover shine
@@ -32,12 +34,20 @@ export function JobBigCard({ job, scheme }: { job: BigJob; scheme: { bg: string;
       {/* company identity */}
       {job.company_name && (
         <div className="flex items-center gap-2.5">
-          <span
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-extrabold"
-            style={{ backgroundColor: scheme.fg, color: scheme.bg }}
-          >
-            {job.company_name.charAt(0)}
-          </span>
+          {fileUrl(job.logo_key) ? (
+            <img
+              src={fileUrl(job.logo_key)}
+              alt={job.company_name}
+              className="h-9 w-9 shrink-0 rounded-full bg-white object-cover ring-2 ring-white/70"
+            />
+          ) : (
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-extrabold"
+              style={{ backgroundColor: scheme.fg, color: scheme.bg }}
+            >
+              {job.company_name.charAt(0)}
+            </span>
+          )}
           <span className="truncate text-sm font-bold opacity-80">{job.company_name}</span>
         </div>
       )}

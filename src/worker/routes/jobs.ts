@@ -22,7 +22,7 @@ jobs.get("/", async (c) => {
   if (q) { clauses.push("(j.title LIKE ? OR j.description LIKE ?)"); binds.push(`%${q}%`, `%${q}%`); }
 
   const rows = await c.env.DB.prepare(
-    `SELECT j.*, cp.company_name, cp.verified AS company_verified
+    `SELECT j.*, cp.company_name, cp.verified AS company_verified, cp.logo_key
        FROM jobs j JOIN company_profiles cp ON cp.user_id = j.company_user_id
       WHERE ${clauses.join(" AND ")}
       ORDER BY j.created_at DESC LIMIT 100`
@@ -44,7 +44,7 @@ jobs.get("/mine", requireAuth("company"), async (c) => {
 // GET /api/jobs/:id
 jobs.get("/:id", async (c) => {
   const row = await c.env.DB.prepare(
-    `SELECT j.*, cp.company_name, cp.verified AS company_verified, cp.sector
+    `SELECT j.*, cp.company_name, cp.verified AS company_verified, cp.sector, cp.logo_key
        FROM jobs j JOIN company_profiles cp ON cp.user_id = j.company_user_id
       WHERE j.id = ?`
   )

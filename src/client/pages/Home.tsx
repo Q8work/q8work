@@ -12,7 +12,7 @@ import { JobBigCard, JOB_SCHEMES as SCHEMES } from "../components/JobBigCard";
 interface Stats { companies: number; workers: number; jobs: number; open_jobs: number; }
 interface Job {
   id: string; title: string; area: string; work_type: string; salary: string;
-  company_name: string; company_verified: number;
+  company_name: string; company_verified: number; logo_key: string | null;
 }
 interface CompanyCard {
   user_id: string; company_name: string; logo_key: string | null; sector: string;

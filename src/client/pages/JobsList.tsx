@@ -18,6 +18,7 @@ interface Job {
   headcount: number;
   company_name: string;
   company_verified: number;
+  logo_key: string | null;
   created_at: number;
 }
 
