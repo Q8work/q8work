@@ -75,7 +75,7 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
         ) : (
           <div className="px-6 pb-6">
             {/* Header — centered */}
-            <div className="-mt-16 flex flex-col items-center text-center">
+            <div className="relative z-10 -mt-16 flex flex-col items-center text-center">
               <span className="inline-block shrink-0 rounded-full bg-white p-1 shadow-md ring-1 ring-brand-soft">
                 <Avatar src={fileUrl(p.photo_key)} name={p.full_name} size={104} />
               </span>
