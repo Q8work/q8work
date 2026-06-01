@@ -9,10 +9,7 @@ import { toLatinDigits } from "../../lib/format";
 import {
   SKILLS,
   AREAS,
-  WORK_TYPES,
   AVAILABILITY,
-  COMMITMENTS,
-  labelOf,
   OFFER_STATUS,
   APPLICATION_STATUS,
 } from "../../lib/constants";
@@ -206,30 +203,6 @@ function ProfileTab() {
                 {a.label}
               </Toggle>
             ))}
-          </div>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div>
-            <label className="label">نوع العمل المفضل</label>
-            <select className="input" value={p.work_type} onChange={(e) => set({ work_type: e.target.value })}>
-              <option value="">—</option>
-              {WORK_TYPES.map((w) => <option key={w.value} value={w.value}>{w.label}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="label">مدة الالتزام</label>
-            <select className="input" value={p.commitment} onChange={(e) => set({ commitment: e.target.value })}>
-              <option value="">—</option>
-              {COMMITMENTS.map((cm) => <option key={cm.value} value={cm.value}>{cm.label}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="label">المكافأة المتوقعة (د.ك)</label>
-            <div className="relative">
-              <input type="number" min={0} step="0.5" className="input pl-12" value={p.expected_salary} onChange={(e) => set({ expected_salary: e.target.value })} placeholder="مثال: 5" />
-              <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm font-semibold text-brand">د.ك</span>
-            </div>
           </div>
         </div>
 
