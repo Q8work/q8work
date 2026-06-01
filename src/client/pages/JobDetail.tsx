@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { PageLoader, EmptyState, VerifiedTick, Badge, ErrorText, Spinner } from "../components/ui";
 import { api, ApiError } from "../lib/api";
@@ -134,19 +134,24 @@ function ApplyBox({ job, onApplied }: { job: Job; onApplied: () => void }) {
 
 export function JobDetail() {
   const { id } = useParams();
+  const { user, loading: authLoading } = useAuth();
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user) return;
     setLoading(true);
     api
       .get<{ job: Job }>(`/jobs/${id}`)
       .then((r) => setJob(r.job))
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, user]);
+
+  // Job details are exclusive to account holders — send guests to register.
+  if (authLoading) return <Layout><PageLoader /></Layout>;
+  if (!user) return <Navigate to={`/register?redirect=${encodeURIComponent(`/jobs/${id}`)}`} replace />;
 
   if (loading) return <Layout><PageLoader /></Layout>;
   if (notFound || !job) {

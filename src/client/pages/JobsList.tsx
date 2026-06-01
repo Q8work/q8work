@@ -4,6 +4,7 @@ import { Layout } from "../components/Layout";
 import { EmptyState, PageLoader, VerifiedTick } from "../components/ui";
 import { IconPin, IconClock, IconBriefcase } from "../components/icons";
 import { api, fileUrl } from "../lib/api";
+import { useAuth } from "../lib/auth";
 import { AREAS, WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
 import { toLatinDigits } from "../lib/format";
 
@@ -33,7 +34,9 @@ const REWARD_TIERS = [
 const parseReward = (s: string) => parseInt(String(s).replace(/[^\d]/g, ""), 10) || 0;
 
 function JobCard({ job }: { job: Job }) {
+  const { user } = useAuth();
   const logo = fileUrl(job.logo_key);
+  const detailsTo = user ? `/jobs/${job.id}` : `/register?redirect=${encodeURIComponent(`/jobs/${job.id}`)}`;
   return (
     <div className="card group flex flex-col">
       {/* company */}
@@ -72,7 +75,7 @@ function JobCard({ job }: { job: Job }) {
       )}
 
       {/* action */}
-      <Link to={`/jobs/${job.id}`} className="btn-primary mt-4 w-full justify-center">
+      <Link to={detailsTo} className="btn-primary mt-4 w-full justify-center">
         عرض التفاصيل
       </Link>
     </div>
