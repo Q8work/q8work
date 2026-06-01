@@ -7,7 +7,7 @@ export function Logo({ light = false, withText = true }: { light?: boolean; with
       </span>
       {withText && (
         <span className={`mt-1 text-[10px] font-semibold ${light ? "text-white/70" : "text-brand"}`}>
-          العمل الجزئي للكويتيين
+          منصة عمل مرنة
         </span>
       )}
     </span>
