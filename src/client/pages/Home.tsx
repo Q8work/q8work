@@ -39,12 +39,12 @@ function MiniJob({ job }: { job: Job }) {
 }
 
 function FeatureRow({ reverse, eyebrow, title, body, cta, to, preview }: {
-  reverse?: boolean; eyebrow: string; title: string; body: string; cta: string; to: string; preview: React.ReactNode;
+  reverse?: boolean; eyebrow?: string; title: string; body: string; cta: string; to: string; preview: React.ReactNode;
 }) {
   return (
     <section className="grid items-center gap-10 md:grid-cols-2">
       <div className={reverse ? "md:order-2" : ""}>
-        <span className="text-xs font-bold uppercase tracking-widest text-brand">{eyebrow}</span>
+        {eyebrow && <span className="text-xs font-bold uppercase tracking-widest text-brand">{eyebrow}</span>}
         <h2 className="mt-3 text-3xl font-extrabold leading-tight text-brand-darkest sm:text-4xl">{title}</h2>
         <p className="mt-4 text-lg leading-relaxed text-brand">{body}</p>
         <Link to={to} className="btn-primary mt-6">{cta}</Link>
@@ -107,9 +107,8 @@ export function Home() {
       {/* Feature rows */}
       <div className="mt-20 space-y-20">
         <FeatureRow
-          eyebrow="للباحثين عن عمل"
-          title="ابحث وقدّم على فرص تناسب وقتك"
-          body="أنشئ ملفك، تصفّح آلاف الفرص الجزئية، وقدّم بضغطة — أو دع الشركات تكتشفك وترسل لك عروضها."
+          title="حوّل وقت فراغك إلى دخل إضافي"
+          body="اختر الفرص المناسبة لك وابدأ العمل بمرونة دون التزام طويل"
           cta="ابدأ كباحث عن عمل"
           to="/register"
           preview={
@@ -122,9 +121,8 @@ export function Home() {
         />
         <FeatureRow
           reverse
-          eyebrow="للشركات"
-          title="وظّف الكفاءات الكويتية بسرعة"
-          body="انشر فرصك، استقبل المتقدمين، وفلتر حسب المهارة والمحافظة والتقييم — ثم أرسل عرضك مباشرة."
+          title="وظّف عند الحاجة فقط"
+          body="اعرض فرصتك وحدد المدة والمكافأة، وسنربطك بالأشخاص المناسبين"
           cta="انشر فرصة عمل"
           to="/register"
           preview={
@@ -148,7 +146,7 @@ export function Home() {
       {jobs.length > 0 && (
         <section className="mt-20">
           <div className="flex items-end justify-between">
-            <h2 className="text-3xl font-extrabold text-brand-darkest sm:text-4xl">فرص العمل الحالية</h2>
+            <h2 className="text-3xl font-extrabold text-brand-darkest sm:text-4xl">فرص مرنة بمكافآت مباشرة</h2>
             <Link to="/jobs" className="text-sm font-bold text-brand-dark hover:underline">عرض الكل ←</Link>
           </div>
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
