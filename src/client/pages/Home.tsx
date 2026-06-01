@@ -75,10 +75,10 @@ export function Home() {
       {/* Hero */}
       <section className="px-2 pt-10 text-center sm:pt-16">
         <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-brand-darkest sm:text-6xl">
-          اعمل <span className="text-brand-dark">متى ما أردت</span>، واختر الفرص التي تناسب وقتك ومهاراتك
+          اعمل وقت ما تبي، واختر الفرص المناسبة لك، واحصل على <span className="text-brand-dark">دخل إضافي</span>.
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-lg text-brand">
-          احصل على دخل إضافي من شركات تبحث عن كفاءات لفترات محددة
+          منصة تربط الكويتيين بالشركات التي تبحث عن كفاءات وفرص عمل مرنة لفترات محددة ومكافآت واضحة
         </p>
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
