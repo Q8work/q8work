@@ -121,8 +121,8 @@ export function Home() {
         />
         <FeatureRow
           reverse
-          title="وظّف عند الحاجة فقط"
-          body="اعرض فرصتك وحدد المدة والمكافأة، وسنربطك بالأشخاص المناسبين"
+          title="لا توظّف بدوام كامل إذا لم تكن بحاجة لذلك"
+          body="اعرض فرصاً مؤقتة أو موسمية أو جزئية، وحدد عدد الأيام أو الساعات والمكافأة، وسنساعدك في الوصول إلى الأشخاص المناسبين بسرعة."
           cta="انشر فرصة عمل"
           to="/register"
           preview={
@@ -175,6 +175,26 @@ export function Home() {
           </div>
         </section>
       )}
+
+      {/* Trust */}
+      <section className="mt-20">
+        <h2 className="text-center text-3xl font-extrabold text-brand-darkest sm:text-4xl">بيئة عمل موثوقة للطرفين</h2>
+        <div className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
+          {[
+            "حسابات موثقة",
+            "تقييمات متبادلة",
+            "فرص حقيقية من شركات معتمدة",
+            "مكافآت واضحة قبل بدء العمل",
+          ].map((t) => (
+            <div key={t} className="flex items-center gap-3 rounded-2xl bg-brand-soft p-4">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-dark text-white">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+              </span>
+              <span className="font-bold text-brand-darkest">{t}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="mt-20 rounded-3xl bg-brand-dark px-6 py-16 text-center text-white">
