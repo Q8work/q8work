@@ -89,8 +89,8 @@ export function Home() {
           <button type="submit" className="btn-primary">ابحث</button>
         </form>
         <div className="mt-4 flex flex-wrap justify-center gap-3">
-          <Link to="/register" className="btn-primary">سجّل مجاناً</Link>
-          <Link to="/jobs" className="btn-secondary">استكشف الفرص</Link>
+          <Link to="/jobs" className="btn-primary">استكشف الفرص</Link>
+          <Link to="/register" className="btn-secondary">أضف فرصة لشركتك</Link>
         </div>
       </section>
 
