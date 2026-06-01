@@ -84,7 +84,7 @@ export function Home() {
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
           className="mx-auto mt-8 flex max-w-xl gap-2 rounded-xl border border-brand-soft bg-white p-2 shadow-sm"
         >
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث عن فرصة عمل أو مهارة..."
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث عن فرصة تناسب وقتك"
             className="flex-1 bg-transparent px-3 text-sm text-brand-darkest placeholder:text-brand/60 focus:outline-none" />
           <button type="submit" className="btn-primary">ابحث</button>
         </form>
