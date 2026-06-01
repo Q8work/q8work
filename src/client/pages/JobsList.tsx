@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { EmptyState, PageLoader, VerifiedBadge } from "../components/ui";
+import { EmptyState, PageLoader } from "../components/ui";
 import { api } from "../lib/api";
-import { AREAS, WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
-import { IconPin, IconBriefcase, IconClock, IconCash } from "../components/icons";
-import { toLatinDigits } from "../lib/format";
+import { AREAS, WORK_TYPES } from "../lib/constants";
+import { JobBigCard, JOB_SCHEMES } from "../components/JobBigCard";
 
 interface Job {
   id: string;
@@ -86,37 +85,9 @@ export function JobsList() {
       ) : jobs.length === 0 ? (
         <EmptyState title="لا توجد فرص عمل مطابقة" hint="جرّب تعديل عوامل التصفية." />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {jobs.map((job) => (
-            <div key={job.id} className="card flex flex-col">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="text-lg font-bold text-brand-darkest">{job.title}</h3>
-                <VerifiedBadge verified={job.company_verified} />
-              </div>
-              <p className="text-sm font-semibold text-brand">{job.company_name}</p>
-              {job.description && <p className="mt-2 line-clamp-3 text-sm text-brand-dark">{job.description}</p>}
-              <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                {job.area && <span className="chip gap-1"><IconPin className="h-3.5 w-3.5" /> {job.area}</span>}
-                {job.work_type && <span className="chip gap-1"><IconBriefcase className="h-3.5 w-3.5" /> {labelOf(WORK_TYPES, job.work_type)}</span>}
-                {job.duration && <span className="chip gap-1"><IconClock className="h-3.5 w-3.5" /> {labelOf(DURATIONS, job.duration)}</span>}
-                {job.salary && <span className="chip gap-1"><IconCash className="h-3.5 w-3.5" /> {toLatinDigits(job.salary)} د.ك</span>}
-              </div>
-              {job.skills_required.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-1">
-                  {job.skills_required.map((s) => (
-                    <span key={s} className="chip bg-brand-bg">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              )}
-              <div className="mt-4 flex items-center justify-between border-t border-brand-soft pt-3">
-                <span className="text-xs text-brand">المطلوب: {job.headcount}</span>
-                <Link to={`/jobs/${job.id}`} className="btn-secondary text-xs">
-                  عرض والتقديم
-                </Link>
-              </div>
-            </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {jobs.map((job, i) => (
+            <JobBigCard key={job.id} job={job} scheme={JOB_SCHEMES[i % JOB_SCHEMES.length]} />
           ))}
         </div>
       )}
