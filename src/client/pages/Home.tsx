@@ -74,9 +74,13 @@ export function Home() {
     <Layout wide>
       {/* Hero */}
       <section className="px-2 pt-10 text-center sm:pt-16">
-        <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-brand-darkest sm:text-6xl">
-          فرص عمل مرنة تمنحك حرية اختيار وقتك وتحقيق <span className="text-brand-dark">دخل إضافي</span>
+        <span className="font-logo text-2xl font-extrabold tracking-tight text-brand-dark sm:text-3xl" data-latin>Q8Work</span>
+        <h1 className="mx-auto mt-3 max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-brand-darkest sm:text-6xl">
+          منصة كويتية للفرص والعمل <span className="text-brand-dark">المرن</span>
         </h1>
+        <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-brand">
+          اعمل وقت ما تريد، واختر الفرص المناسبة لمهاراتك، واحصل على دخل إضافي من شركات تبحث عن كفاءات لفترات محددة.
+        </p>
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
           className="mx-auto mt-8 flex max-w-xl gap-2 rounded-xl border border-brand-soft bg-white p-2 shadow-sm"
