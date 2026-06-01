@@ -75,10 +75,10 @@ export function Home() {
       {/* Hero */}
       <section className="px-2 pt-10 text-center sm:pt-16">
         <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-brand-darkest sm:text-6xl">
-          اختر وقتك.. واعمل بمرونة واحصل على <span className="text-brand-dark">دخل إضافي</span>
+          اعمل <span className="text-brand-dark">متى ما أردت</span>، واختر الفرص التي تناسب وقتك ومهاراتك
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-lg text-brand">
-          <span data-latin>Q8Work</span> منصة دخل إضافي وفرص مرنة.
+          احصل على دخل إضافي من شركات تبحث عن كفاءات لفترات محددة
         </p>
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
