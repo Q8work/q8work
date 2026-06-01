@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { EmptyState, PageLoader } from "../components/ui";
-import { api } from "../lib/api";
-import { AREAS, WORK_TYPES } from "../lib/constants";
-import { JobBigCard, JOB_SCHEMES } from "../components/JobBigCard";
+import { EmptyState, PageLoader, VerifiedTick } from "../components/ui";
+import { IconPin, IconClock, IconBriefcase } from "../components/icons";
+import { api, fileUrl } from "../lib/api";
+import { AREAS, WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
+import { toLatinDigits } from "../lib/format";
 
 interface Job {
   id: string;
@@ -22,6 +23,62 @@ interface Job {
   created_at: number;
 }
 
+const REWARD_TIERS = [
+  { value: "", label: "كل المكافآت" },
+  { value: "50", label: "+50 د.ك" },
+  { value: "100", label: "+100 د.ك" },
+  { value: "200", label: "+200 د.ك" },
+];
+
+const parseReward = (s: string) => parseInt(String(s).replace(/[^\d]/g, ""), 10) || 0;
+
+function JobCard({ job }: { job: Job }) {
+  const logo = fileUrl(job.logo_key);
+  return (
+    <div className="card group flex flex-col">
+      {/* company */}
+      <div className="flex items-center gap-2.5">
+        {logo ? (
+          <img src={logo} alt={job.company_name} className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-brand-soft" />
+        ) : (
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-extrabold text-brand-dark">
+            {job.company_name.charAt(0)}
+          </span>
+        )}
+        <span className="inline-flex min-w-0 items-center gap-1 text-sm font-bold text-brand-dark">
+          <span className="truncate">{job.company_name}</span>
+          <VerifiedTick verified={job.company_verified} size={14} />
+        </span>
+      </div>
+
+      {/* title */}
+      <h3 className="mt-3 text-xl font-extrabold leading-snug text-brand-darkest">{job.title}</h3>
+
+      {/* meta */}
+      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm text-brand">
+        {job.area && <span className="inline-flex items-center gap-1.5"><IconPin className="h-4 w-4" /> {job.area}</span>}
+        {job.duration && <span className="inline-flex items-center gap-1.5"><IconClock className="h-4 w-4" /> {labelOf(DURATIONS, job.duration)}</span>}
+        {job.work_type && <span className="inline-flex items-center gap-1.5"><IconBriefcase className="h-4 w-4" /> {labelOf(WORK_TYPES, job.work_type)}</span>}
+      </div>
+
+      {/* prominent reward */}
+      {job.salary && (
+        <div className="mt-4 flex items-center justify-between rounded-xl bg-emerald-50 px-4 py-3">
+          <span className="text-xs font-bold text-emerald-700/80">المكافأة</span>
+          <span className="text-2xl font-extrabold text-emerald-700">
+            {toLatinDigits(job.salary)} <span className="text-base font-bold">د.ك</span>
+          </span>
+        </div>
+      )}
+
+      {/* action */}
+      <Link to={`/jobs/${job.id}`} className="btn-primary mt-4 w-full justify-center">
+        عرض التفاصيل
+      </Link>
+    </div>
+  );
+}
+
 export function JobsList() {
   const [params, setParams] = useSearchParams();
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -30,6 +87,8 @@ export function JobsList() {
   const q = params.get("q") || "";
   const area = params.get("area") || "";
   const workType = params.get("work_type") || "";
+  const duration = params.get("duration") || "";
+  const reward = params.get("reward") || "";
 
   useEffect(() => {
     setLoading(true);
@@ -43,6 +102,14 @@ export function JobsList() {
       .finally(() => setLoading(false));
   }, [q, area, workType]);
 
+  // duration + reward are filtered client-side
+  const filtered = useMemo(() => {
+    const min = parseReward(reward);
+    return jobs.filter(
+      (j) => (!duration || j.duration === duration) && (!min || parseReward(j.salary) >= min)
+    );
+  }, [jobs, duration, reward]);
+
   const update = (key: string, value: string) => {
     const next = new URLSearchParams(params);
     if (value) next.set(key, value);
@@ -55,40 +122,49 @@ export function JobsList() {
       <h1 className="mb-2 text-3xl font-extrabold text-brand-darkest">اكتشف الفرص المناسبة لك</h1>
       <p className="mb-6 text-brand-dark">فرص عمل مرنة ومكافآت واضحة من شركات تبحث عن كفاءات لفترات محددة.</p>
 
-      {/* Filters */}
-      <div className="mb-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-brand-soft">
+      {/* Smart filters */}
+      <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-brand-soft">
         <input
-          className="input flex-1 min-w-[200px]"
-          placeholder="بحث بالكلمة..."
+          className="input w-full"
+          placeholder="ابحث عن فرصة تناسب وقتك"
           defaultValue={q}
           onKeyDown={(e) => e.key === "Enter" && update("q", (e.target as HTMLInputElement).value)}
         />
-        <select className="input w-auto" value={area} onChange={(e) => update("area", e.target.value)}>
-          <option value="">كل المحافظات</option>
-          {AREAS.map((a) => (
-            <option key={a} value={a}>
-              {a}
-            </option>
-          ))}
-        </select>
-        <select className="input w-auto" value={workType} onChange={(e) => update("work_type", e.target.value)}>
-          <option value="">كل أنواع العمل</option>
-          {WORK_TYPES.map((w) => (
-            <option key={w.value} value={w.value}>
-              {w.label}
-            </option>
-          ))}
-        </select>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <select className="input" value={area} onChange={(e) => update("area", e.target.value)}>
+            <option value="">المدينة (كل المحافظات)</option>
+            {AREAS.map((a) => (
+              <option key={a} value={a}>{a}</option>
+            ))}
+          </select>
+          <select className="input" value={workType} onChange={(e) => update("work_type", e.target.value)}>
+            <option value="">نوع الفرصة</option>
+            {WORK_TYPES.map((w) => (
+              <option key={w.value} value={w.value}>{w.label}</option>
+            ))}
+          </select>
+          <select className="input" value={duration} onChange={(e) => update("duration", e.target.value)}>
+            <option value="">مدة العمل</option>
+            {DURATIONS.map((d) => (
+              <option key={d.value} value={d.value}>{d.label}</option>
+            ))}
+          </select>
+          <select className="input" value={reward} onChange={(e) => update("reward", e.target.value)}>
+            {REWARD_TIERS.map((r) => (
+              <option key={r.value} value={r.value}>{r.label}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {loading ? (
         <PageLoader />
-      ) : jobs.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <EmptyState title="لا توجد فرص عمل مطابقة" hint="جرّب تعديل عوامل التصفية." />
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {jobs.map((job, i) => (
-            <JobBigCard key={job.id} job={job} scheme={JOB_SCHEMES[i % JOB_SCHEMES.length]} />
+          {filtered.map((job) => (
+            <JobCard key={job.id} job={job} />
           ))}
         </div>
       )}
