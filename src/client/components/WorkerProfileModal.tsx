@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, fileUrl } from "../lib/api";
-import { Avatar, Badge, Spinner, StarRating, VerifiedBadge, VerifiedTick } from "./ui";
-import { WORK_TYPES, COMMITMENTS, AVAILABILITY, labelOf } from "../lib/constants";
-import { IconPin } from "./icons";
-import { toLatinDigits } from "../lib/format";
+import { Avatar, Spinner, StarRating, VerifiedTick } from "./ui";
+import { WORK_TYPES, AVAILABILITY, labelOf } from "../lib/constants";
 
 interface WorkerProfile {
   user_id: string;
@@ -14,8 +12,6 @@ interface WorkerProfile {
   area: string;
   availability: string[];
   work_type: string;
-  commitment: string;
-  expected_salary: string;
   civil_id_verified: number;
   avg_rating: number | null;
   rating_count: number;
@@ -37,6 +33,10 @@ const fmtDate = (ms?: number) =>
 
 const availabilityLabel = (v: string) => AVAILABILITY.find((a) => a.value === v)?.label || v;
 
+function IconPinSm() {
+  return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" /><circle cx="12" cy="10" r="3" /></svg>;
+}
+
 export function WorkerProfileModal({ workerId, onClose }: { workerId: string; onClose: () => void }) {
   const [p, setP] = useState<WorkerProfile | null>(null);
   const [ratings, setRatings] = useState<RatingItem[]>([]);
@@ -54,85 +54,115 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
   }, [workerId]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
       <div
-        className="max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-xl"
+        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-extrabold text-brand-darkest">بروفايل الباحث عن فرص</h3>
-          <button onClick={onClose} className="btn-ghost px-3 py-1">إغلاق</button>
+        {/* Cover banner */}
+        <div className="relative h-28 bg-gradient-to-l from-brand-dark to-[#6c83ff]">
+          <button
+            onClick={onClose}
+            aria-label="إغلاق"
+            className="absolute left-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur transition-colors hover:bg-white/30"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
         </div>
 
         {loading || !p ? (
-          <div className="py-10 text-center"><Spinner /></div>
+          <div className="px-6 pb-10 pt-6 text-center"><Spinner /></div>
         ) : (
-          <div className="space-y-5">
+          <div className="px-6 pb-6">
             {/* Header */}
-            <div className="flex items-center gap-4">
-              <Avatar src={fileUrl(p.photo_key)} name={p.full_name} size={72} />
-              <div>
-                <div className="flex items-center gap-2">
-                  <h4 className="text-xl font-bold text-brand-darkest">{p.full_name || "باحث عن فرص"}</h4>
-                  {p.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
-                </div>
-                <div className="mt-1"><StarRating value={p.avg_rating} count={p.rating_count} /></div>
-                {p.area && <p className="mt-1 inline-flex items-center gap-1 text-sm text-brand"><IconPin className="h-3.5 w-3.5" /> {p.area}</p>}
+            <div className="-mt-12 flex items-end gap-4">
+              <span className="inline-block shrink-0 rounded-full bg-white p-1 shadow-sm ring-1 ring-brand-soft">
+                <Avatar src={fileUrl(p.photo_key)} name={p.full_name} size={88} />
+              </span>
+              <div className="flex flex-wrap items-center gap-2 pb-2">
+                {p.avg_rating != null && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-sm font-bold text-amber-700">
+                    ★ {p.avg_rating} <span className="text-xs font-semibold text-amber-700/70">({p.rating_count})</span>
+                  </span>
+                )}
               </div>
             </div>
 
-            {p.bio && <p className="rounded-lg bg-brand-bg p-3 text-sm text-brand-dark">{p.bio}</p>}
+            <div className="mt-3 flex items-center gap-1.5">
+              <h4 className="text-2xl font-extrabold text-brand-darkest">{p.full_name || "باحث عن فرص"}</h4>
+              <VerifiedTick verified={p.civil_id_verified} size={18} />
+            </div>
 
-            {/* Details */}
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+              {p.area && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
+                  <IconPinSm /> {p.area}
+                </span>
+              )}
               {p.work_type && (
-                <div><span className="font-semibold text-brand-dark">نوع العمل: </span>{labelOf(WORK_TYPES, p.work_type)}</div>
-              )}
-              {p.commitment && (
-                <div><span className="font-semibold text-brand-dark">الالتزام: </span>{labelOf(COMMITMENTS, p.commitment)}</div>
-              )}
-              {p.expected_salary && (
-                <div><span className="font-semibold text-brand-dark">المكافأة المتوقعة: </span>{toLatinDigits(p.expected_salary)} د.ك</div>
-              )}
-              {p.phone_visible && p.phone && (
-                <div><span className="font-semibold text-brand-dark">رقم التواصل: </span><span data-latin>{p.phone}</span></div>
-              )}
-              {p.phone_visible && p.email && (
-                <div><span className="font-semibold text-brand-dark">البريد الإلكتروني: </span><span data-latin>{p.email}</span></div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
+                  {labelOf(WORK_TYPES, p.work_type)}
+                </span>
               )}
             </div>
 
+            {p.bio && <p className="mt-4 leading-relaxed text-brand-dark">{p.bio}</p>}
+
+            {/* Contact */}
+            {p.phone_visible && (p.phone || p.email) ? (
+              <div className="mt-4 space-y-2 rounded-2xl bg-emerald-50 p-4">
+                <h5 className="text-xs font-bold text-emerald-700/80">معلومات التواصل</h5>
+                {p.phone && (
+                  <div className="text-sm font-semibold text-emerald-800">
+                    رقم التواصل: <span data-latin>{p.phone}</span>
+                  </div>
+                )}
+                {p.email && (
+                  <div className="text-sm font-semibold text-emerald-800">
+                    البريد الإلكتروني: <span data-latin>{p.email}</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="mt-4 flex items-center gap-2 rounded-2xl bg-brand-soft p-3 text-xs text-brand">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                معلومات التواصل (الهاتف والبريد) تظهر بعد قبول الباحث لعرضك.
+              </div>
+            )}
+
+            {/* Skills */}
             {p.skills.length > 0 && (
-              <div>
-                <h5 className="mb-2 font-bold text-brand-darkest">المهارات</h5>
-                <div className="flex flex-wrap gap-1">
-                  {p.skills.map((s) => <span key={s} className="chip">{s}</span>)}
+              <div className="mt-5">
+                <h5 className="mb-2 text-sm font-bold text-brand-darkest">المهارات والتخصصات</h5>
+                <div className="flex flex-wrap gap-2">
+                  {p.skills.map((s) => (
+                    <span key={s} className="rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand-dark">{s}</span>
+                  ))}
                 </div>
               </div>
             )}
 
+            {/* Availability */}
             {p.availability.length > 0 && (
-              <div>
-                <h5 className="mb-2 font-bold text-brand-darkest">أوقات التوفّر</h5>
-                <div className="flex flex-wrap gap-1">
-                  {p.availability.map((a) => <span key={a} className="chip bg-brand-bg">{availabilityLabel(a)}</span>)}
+              <div className="mt-5">
+                <h5 className="mb-2 text-sm font-bold text-brand-darkest">أوقات التوفّر</h5>
+                <div className="flex flex-wrap gap-2">
+                  {p.availability.map((a) => (
+                    <span key={a} className="rounded-full border border-brand-soft px-3 py-1 text-xs font-semibold text-brand-dark">{availabilityLabel(a)}</span>
+                  ))}
                 </div>
               </div>
-            )}
-
-            {!p.phone_visible && (
-              <p className="text-center text-xs text-brand">معلومات التواصل (الهاتف والبريد) تظهر بعد قبول الباحث لعرضك.</p>
             )}
 
             {/* Ratings */}
-            <div>
-              <h5 className="mb-2 font-bold text-brand-darkest">التقييمات ({p.rating_count})</h5>
+            <div className="mt-6 border-t border-brand-soft pt-5">
+              <h5 className="mb-3 text-sm font-bold text-brand-darkest">التقييمات ({p.rating_count})</h5>
               {ratings.length === 0 ? (
                 <p className="text-sm text-brand">لا توجد تقييمات بعد.</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {ratings.map((r, i) => (
-                    <div key={i} className="rounded-lg border border-brand-soft p-3">
+                    <div key={i} className="rounded-2xl bg-brand-bg p-4">
                       <div className="flex items-center justify-between gap-2">
                         <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-darkest">
                           {r.rater_name || "شركة"}
@@ -140,8 +170,8 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                         </span>
                         <span className="text-xs text-brand">{fmtDate(r.created_at)}</span>
                       </div>
-                      <div className="mt-1"><StarRating value={r.stars} /></div>
-                      {r.comment && <p className="mt-1 text-sm text-brand-dark">{r.comment}</p>}
+                      <div className="mt-1.5"><StarRating value={r.stars} /></div>
+                      {r.comment && <p className="mt-2 text-sm leading-relaxed text-brand-dark">{r.comment}</p>}
                     </div>
                   ))}
                 </div>
