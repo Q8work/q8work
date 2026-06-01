@@ -74,39 +74,35 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
           <div className="px-6 pb-10 pt-6 text-center"><Spinner /></div>
         ) : (
           <div className="px-6 pb-6">
-            {/* Header */}
-            <div className="-mt-12 flex items-end gap-4">
-              <span className="inline-block shrink-0 rounded-full bg-white p-1 shadow-sm ring-1 ring-brand-soft">
-                <Avatar src={fileUrl(p.photo_key)} name={p.full_name} size={88} />
+            {/* Header — centered */}
+            <div className="-mt-16 flex flex-col items-center text-center">
+              <span className="inline-block shrink-0 rounded-full bg-white p-1 shadow-md ring-1 ring-brand-soft">
+                <Avatar src={fileUrl(p.photo_key)} name={p.full_name} size={104} />
               </span>
-              <div className="flex flex-wrap items-center gap-2 pb-2">
+              <div className="mt-3 flex items-center justify-center gap-1.5">
+                <h4 className="text-2xl font-extrabold text-brand-darkest">{p.full_name || "باحث عن فرص"}</h4>
+                <VerifiedTick verified={p.civil_id_verified} size={18} />
+              </div>
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-sm">
                 {p.avg_rating != null && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-sm font-bold text-amber-700">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 font-bold text-amber-700">
                     ★ {p.avg_rating} <span className="text-xs font-semibold text-amber-700/70">({p.rating_count})</span>
+                  </span>
+                )}
+                {p.area && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
+                    <IconPinSm /> {p.area}
+                  </span>
+                )}
+                {p.work_type && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
+                    {labelOf(WORK_TYPES, p.work_type)}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="mt-3 flex items-center gap-1.5">
-              <h4 className="text-2xl font-extrabold text-brand-darkest">{p.full_name || "باحث عن فرص"}</h4>
-              <VerifiedTick verified={p.civil_id_verified} size={18} />
-            </div>
-
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-              {p.area && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
-                  <IconPinSm /> {p.area}
-                </span>
-              )}
-              {p.work_type && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
-                  {labelOf(WORK_TYPES, p.work_type)}
-                </span>
-              )}
-            </div>
-
-            {p.bio && <p className="mt-4 leading-relaxed text-brand-dark">{p.bio}</p>}
+            {p.bio && <p className="mt-4 text-center leading-relaxed text-brand-dark">{p.bio}</p>}
 
             {/* Contact */}
             {p.phone_visible && (p.phone || p.email) ? (
