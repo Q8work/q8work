@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { Avatar, PageLoader, EmptyState, StarRating, VerifiedBadge } from "../components/ui";
+import { Avatar, PageLoader, EmptyState, StarRating, VerifiedTick } from "../components/ui";
 import { api, fileUrl } from "../lib/api";
 import { WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
 import { IconPin, IconBriefcase, IconClock, IconCash } from "../components/icons";
@@ -107,9 +107,9 @@ export function CompanyProfile() {
           </span>
           <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <h1 className="text-2xl font-extrabold text-brand-darkest sm:text-3xl">{company.company_name}</h1>
-                <VerifiedBadge verified={company.verified} />
+                <VerifiedTick verified={company.verified} size={22} />
               </div>
               <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-brand">
                 {company.sector && <span>{company.sector}</span>}

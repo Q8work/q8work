@@ -62,6 +62,40 @@ export function VerifiedBadge({ verified }: { verified?: number | boolean }) {
   );
 }
 
+// Inline verification tick — shown right next to a company name everywhere.
+export function VerifiedTick({
+  verified,
+  size = 16,
+  className = "",
+}: {
+  verified?: number | boolean;
+  size?: number;
+  className?: string;
+}) {
+  if (!verified) return null;
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      role="img"
+      aria-label="موثّق"
+      className={`inline-block shrink-0 align-middle ${className}`}
+    >
+      <title>موثّق</title>
+      <circle cx="12" cy="12" r="10" fill="#3b5bfd" />
+      <path
+        d="M7.8 12.4l2.7 2.7 5.7-6"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="2.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function EmptyState({ title, hint }: { title: string; hint?: string }) {
   return (
     <div className="rounded-2xl border-2 border-dashed border-brand-light bg-white/50 p-10 text-center">

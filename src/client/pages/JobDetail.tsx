@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { PageLoader, EmptyState, VerifiedBadge, Badge, ErrorText, Spinner } from "../components/ui";
+import { PageLoader, EmptyState, VerifiedTick, Badge, ErrorText, Spinner } from "../components/ui";
 import { api, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
@@ -176,10 +176,10 @@ export function JobDetail() {
             </Badge>
             <h1 className="mt-3 text-2xl font-extrabold text-brand-darkest sm:text-3xl">{job.title}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-              <Link to={`/companies/${job.company_user_id}`} className="font-bold text-brand-dark hover:underline">
+              <Link to={`/companies/${job.company_user_id}`} className="inline-flex items-center gap-1 font-bold text-brand-dark hover:underline">
                 {job.company_name}
+                <VerifiedTick verified={job.company_verified} size={16} />
               </Link>
-              <VerifiedBadge verified={job.company_verified} />
               {job.sector && <span className="text-brand">· {job.sector}</span>}
             </div>
             {job.created_at ? <p className="mt-2 text-xs text-brand">نُشرت في {postedDate(job.created_at)}</p> : null}
@@ -213,9 +213,9 @@ export function JobDetail() {
 
           <div className="card">
             <h2 className="mb-1 text-lg font-extrabold text-brand-darkest">عن الشركة</h2>
-            <p className="text-sm text-brand-dark">
+            <p className="flex items-center gap-1 text-sm text-brand-dark">
               {job.company_name}
-              {job.company_verified ? " — شركة موثّقة" : ""}
+              <VerifiedTick verified={job.company_verified} size={15} />
             </p>
             <Link to={`/companies/${job.company_user_id}`} className="btn-secondary mt-3">عرض بروفايل الشركة</Link>
           </div>

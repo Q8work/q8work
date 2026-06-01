@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { Avatar, PageLoader, EmptyState, StarRating, VerifiedBadge } from "../components/ui";
+import { Avatar, PageLoader, EmptyState, StarRating, VerifiedTick } from "../components/ui";
 import { api, fileUrl } from "../lib/api";
 
 interface CompanyCard {
@@ -39,9 +39,9 @@ export function CompaniesList() {
               <div className="flex items-center gap-3">
                 <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={52} />
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <h3 className="truncate font-bold text-brand-darkest">{c.company_name}</h3>
-                    {c.verified ? <VerifiedBadge verified={1} /> : null}
+                    <VerifiedTick verified={c.verified} size={15} />
                   </div>
                   {c.sector && <p className="text-xs text-brand">{c.sector}</p>}
                 </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { VerifiedBadge } from "../components/ui";
+import { VerifiedTick } from "../components/ui";
 import { IconPin, IconBriefcase, IconCash } from "../components/icons";
 import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
@@ -24,11 +24,11 @@ interface CompanyCard {
 function MiniJob({ job }: { job: Job }) {
   return (
     <div className="rounded-xl border border-brand-soft bg-white p-4 text-right shadow-sm">
-      <div className="flex items-center justify-between gap-2">
-        <h4 className="text-sm font-bold text-brand-darkest">{job.title}</h4>
-        <VerifiedBadge verified={job.company_verified} />
-      </div>
-      <p className="mt-0.5 text-xs font-semibold text-brand">{job.company_name}</p>
+      <h4 className="text-sm font-bold text-brand-darkest">{job.title}</h4>
+      <p className="mt-0.5 flex items-center gap-1 text-xs font-semibold text-brand">
+        {job.company_name}
+        <VerifiedTick verified={job.company_verified} size={13} />
+      </p>
       <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
         {job.area && <span className="chip gap-1"><IconPin className="h-3 w-3" /> {job.area}</span>}
         {job.work_type && <span className="chip gap-1"><IconBriefcase className="h-3 w-3" /> {labelOf(WORK_TYPES, job.work_type)}</span>}

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { toLatinDigits } from "../lib/format";
 import { fileUrl } from "../lib/api";
+import { VerifiedTick } from "./ui";
 
 export const JOB_SCHEMES = [
   { bg: "#d7f3f6", fg: "#0e8f9e" },
@@ -17,6 +18,7 @@ export interface BigJob {
   area?: string;
   salary?: string;
   company_name?: string;
+  company_verified?: number | boolean;
   logo_key?: string | null;
 }
 
@@ -48,7 +50,10 @@ export function JobBigCard({ job, scheme }: { job: BigJob; scheme: { bg: string;
               {job.company_name.charAt(0)}
             </span>
           )}
-          <span className="truncate text-sm font-bold opacity-80">{job.company_name}</span>
+          <span className="inline-flex items-center gap-1 truncate text-sm font-bold opacity-80">
+            <span className="truncate">{job.company_name}</span>
+            <VerifiedTick verified={job.company_verified} size={15} />
+          </span>
         </div>
       )}
 
