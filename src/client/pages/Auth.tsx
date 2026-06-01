@@ -117,7 +117,7 @@ export function Register() {
                 role === "worker" ? "border-brand-dark bg-brand-soft text-brand-darkest" : "border-brand-light text-brand-dark"
               }`}
             >
-              باحث عن عمل
+              باحث عن فرص
             </button>
             <button
               type="button"

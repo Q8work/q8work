@@ -109,7 +109,7 @@ export function Home() {
         <FeatureRow
           title="حوّل وقت فراغك إلى دخل إضافي"
           body="اختر الفرص المناسبة لك وابدأ العمل بمرونة دون التزام طويل"
-          cta="ابدأ كباحث عن عمل"
+          cta="ابدأ كباحث عن فرص"
           to="/register"
           preview={
             <div className="space-y-3 rounded-3xl bg-flame-soft p-5">

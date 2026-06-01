@@ -57,7 +57,7 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-extrabold text-brand-darkest">بروفايل الباحث عن عمل</h3>
+          <h3 className="text-lg font-extrabold text-brand-darkest">بروفايل الباحث عن فرص</h3>
           <button onClick={onClose} className="btn-ghost px-3 py-1">إغلاق</button>
         </div>
 
@@ -70,7 +70,7 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
               <Avatar src={fileUrl(p.photo_key)} name={p.full_name} size={72} />
               <div>
                 <div className="flex items-center gap-2">
-                  <h4 className="text-xl font-bold text-brand-darkest">{p.full_name || "باحث عن عمل"}</h4>
+                  <h4 className="text-xl font-bold text-brand-darkest">{p.full_name || "باحث عن فرص"}</h4>
                   {p.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
                 </div>
                 <div className="mt-1"><StarRating value={p.avg_rating} count={p.rating_count} /></div>

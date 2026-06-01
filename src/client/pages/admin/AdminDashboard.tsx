@@ -30,7 +30,7 @@ function OverviewTab() {
   if (!s) return <div className="py-10 text-center"><Spinner /></div>;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatCard value={s.workers} label="باحث عن عمل" />
+      <StatCard value={s.workers} label="باحث عن فرص" />
       <StatCard value={s.companies} label="شركة" />
       <StatCard value={s.jobs} label="فرصة عمل منشورة" />
       <StatCard value={s.open_jobs} label="فرصة عمل مفتوحة" />

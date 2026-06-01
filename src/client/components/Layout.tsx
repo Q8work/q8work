@@ -79,7 +79,7 @@ export function Footer() {
         <div>
           <Logo />
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-brand">
-            منصة كويتية تربط الباحثين عن عمل جزئي بأصحاب العمل بمرونة واحترافية.
+            منصة كويتية تربط الباحثين عن فرص مرنة بأصحاب العمل بمرونة واحترافية.
           </p>
         </div>
         <FooterCol title="روابط سريعة">
@@ -90,7 +90,7 @@ export function Footer() {
           <li><Link to="/login" className="hover:text-brand-dark">تسجيل الدخول</Link></li>
         </FooterCol>
         <FooterCol title="للباحثين والشركات">
-          <li><Link to="/register" className="hover:text-brand-dark">سجّل كباحث عن عمل</Link></li>
+          <li><Link to="/register" className="hover:text-brand-dark">سجّل كباحث عن فرص</Link></li>
           <li><Link to="/register" className="hover:text-brand-dark">سجّل كشركة</Link></li>
           <li><Link to="/jobs" className="hover:text-brand-dark">تصفّح الفرص</Link></li>
         </FooterCol>

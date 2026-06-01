@@ -329,7 +329,7 @@ function JobApplicants({ jobId }: { jobId: string }) {
                     <Avatar src={fileUrl(a.photo_key)} name={a.full_name} size={44} />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-brand-darkest hover:underline">{a.full_name || "باحث عن عمل"}</span>
+                        <span className="font-bold text-brand-darkest hover:underline">{a.full_name || "باحث عن فرص"}</span>
                         {a.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-brand">

@@ -70,7 +70,7 @@ function ApplyBox({ job, onApplied }: { job: Job; onApplied: () => void }) {
   if (!user) {
     return (
       <div className="card space-y-3 text-center">
-        <p className="font-bold text-brand-darkest">سجّل دخولك كباحث عن عمل للتقديم على هذه الفرصة</p>
+        <p className="font-bold text-brand-darkest">سجّل دخولك كباحث عن فرص للتقديم على هذه الفرصة</p>
         <div className="flex justify-center gap-2">
           <Link to={`/register?redirect=${encodeURIComponent(redirect)}`} className="btn-primary">
             سجّل وقدّم
@@ -84,7 +84,7 @@ function ApplyBox({ job, onApplied }: { job: Job; onApplied: () => void }) {
   }
 
   if (user.role !== "worker") {
-    return <div className="card text-center text-brand-dark">التقديم متاح للباحثين عن عمل فقط.</div>;
+    return <div className="card text-center text-brand-dark">التقديم متاح للباحثين عن فرص فقط.</div>;
   }
 
   if (applied) {
