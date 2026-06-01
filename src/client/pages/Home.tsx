@@ -75,11 +75,8 @@ export function Home() {
       {/* Hero */}
       <section className="px-2 pt-10 text-center sm:pt-16">
         <h1 className="mx-auto max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-brand-darkest sm:text-6xl">
-          اعمل وقت ما تبي، واختر الفرص المناسبة لك، واحصل على <span className="text-brand-dark">دخل إضافي</span>.
+          فرص عمل مرنة تمنحك حرية اختيار وقتك وتحقيق <span className="text-brand-dark">دخل إضافي</span>
         </h1>
-        <p className="mx-auto mt-5 max-w-xl text-lg text-brand">
-          منصة تربط الكويتيين بالشركات التي تبحث عن كفاءات وفرص عمل مرنة لفترات محددة ومكافآت واضحة
-        </p>
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
           className="mx-auto mt-8 flex max-w-xl gap-2 rounded-xl border border-brand-soft bg-white p-2 shadow-sm"
