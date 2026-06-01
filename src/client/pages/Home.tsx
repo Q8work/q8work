@@ -139,6 +139,26 @@ export function Home() {
         />
       </div>
 
+      {/* How it works */}
+      <section className="mt-20">
+        <h2 className="text-center text-3xl font-extrabold text-brand-darkest sm:text-4xl">كيف تعمل المنصة؟</h2>
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            "سجّل حسابك",
+            "اختر الفرصة المناسبة",
+            "نفّذ العمل",
+            "استلم مكافأتك",
+          ].map((step, i) => (
+            <div key={step} className="relative rounded-2xl bg-brand-soft p-6 text-center">
+              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-dark text-lg font-extrabold text-white" data-latin>
+                {i + 1}
+              </span>
+              <p className="mt-4 font-bold text-brand-darkest">{step}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Current jobs — coolors-style colorful cards */}
       {jobs.length > 0 && (
         <section className="mt-20">
