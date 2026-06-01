@@ -31,7 +31,7 @@ ratings.post("/", requireAuth("worker", "company"), async (c) => {
   await c.env.DB.prepare(
     "INSERT INTO ratings (id, offer_id, rater_user_id, ratee_user_id, stars, comment, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
   )
-    .bind(genId("r_"), offerId, user.id, rateeId, stars, String(b.comment ?? ""), Date.now())
+    .bind(genId("r_"), offerId, user.id, rateeId, stars, String(b.comment ?? "").slice(0, 2000), Date.now())
     .run();
   return c.json({ ok: true }, 201);
 });

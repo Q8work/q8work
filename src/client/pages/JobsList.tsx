@@ -31,7 +31,7 @@ const REWARD_TIERS = [
   { value: "200", label: "+200 د.ك" },
 ];
 
-const parseReward = (s: string) => parseInt(String(s).replace(/[^\d]/g, ""), 10) || 0;
+const parseReward = (s: string) => parseFloat(toLatinDigits(String(s)).replace(/[^\d.]/g, "")) || 0;
 
 function JobCard({ job }: { job: Job }) {
   const { user } = useAuth();

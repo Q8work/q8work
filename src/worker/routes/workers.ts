@@ -26,7 +26,7 @@ workers.get("/", requireAuth("company", "admin"), async (c) => {
 
   const rows = await c.env.DB.prepare(
     `SELECT wp.user_id, wp.full_name, wp.photo_key, wp.bio, wp.skills, wp.area,
-            wp.availability, wp.work_type, wp.commitment, wp.expected_salary, wp.civil_id_verified,
+            wp.availability, wp.civil_id_verified,
             (SELECT ROUND(AVG(stars),1) FROM ratings r WHERE r.ratee_user_id = wp.user_id) AS avg_rating,
             (SELECT COUNT(*) FROM ratings r WHERE r.ratee_user_id = wp.user_id) AS rating_count
        FROM worker_profiles wp
@@ -77,6 +77,8 @@ workers.get("/:id", requireAuth("company", "admin"), async (c) => {
     skills: parseJsonArray(r.skills),
     availability: parseJsonArray(r.availability),
   };
+  // Sensitive fields are never exposed to companies through this endpoint.
+  delete profile.civil_id_image_key;
   if (!phoneVisible) {
     delete profile.phone;
     delete profile.email;

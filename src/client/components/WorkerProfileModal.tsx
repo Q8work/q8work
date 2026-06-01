@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, fileUrl } from "../lib/api";
 import { Avatar, Spinner, StarRating, VerifiedTick } from "./ui";
-import { WORK_TYPES, AVAILABILITY, labelOf } from "../lib/constants";
+import { AVAILABILITY } from "../lib/constants";
 
 interface WorkerProfile {
   user_id: string;
@@ -11,7 +11,6 @@ interface WorkerProfile {
   skills: string[];
   area: string;
   availability: string[];
-  work_type: string;
   civil_id_verified: number;
   avg_rating: number | null;
   rating_count: number;
@@ -92,11 +91,6 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                 {p.area && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
                     <IconPinSm /> {p.area}
-                  </span>
-                )}
-                {p.work_type && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1 font-semibold text-brand-dark">
-                    {labelOf(WORK_TYPES, p.work_type)}
                   </span>
                 )}
               </div>

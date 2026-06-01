@@ -65,12 +65,20 @@ export async function createSession(env: Env, userId: string): Promise<string> {
   return token;
 }
 
-export function setSessionCookie(c: { header: (k: string, v: string) => void } & any, token: string, env: Env) {
+export function setSessionCookie(c: { header: (k: string, v: string) => void } & any, token: string, _env: Env) {
+  // Secure whenever the request is served over HTTPS (always true in production
+  // Workers); stays off for local http dev so the cookie is still accepted.
+  let secure = true;
+  try {
+    secure = new URL(c.req.url).protocol === "https:";
+  } catch {
+    secure = true;
+  }
   setCookie(c, SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "Lax",
     path: "/",
-    secure: env.ENVIRONMENT === "production",
+    secure,
     maxAge: SESSION_TTL_MS / 1000,
   });
 }

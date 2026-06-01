@@ -26,7 +26,6 @@ interface CompanyProfile {
   company_name: string;
   logo_key: string | null;
   description: string;
-  commercial_registry_key: string | null;
   contact_name: string;
   contact_phone: string;
   sector: string;
@@ -58,10 +57,10 @@ function ProfileTab() {
     } catch (e: any) { setError(e.message); } finally { setBusy(false); }
   };
 
-  const upload = async (kind: "logo" | "registry", file?: File) => {
+  const upload = async (file?: File) => {
     if (!file) return;
-    const r = await api.upload<{ key: string }>(`/profile/upload?kind=${kind}`, file);
-    set(kind === "logo" ? { logo_key: r.key } : { commercial_registry_key: r.key });
+    const r = await api.upload<{ key: string }>(`/profile/upload?kind=logo`, file);
+    set({ logo_key: r.key });
   };
 
   return (
@@ -71,7 +70,7 @@ function ProfileTab() {
         <div className="flex-1">
           <label className="btn-secondary cursor-pointer">
             شعار الشركة
-            <input type="file" accept="image/*" className="hidden" onChange={(e) => upload("logo", e.target.files?.[0])} />
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => upload(e.target.files?.[0])} />
           </label>
           <div className="mt-2"><VerifiedBadge verified={p.verified} /></div>
         </div>
@@ -377,8 +376,8 @@ function JobApplicants({ jobId }: { jobId: string }) {
 // ---------------- Talent search ----------------
 interface WorkerCard {
   user_id: string; full_name: string; photo_key: string | null; bio: string;
-  skills: string[]; area: string; availability: string[]; work_type: string;
-  expected_salary: string; civil_id_verified: number; avg_rating: number | null; rating_count: number;
+  skills: string[]; area: string; availability: string[];
+  civil_id_verified: number; avg_rating: number | null; rating_count: number;
 }
 
 function TalentTab() {
@@ -417,10 +416,6 @@ function TalentTab() {
           <option value="">كل المحافظات</option>
           {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
         </select>
-        <select className="input w-auto" value={filters.work_type} onChange={(e) => setFilters({ ...filters, work_type: e.target.value })}>
-          <option value="">كل أنواع العمل</option>
-          {WORK_TYPES.map((w) => <option key={w.value} value={w.value}>{w.label}</option>)}
-        </select>
         <select className="input w-auto" value={filters.availability} onChange={(e) => setFilters({ ...filters, availability: e.target.value })}>
           <option value="">كل الأوقات</option>
           {AVAILABILITY.map((a) => <option key={a.value} value={a.value}>{a.label}</option>)}
@@ -451,8 +446,6 @@ function TalentTab() {
               </div>
               <div className="mt-2 flex flex-wrap gap-2 text-xs text-brand">
                 {w.area && <span className="inline-flex items-center gap-1"><IconPin className="h-3 w-3" /> {w.area}</span>}
-                {w.work_type && <span>· {labelOf(WORK_TYPES, w.work_type)}</span>}
-                {w.expected_salary && <span>· {toLatinDigits(w.expected_salary)} د.ك</span>}
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button className="btn-secondary" onClick={() => setProfileId(w.user_id)}>عرض البروفايل</button>

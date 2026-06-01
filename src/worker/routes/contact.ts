@@ -11,8 +11,8 @@ const FROM = "noreply@q8work.com";
 // POST /api/contact — public contact form; stores the message and emails the inbox
 contact.post("/", async (c) => {
   const b = (await c.req.json().catch(() => ({}))) as Record<string, unknown>;
-  const name = String(b.name ?? "").trim();
-  const email = String(b.email ?? "").trim();
+  const name = String(b.name ?? "").trim().slice(0, 120);
+  const email = String(b.email ?? "").trim().slice(0, 160);
   const message = String(b.message ?? "").trim();
 
   if (!isNonEmptyString(name)) return c.json({ error: "الاسم مطلوب." }, 400);

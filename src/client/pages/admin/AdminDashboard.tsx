@@ -235,9 +235,6 @@ function UserDetailModal({ id, onClose }: { id: string; onClose: () => void }) {
                 <Row label="موثّقة" value={d.profile.verified ? "✓ نعم" : "لا"} />
                 <Row label="فرص منشورة" value={d.stats.jobs_posted} />
                 <Row label="عروض مُرسلة" value={d.stats.offers_sent} />
-                {d.profile.commercial_registry_key && (
-                  <Row label="السجل التجاري" value={<a className="font-bold text-brand-dark underline" href={fileUrl(d.profile.commercial_registry_key)} target="_blank" rel="noopener noreferrer">عرض</a>} />
-                )}
               </div>
             )}
           </div>

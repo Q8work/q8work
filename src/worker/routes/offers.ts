@@ -10,31 +10,40 @@ offers.post("/", requireAuth("company"), async (c) => {
   const user = c.get("user");
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
   const workerId = String(b.worker_user_id ?? "");
-  if (!workerId) return c.json({ error: "يجب تحديد الكويتي." }, 400);
+  if (!workerId) return c.json({ error: "يجب تحديد الباحث." }, 400);
 
   const worker = await c.env.DB.prepare(
     "SELECT u.id FROM users u WHERE u.id = ? AND u.role = 'worker' AND u.status = 'active'"
   )
     .bind(workerId)
     .first();
-  if (!worker) return c.json({ error: "الكويتي غير موجود." }, 404);
+  if (!worker) return c.json({ error: "الباحث غير موجود." }, 404);
+
+  // Prevent offer spam: only one open (pending) offer per company→worker at a time.
+  const pending = await c.env.DB.prepare(
+    "SELECT 1 FROM offers WHERE company_user_id = ? AND worker_user_id = ? AND status = 'pending' LIMIT 1"
+  )
+    .bind(user.id, workerId)
+    .first();
+  if (pending) return c.json({ error: "لديك عرض معلّق لهذا الباحث بالفعل." }, 409);
 
   const jobId = b.job_id ? String(b.job_id) : null;
+  const message = String(b.message ?? "").slice(0, 4000);
   const id = genId("o_");
   const now = Date.now();
   await c.env.DB.prepare(
     `INSERT INTO offers (id, job_id, company_user_id, worker_user_id, message, status, created_at, updated_at)
      VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)`
   )
-    .bind(id, jobId, user.id, workerId, String(b.message ?? ""), now, now)
+    .bind(id, jobId, user.id, workerId, message, now, now)
     .run();
 
   // Seed the message thread with the offer message
-  if (b.message) {
+  if (message) {
     await c.env.DB.prepare(
       "INSERT INTO messages (id, offer_id, sender_user_id, recipient_user_id, body, read, created_at) VALUES (?, ?, ?, ?, ?, 0, ?)"
     )
-      .bind(genId("m_"), id, user.id, workerId, String(b.message), now)
+      .bind(genId("m_"), id, user.id, workerId, message, now)
       .run();
   }
   return c.json({ id }, 201);

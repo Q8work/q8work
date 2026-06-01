@@ -30,9 +30,6 @@ interface WorkerProfile {
   civil_id_image_key: string | null;
   civil_id_verified: number;
   availability: string[];
-  work_type: string;
-  commitment: string;
-  expected_salary: string;
 }
 
 function Toggle({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {

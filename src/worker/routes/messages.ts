@@ -54,7 +54,7 @@ messages.post("/:offerId", requireAuth("worker", "company"), async (c) => {
   const user = c.get("user");
   const offerId = c.req.param("offerId");
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
-  const body = String(b.body ?? "").trim();
+  const body = String(b.body ?? "").trim().slice(0, 4000);
   if (!body) return c.json({ error: "الرسالة فارغة." }, 400);
 
   const offer = await c.env.DB.prepare("SELECT company_user_id, worker_user_id, status FROM offers WHERE id = ?")

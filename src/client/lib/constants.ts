@@ -39,12 +39,6 @@ export const AVAILABILITY: { value: string; label: string }[] = [
   { value: "weekend", label: "عطلة نهاية الأسبوع" },
 ];
 
-export const COMMITMENTS: { value: string; label: string }[] = [
-  { value: "daily", label: "يومي" },
-  { value: "weekly", label: "أسبوعي" },
-  { value: "project", label: "مشروع محدد" },
-];
-
 export const DURATIONS: { value: string; label: string }[] = [
   { value: "day", label: "يوم" },
   { value: "week", label: "أسبوع" },

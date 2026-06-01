@@ -27,26 +27,24 @@ profile.put("/worker", requireAuth("worker"), async (c) => {
   const lastName = String(b.last_name ?? "").trim();
   const fullName = `${firstName} ${lastName}`.trim() || String(b.full_name ?? "");
 
+  const clamp = (v: unknown, max: number) => String(v ?? "").slice(0, max);
   await c.env.DB.prepare(
     `UPDATE worker_profiles SET
        full_name = ?, first_name = ?, last_name = ?, bio = ?, skills = ?, area = ?, phone = ?, email = ?, civil_id = ?,
-       availability = ?, work_type = ?, commitment = ?, expected_salary = ?
+       availability = ?
      WHERE user_id = ?`
   )
     .bind(
-      fullName,
-      firstName,
-      lastName,
-      String(b.bio ?? ""),
+      clamp(fullName, 120),
+      clamp(firstName, 60),
+      clamp(lastName, 60),
+      clamp(b.bio, 2000),
       skills,
-      String(b.area ?? ""),
-      String(b.phone ?? ""),
-      String(b.email ?? ""),
-      String(b.civil_id ?? ""),
+      clamp(b.area, 60),
+      clamp(b.phone, 30),
+      clamp(b.email, 160),
+      clamp(b.civil_id, 20),
       availability,
-      String(b.work_type ?? ""),
-      String(b.commitment ?? ""),
-      String(b.expected_salary ?? ""),
       user.id
     )
     .run();
@@ -69,6 +67,7 @@ profile.get("/company", requireAuth("company"), async (c) => {
 profile.put("/company", requireAuth("company"), async (c) => {
   const user = c.get("user");
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
+  const clamp = (v: unknown, max: number) => String(v ?? "").slice(0, max);
   await c.env.DB.prepare(
     `UPDATE company_profiles SET
        company_name = ?, description = ?, contact_name = ?, contact_phone = ?, sector = ?,
@@ -76,16 +75,16 @@ profile.put("/company", requireAuth("company"), async (c) => {
      WHERE user_id = ?`
   )
     .bind(
-      String(b.company_name ?? ""),
-      String(b.description ?? ""),
-      String(b.contact_name ?? ""),
-      String(b.contact_phone ?? ""),
-      String(b.sector ?? ""),
-      String(b.website ?? ""),
-      String(b.public_email ?? ""),
-      String(b.instagram ?? ""),
-      String(b.twitter ?? ""),
-      String(b.linkedin ?? ""),
+      clamp(b.company_name, 120),
+      clamp(b.description, 5000),
+      clamp(b.contact_name, 80),
+      clamp(b.contact_phone, 30),
+      clamp(b.sector, 80),
+      clamp(b.website, 200),
+      clamp(b.public_email, 160),
+      clamp(b.instagram, 120),
+      clamp(b.twitter, 120),
+      clamp(b.linkedin, 200),
       user.id
     )
     .run();
@@ -93,7 +92,12 @@ profile.put("/company", requireAuth("company"), async (c) => {
 });
 
 // ---- File uploads (R2) ----
-// POST /api/profile/upload?kind=photo|logo|registry
+// POST /api/profile/upload?kind=photo|logo|civil_id
+const ALLOWED_UPLOAD_TYPES: Record<string, string[]> = {
+  photo: ["image/png", "image/jpeg", "image/webp", "image/gif"],
+  logo: ["image/png", "image/jpeg", "image/webp", "image/gif"],
+  civil_id: ["image/png", "image/jpeg", "image/webp", "application/pdf"],
+};
 profile.post("/upload", requireAuth("worker", "company"), async (c) => {
   const user = c.get("user");
   const kind = c.req.query("kind");
@@ -101,7 +105,6 @@ profile.post("/upload", requireAuth("worker", "company"), async (c) => {
     photo: "worker",
     civil_id: "worker",
     logo: "company",
-    registry: "company",
   };
   if (!kind || !(kind in allowed)) return c.json({ error: "نوع الملف غير صالح." }, 400);
   if (allowed[kind] !== user.role) return c.json({ error: "لا تملك صلاحية رفع هذا الملف." }, 403);
@@ -110,6 +113,10 @@ profile.post("/upload", requireAuth("worker", "company"), async (c) => {
   const file = form.get("file");
   if (!(file instanceof File)) return c.json({ error: "لم يتم إرفاق ملف." }, 400);
   if (file.size > 5 * 1024 * 1024) return c.json({ error: "حجم الملف يتجاوز 5 ميجابايت." }, 400);
+  // Reject anything that isn't an explicitly allowed image/pdf type (blocks SVG/HTML → stored-XSS).
+  if (!ALLOWED_UPLOAD_TYPES[kind].includes(file.type)) {
+    return c.json({ error: "صيغة الملف غير مسموحة. الرجاء رفع صورة (PNG/JPG) أو PDF." }, 400);
+  }
 
   const ext = (file.name.split(".").pop() || "bin").toLowerCase().replace(/[^a-z0-9]/g, "");
   const key = `${kind}/${user.id}/${genId()}.${ext}`;
@@ -124,8 +131,6 @@ profile.post("/upload", requireAuth("worker", "company"), async (c) => {
     await c.env.DB.prepare("UPDATE worker_profiles SET civil_id_image_key = ? WHERE user_id = ?").bind(key, user.id).run();
   } else if (kind === "logo") {
     await c.env.DB.prepare("UPDATE company_profiles SET logo_key = ? WHERE user_id = ?").bind(key, user.id).run();
-  } else if (kind === "registry") {
-    await c.env.DB.prepare("UPDATE company_profiles SET commercial_registry_key = ? WHERE user_id = ?").bind(key, user.id).run();
   }
   return c.json({ key });
 });

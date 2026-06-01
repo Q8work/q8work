@@ -104,16 +104,21 @@ export function Register() {
             }
           : { email, password, role, name }
       );
-      // ارفع صورة الهوية بعد إنشاء الحساب (الجلسة أصبحت فعّالة)
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "تعذّر إنشاء الحساب.");
+      setBusy(false);
+      return;
+    }
+    // الحساب أُنشئ والجلسة فعّالة؛ رفع صورة الهوية خطوة منفصلة لا تُفشل التسجيل.
+    try {
       if (role === "worker" && idImage) {
         await api.upload("/profile/upload?kind=civil_id", idImage);
       }
-      navigate(redirect);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "تعذّر إنشاء الحساب.");
-    } finally {
-      setBusy(false);
+    } catch {
+      // تجاهل فشل رفع الصورة هنا — يمكن للمستخدم رفعها لاحقاً من لوحته.
     }
+    setBusy(false);
+    navigate(redirect);
   };
 
   return (

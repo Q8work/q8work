@@ -69,17 +69,6 @@ admin.patch("/companies/:id/verify", requireAuth("admin"), async (c) => {
   return c.json({ ok: true });
 });
 
-// PATCH /api/admin/workers/:id/verify — toggle civil-id verification
-admin.patch("/workers/:id/verify", requireAuth("admin"), async (c) => {
-  const id = c.req.param("id");
-  const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
-  const verified = b.verified ? 1 : 0;
-  await c.env.DB.prepare("UPDATE worker_profiles SET civil_id_verified = ? WHERE user_id = ?")
-    .bind(verified, id)
-    .run();
-  return c.json({ ok: true });
-});
-
 // GET /api/admin/users/:id — full account detail (profile + activity stats)
 admin.get("/users/:id", requireAuth("admin"), async (c) => {
   const id = c.req.param("id");

@@ -62,15 +62,18 @@ jobs.post("/", requireAuth("company"), async (c) => {
 
   const id = genId("j_");
   const now = Date.now();
-  const skills = JSON.stringify(Array.isArray(b.skills_required) ? b.skills_required.map(String) : []);
+  const clamp = (v: unknown, max: number) => String(v ?? "").slice(0, max);
+  const skills = JSON.stringify(
+    Array.isArray(b.skills_required) ? b.skills_required.slice(0, 30).map((s: unknown) => String(s).slice(0, 60)) : []
+  );
   await c.env.DB.prepare(
     `INSERT INTO jobs (id, company_user_id, title, description, duration, salary, area, work_type, skills_required, headcount, status, created_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'open', ?)`
   )
     .bind(
-      id, user.id, String(b.title), String(b.description ?? ""), String(b.duration ?? ""),
-      String(b.salary ?? ""), String(b.area ?? ""), String(b.work_type ?? ""), skills,
-      Math.max(1, parseInt(String(b.headcount ?? "1"), 10) || 1), now
+      id, user.id, clamp(b.title, 200), clamp(b.description, 5000), clamp(b.duration, 40),
+      clamp(b.salary, 40), clamp(b.area, 60), clamp(b.work_type, 40), skills,
+      Math.max(1, Math.min(9999, parseInt(String(b.headcount ?? "1"), 10) || 1)), now
     )
     .run();
   return c.json({ id }, 201);
