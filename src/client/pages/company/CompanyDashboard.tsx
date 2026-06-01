@@ -114,11 +114,11 @@ function ProfileTab() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="label">اسم المسؤول</label>
+            <label className="label">اسم المسؤول <span className="font-normal text-brand">(الإدارة فقط · لا يظهر للباحثين)</span></label>
             <input className="input" value={p.contact_name} onChange={(e) => set({ contact_name: e.target.value })} />
           </div>
           <div>
-            <label className="label">رقم التواصل</label>
+            <label className="label">رقم التواصل <span className="font-normal text-brand">(الإدارة فقط · لا يظهر للباحثين)</span></label>
             <input className="input" value={p.contact_phone} onChange={(e) => set({ contact_phone: e.target.value })} />
           </div>
         </div>
