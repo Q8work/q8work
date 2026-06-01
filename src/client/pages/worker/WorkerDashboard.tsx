@@ -124,13 +124,6 @@ function ProfileTab() {
             تغيير الصورة
             <input type="file" accept="image/*" className="hidden" onChange={onPhoto} />
           </label>
-          <div className="mt-2">
-            {p.civil_id_verified ? (
-              <Badge className="bg-emerald-100 text-emerald-800">✓ موثّق الجنسية</Badge>
-            ) : (
-              <Badge className="bg-amber-100 text-amber-800">بانتظار توثيق الجنسية</Badge>
-            )}
-          </div>
         </div>
       </div>
 
@@ -245,7 +238,7 @@ function ProfileTab() {
         </div>
 
         <div>
-          <label className="label">الرقم المدني <span className="font-normal text-brand">(للتحقق من الجنسية)</span></label>
+          <label className="label">الرقم المدني <span className="font-normal text-brand">(الإدارة فقط · لا تظهر للشركات)</span></label>
           <input className="input" value={p.civil_id} onChange={(e) => set({ civil_id: e.target.value })} />
         </div>
 
