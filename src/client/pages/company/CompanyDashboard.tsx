@@ -431,10 +431,9 @@ function TalentTab() {
               <div className="flex items-center gap-3">
                 <Avatar src={fileUrl(w.photo_key)} name={w.full_name} />
                 <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-brand-darkest">{w.full_name || "الشخص"}</h3>
-                    {w.civil_id_verified ? <Badge className="bg-emerald-100 text-emerald-800">✓</Badge> : null}
-                  </div>
+                  <button type="button" onClick={() => setProfileId(w.user_id)} className="font-bold text-brand-darkest hover:text-brand-dark hover:underline">
+                    {w.full_name || "الشخص"}
+                  </button>
                   <StarRating value={w.avg_rating} count={w.rating_count} />
                 </div>
               </div>
@@ -480,12 +479,13 @@ function TalentTab() {
 // ---------------- Sent offers ----------------
 interface Offer {
   id: string; status: keyof typeof OFFER_STATUS; message: string;
-  worker_name: string; worker_photo: string | null; job_title: string | null;
+  worker_user_id: string; worker_name: string; worker_photo: string | null; job_title: string | null;
 }
 
 function OffersTab() {
   const [offers, setOffers] = useState<Offer[] | null>(null);
   const [rating, setRating] = useState<{ offerId: string; stars: number; comment: string } | null>(null);
+  const [profileId, setProfileId] = useState<string | null>(null);
   const load = () => api.get<{ offers: Offer[] }>("/offers").then((r) => setOffers(r.offers));
   useEffect(() => { load(); }, []);
 
@@ -507,7 +507,9 @@ function OffersTab() {
             <div className="flex items-center gap-3">
               <Avatar src={fileUrl(o.worker_photo)} name={o.worker_name} />
               <div>
-                <h3 className="font-bold text-brand-darkest">{o.worker_name || "الشخص"}</h3>
+                <button type="button" onClick={() => setProfileId(o.worker_user_id)} className="font-bold text-brand-darkest hover:text-brand-dark hover:underline">
+                  {o.worker_name || "الشخص"}
+                </button>
                 {o.job_title && <p className="text-sm text-brand">{o.job_title}</p>}
               </div>
             </div>
@@ -536,6 +538,7 @@ function OffersTab() {
           )}
         </div>
       ))}
+      {profileId && <WorkerProfileModal workerId={profileId} onClose={() => setProfileId(null)} />}
     </div>
   );
 }
