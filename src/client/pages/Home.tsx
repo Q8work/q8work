@@ -95,7 +95,7 @@ export function Home() {
 
         {/* Assurance bar */}
         <div className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-semibold text-brand-dark">
-          {["منصة كويتية", "فرص مرنة ومكافآت واضحة", "شركات موثوقة", "تسجيل مجاني"].map((t) => (
+          {["تقييمات متبادلة", "فرص مرنة ومكافآت واضحة", "مكافآت واضحة قبل بدء العمل", "تسجيل مجاني"].map((t) => (
             <span key={t} className="inline-flex items-center gap-1.5">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
               {t}
