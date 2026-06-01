@@ -26,7 +26,7 @@ profile.put("/worker", requireAuth("worker"), async (c) => {
 
   await c.env.DB.prepare(
     `UPDATE worker_profiles SET
-       full_name = ?, bio = ?, skills = ?, area = ?, phone = ?, civil_id = ?,
+       full_name = ?, bio = ?, skills = ?, area = ?, phone = ?, email = ?, civil_id = ?,
        availability = ?, work_type = ?, commitment = ?, expected_salary = ?
      WHERE user_id = ?`
   )
@@ -36,6 +36,7 @@ profile.put("/worker", requireAuth("worker"), async (c) => {
       skills,
       String(b.area ?? ""),
       String(b.phone ?? ""),
+      String(b.email ?? ""),
       String(b.civil_id ?? ""),
       availability,
       String(b.work_type ?? ""),

@@ -79,6 +79,7 @@ workers.get("/:id", requireAuth("company", "admin"), async (c) => {
   };
   if (!phoneVisible) {
     delete profile.phone;
+    delete profile.email;
     delete profile.civil_id;
   }
   profile.phone_visible = phoneVisible;

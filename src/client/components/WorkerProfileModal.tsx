@@ -21,6 +21,7 @@ interface WorkerProfile {
   rating_count: number;
   phone_visible?: boolean;
   phone?: string;
+  email?: string;
 }
 
 interface RatingItem {
@@ -94,6 +95,9 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
               {p.phone_visible && p.phone && (
                 <div><span className="font-semibold text-brand-dark">رقم التواصل: </span><span data-latin>{p.phone}</span></div>
               )}
+              {p.phone_visible && p.email && (
+                <div><span className="font-semibold text-brand-dark">البريد الإلكتروني: </span><span data-latin>{p.email}</span></div>
+              )}
             </div>
 
             {p.skills.length > 0 && (
@@ -115,7 +119,7 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
             )}
 
             {!p.phone_visible && (
-              <p className="text-center text-xs text-brand">رقم التواصل يظهر بعد قبول الباحث لعرضك.</p>
+              <p className="text-center text-xs text-brand">معلومات التواصل (الهاتف والبريد) تظهر بعد قبول الباحث لعرضك.</p>
             )}
 
             {/* Ratings */}

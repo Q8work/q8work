@@ -23,6 +23,7 @@ interface WorkerProfile {
   skills: string[];
   area: string;
   phone: string;
+  email: string;
   civil_id: string;
   civil_id_image_key: string | null;
   civil_id_verified: number;
@@ -212,9 +213,14 @@ function ProfileTab() {
             <input className="input" value={p.phone} onChange={(e) => set({ phone: e.target.value })} placeholder="965..." />
           </div>
           <div>
-            <label className="label">الرقم المدني <span className="font-normal text-brand">(للتحقق من الجنسية)</span></label>
-            <input className="input" value={p.civil_id} onChange={(e) => set({ civil_id: e.target.value })} />
+            <label className="label">البريد الإلكتروني <span className="font-normal text-brand">(يظهر للشركة بعد قبول العرض فقط)</span></label>
+            <input type="email" className="input" value={p.email} onChange={(e) => set({ email: e.target.value })} placeholder="name@example.com" data-latin />
           </div>
+        </div>
+
+        <div>
+          <label className="label">الرقم المدني <span className="font-normal text-brand">(للتحقق من الجنسية)</span></label>
+          <input className="input" value={p.civil_id} onChange={(e) => set({ civil_id: e.target.value })} />
         </div>
 
         <div>
