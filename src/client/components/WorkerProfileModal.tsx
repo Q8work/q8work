@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, fileUrl } from "../lib/api";
-import { Avatar, Badge, Spinner, StarRating, VerifiedBadge } from "./ui";
+import { Avatar, Badge, Spinner, StarRating, VerifiedBadge, VerifiedTick } from "./ui";
 import { WORK_TYPES, COMMITMENTS, AVAILABILITY, labelOf } from "../lib/constants";
 import { IconPin } from "./icons";
 import { toLatinDigits } from "../lib/format";
@@ -28,6 +28,8 @@ interface RatingItem {
   stars: number;
   comment: string;
   created_at: number;
+  rater_name?: string | null;
+  rater_verified?: number;
 }
 
 const fmtDate = (ms?: number) =>
@@ -131,10 +133,14 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                 <div className="space-y-2">
                   {ratings.map((r, i) => (
                     <div key={i} className="rounded-lg border border-brand-soft p-3">
-                      <div className="flex items-center justify-between">
-                        <StarRating value={r.stars} />
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-darkest">
+                          {r.rater_name || "شركة"}
+                          <VerifiedTick verified={r.rater_verified} size={13} />
+                        </span>
                         <span className="text-xs text-brand">{fmtDate(r.created_at)}</span>
                       </div>
+                      <div className="mt-1"><StarRating value={r.stars} /></div>
                       {r.comment && <p className="mt-1 text-sm text-brand-dark">{r.comment}</p>}
                     </div>
                   ))}

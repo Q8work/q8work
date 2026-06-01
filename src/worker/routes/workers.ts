@@ -84,9 +84,14 @@ workers.get("/:id", requireAuth("company", "admin"), async (c) => {
   }
   profile.phone_visible = phoneVisible;
 
-  // recent rating comments
+  // recent rating comments (with the rating company's name)
   const ratings = await c.env.DB.prepare(
-    "SELECT stars, comment, created_at FROM ratings WHERE ratee_user_id = ? ORDER BY created_at DESC LIMIT 10"
+    `SELECT rt.stars, rt.comment, rt.created_at,
+            cp.company_name AS rater_name, cp.verified AS rater_verified
+       FROM ratings rt
+       LEFT JOIN company_profiles cp ON cp.user_id = rt.rater_user_id
+      WHERE rt.ratee_user_id = ?
+      ORDER BY rt.created_at DESC LIMIT 10`
   )
     .bind(id)
     .all();
