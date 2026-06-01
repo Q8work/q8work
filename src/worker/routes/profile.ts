@@ -23,15 +23,20 @@ profile.put("/worker", requireAuth("worker"), async (c) => {
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
   const skills = JSON.stringify(Array.isArray(b.skills) ? b.skills.map(String) : []);
   const availability = JSON.stringify(Array.isArray(b.availability) ? b.availability.map(String) : []);
+  const firstName = String(b.first_name ?? "").trim();
+  const lastName = String(b.last_name ?? "").trim();
+  const fullName = `${firstName} ${lastName}`.trim() || String(b.full_name ?? "");
 
   await c.env.DB.prepare(
     `UPDATE worker_profiles SET
-       full_name = ?, bio = ?, skills = ?, area = ?, phone = ?, email = ?, civil_id = ?,
+       full_name = ?, first_name = ?, last_name = ?, bio = ?, skills = ?, area = ?, phone = ?, email = ?, civil_id = ?,
        availability = ?, work_type = ?, commitment = ?, expected_salary = ?
      WHERE user_id = ?`
   )
     .bind(
-      String(b.full_name ?? ""),
+      fullName,
+      firstName,
+      lastName,
       String(b.bio ?? ""),
       skills,
       String(b.area ?? ""),

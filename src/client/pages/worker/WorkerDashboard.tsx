@@ -18,6 +18,8 @@ type Tab = "profile" | "applications" | "offers" | "messages" | "ratings";
 
 interface WorkerProfile {
   full_name: string;
+  first_name: string;
+  last_name: string;
   photo_key: string | null;
   bio: string;
   skills: string[];
@@ -55,7 +57,16 @@ function ProfileTab() {
   const [customSkill, setCustomSkill] = useState("");
 
   useEffect(() => {
-    api.get<{ profile: WorkerProfile }>("/profile/worker").then((r) => setP(r.profile));
+    api.get<{ profile: WorkerProfile }>("/profile/worker").then((r) => {
+      const prof = r.profile;
+      // backfill first/last from full_name for older records
+      if (!prof.first_name && !prof.last_name && prof.full_name) {
+        const idx = prof.full_name.indexOf(" ");
+        prof.first_name = idx > 0 ? prof.full_name.slice(0, idx) : prof.full_name;
+        prof.last_name = idx > 0 ? prof.full_name.slice(idx + 1) : "";
+      }
+      setP(prof);
+    });
   }, []);
 
   if (!p) return <div className="py-10 text-center"><Spinner /></div>;
@@ -127,9 +138,24 @@ function ProfileTab() {
         <ErrorText>{error}</ErrorText>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="label">الاسم الكامل</label>
-            <input className="input" value={p.full_name} onChange={(e) => set({ full_name: e.target.value })} />
+            <label className="label">الاسم الأول</label>
+            <input
+              className="input"
+              value={p.first_name}
+              onChange={(e) => set({ first_name: e.target.value, full_name: `${e.target.value} ${p.last_name}`.trim() })}
+            />
           </div>
+          <div>
+            <label className="label">اسم العائلة</label>
+            <input
+              className="input"
+              value={p.last_name}
+              onChange={(e) => set({ last_name: e.target.value, full_name: `${p.first_name} ${e.target.value}`.trim() })}
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="label">المحافظة</label>
             <select className="input" value={p.area} onChange={(e) => set({ area: e.target.value })}>

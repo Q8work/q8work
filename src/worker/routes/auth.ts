@@ -15,7 +15,7 @@ const auth = new Hono<{ Bindings: Env; Variables: Variables }>();
 // POST /api/auth/register
 auth.post("/register", async (c) => {
   const body = await c.req.json().catch(() => ({}));
-  const { email, password, role, name, phone } = body as Record<string, unknown>;
+  const { email, password, role, name, phone, first_name, last_name } = body as Record<string, unknown>;
 
   if (!isEmail(email)) return c.json({ error: "بريد إلكتروني غير صالح." }, 400);
   if (!isNonEmptyString(password) || (password as string).length < 6)
@@ -40,12 +40,15 @@ auth.post("/register", async (c) => {
     .bind(id, emailLc, passwordHash, role, now)
     .run();
 
-  const displayName = isNonEmptyString(name) ? (name as string) : "";
+  const firstName = isNonEmptyString(first_name) ? (first_name as string).trim() : "";
+  const lastName = isNonEmptyString(last_name) ? (last_name as string).trim() : "";
+  const combined = `${firstName} ${lastName}`.trim();
+  const displayName = combined || (isNonEmptyString(name) ? (name as string) : "");
   if (role === "worker") {
     await c.env.DB.prepare(
-      "INSERT INTO worker_profiles (user_id, full_name, phone, created_at) VALUES (?, ?, ?, ?)"
+      "INSERT INTO worker_profiles (user_id, full_name, first_name, last_name, phone, created_at) VALUES (?, ?, ?, ?, ?, ?)"
     )
-      .bind(id, displayName, (phone as string).trim(), now)
+      .bind(id, displayName, firstName, lastName, (phone as string).trim(), now)
       .run();
   } else {
     await c.env.DB.prepare(

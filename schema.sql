@@ -23,7 +23,9 @@ CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
 -- Worker (الكويتي) profile
 CREATE TABLE IF NOT EXISTS worker_profiles (
   user_id            TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-  full_name          TEXT NOT NULL DEFAULT '',
+  full_name          TEXT NOT NULL DEFAULT '',     -- derived: first_name + last_name
+  first_name         TEXT NOT NULL DEFAULT '',
+  last_name          TEXT NOT NULL DEFAULT '',
   photo_key          TEXT,
   bio                TEXT NOT NULL DEFAULT '',
   skills             TEXT NOT NULL DEFAULT '[]',   -- JSON array of skill strings

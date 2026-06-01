@@ -73,6 +73,8 @@ export function Register() {
   const redirect = sp.get("redirect") || "/app";
   const [role, setRole] = useState<"worker" | "company">("worker");
   const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -89,7 +91,19 @@ export function Register() {
     }
     setBusy(true);
     try {
-      await register({ email, password, role, name, phone: role === "worker" ? phone : undefined });
+      await register(
+        role === "worker"
+          ? {
+              email,
+              password,
+              role,
+              name: `${firstName} ${lastName}`.trim(),
+              first_name: firstName,
+              last_name: lastName,
+              phone,
+            }
+          : { email, password, role, name }
+      );
       // ارفع صورة الهوية بعد إنشاء الحساب (الجلسة أصبحت فعّالة)
       if (role === "worker" && idImage) {
         await api.upload("/profile/upload?kind=civil_id", idImage);
@@ -131,10 +145,23 @@ export function Register() {
           </div>
         </div>
 
-        <div>
-          <label className="label">{role === "worker" ? "الاسم الكامل" : "اسم الشركة"}</label>
-          <input className="input" value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
+        {role === "worker" ? (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="label">الاسم الأول</label>
+              <input className="input" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+            </div>
+            <div>
+              <label className="label">اسم العائلة</label>
+              <input className="input" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <label className="label">اسم الشركة</label>
+            <input className="input" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+        )}
         <div>
           <label className="label">البريد الإلكتروني</label>
           <input className="input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
