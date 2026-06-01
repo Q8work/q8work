@@ -54,6 +54,7 @@ function ProfileTab() {
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [customSkill, setCustomSkill] = useState("");
 
   useEffect(() => {
     api.get<{ profile: WorkerProfile }>("/profile/worker").then((r) => setP(r.profile));
@@ -66,6 +67,16 @@ function ProfileTab() {
     const arr = p[key];
     set({ [key]: arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v] } as any);
   };
+  const addCustomSkill = () => {
+    const v = customSkill.trim();
+    if (!v || p.skills.includes(v)) {
+      setCustomSkill("");
+      return;
+    }
+    set({ skills: [...p.skills, v] });
+    setCustomSkill("");
+  };
+  const removeSkill = (v: string) => set({ skills: p.skills.filter((x) => x !== v) });
 
   const save = async () => {
     setBusy(true);
@@ -125,6 +136,7 @@ function ProfileTab() {
             <label className="label">المحافظة</label>
             <select className="input" value={p.area} onChange={(e) => set({ area: e.target.value })}>
               <option value="">اختر المحافظة</option>
+              <option value="جميع المحافظات">جميع المحافظات</option>
               {AREAS.map((a) => (
                 <option key={a} value={a}>{a}</option>
               ))}
@@ -146,6 +158,44 @@ function ProfileTab() {
               </Toggle>
             ))}
           </div>
+
+          {/* Add a custom skill / specialization not in the list */}
+          <div className="mt-3 flex gap-2">
+            <input
+              className="input flex-1"
+              placeholder="أضف مهارة أو تخصص غير موجود..."
+              value={customSkill}
+              onChange={(e) => setCustomSkill(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addCustomSkill();
+                }
+              }}
+            />
+            <button type="button" className="btn-secondary" onClick={addCustomSkill}>إضافة</button>
+          </div>
+
+          {/* Custom skills the user added */}
+          {p.skills.filter((s) => !SKILLS.includes(s)).length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {p.skills
+                .filter((s) => !SKILLS.includes(s))
+                .map((s) => (
+                  <span key={s} className="chip gap-1.5">
+                    {s}
+                    <button
+                      type="button"
+                      onClick={() => removeSkill(s)}
+                      aria-label={`إزالة ${s}`}
+                      className="text-brand hover:text-red-600"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ))}
+            </div>
+          )}
         </div>
 
         <div>
