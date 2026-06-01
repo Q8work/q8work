@@ -89,6 +89,16 @@ export function Home() {
           <Link to="/jobs" className="btn-primary">استكشف الفرص</Link>
           <Link to="/register" className="btn-secondary">أضف فرصة لشركتك</Link>
         </div>
+
+        {/* Assurance bar */}
+        <div className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-semibold text-brand-dark">
+          {["فرص من شركات موثوقة", "مكافآت واضحة", "عمل مرن حسب وقتك", "تسجيل مجاني"].map((t) => (
+            <span key={t} className="inline-flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+              {t}
+            </span>
+          ))}
+        </div>
       </section>
 
       {/* Stat strip */}
