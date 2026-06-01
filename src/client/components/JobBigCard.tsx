@@ -29,11 +29,11 @@ export function JobBigCard({ job, scheme }: { job: BigJob; scheme: { bg: string;
       {/* flash / shine sweep on hover */}
       <span className="pointer-events-none absolute inset-y-0 -left-1/3 z-10 w-1/3 -skew-x-12 bg-white/40 blur-md transition-[transform,opacity] duration-700 ease-out group-hover:translate-x-[450%] group-hover:opacity-0" />
       <h3 className="text-2xl font-extrabold leading-tight sm:text-3xl">{job.title}</h3>
-      <p className="mt-3 leading-relaxed opacity-90">
-        {job.company_name}
-        {job.area ? ` · ${job.area}` : ""}
-        {job.salary ? ` · ${toLatinDigits(job.salary)} د.ك` : ""}
-      </p>
+      <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
+        {job.company_name && <span className="rounded-full bg-white/75 px-3 py-1.5">{job.company_name}</span>}
+        {job.area && <span className="rounded-full bg-white/75 px-3 py-1.5">{job.area}</span>}
+        {job.salary && <span className="rounded-full bg-white/75 px-3 py-1.5">{toLatinDigits(job.salary)} د.ك</span>}
+      </div>
       <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold">
         عرض والتقديم
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
