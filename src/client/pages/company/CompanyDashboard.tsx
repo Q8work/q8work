@@ -43,10 +43,12 @@ function ProfileTab() {
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [customSector, setCustomSector] = useState(false);
 
   useEffect(() => { api.get<{ profile: CompanyProfile }>("/profile/company").then((r) => setP(r.profile)); }, []);
   if (!p) return <div className="py-10 text-center"><Spinner /></div>;
   const set = (patch: Partial<CompanyProfile>) => setP({ ...p, ...patch });
+  const sectorIsCustom = customSector || (!!p.sector && !SECTORS.includes(p.sector));
 
   const save = async () => {
     setBusy(true); setError("");
@@ -84,10 +86,26 @@ function ProfileTab() {
           </div>
           <div>
             <label className="label">القطاع</label>
-            <select className="input" value={p.sector} onChange={(e) => set({ sector: e.target.value })}>
+            <select
+              className="input"
+              value={sectorIsCustom ? "__other__" : p.sector}
+              onChange={(e) => {
+                if (e.target.value === "__other__") { setCustomSector(true); set({ sector: "" }); }
+                else { setCustomSector(false); set({ sector: e.target.value }); }
+              }}
+            >
               <option value="">اختر القطاع</option>
               {SECTORS.map((s) => <option key={s} value={s}>{s}</option>)}
+              <option value="__other__">قطاع آخر…</option>
             </select>
+            {sectorIsCustom && (
+              <input
+                className="input mt-2"
+                placeholder="اكتب اسم القطاع"
+                value={p.sector}
+                onChange={(e) => set({ sector: e.target.value })}
+              />
+            )}
           </div>
         </div>
         <div>
@@ -130,16 +148,6 @@ function ProfileTab() {
           </div>
         </div>
 
-        <div>
-          <label className="label">السجل التجاري <span className="font-normal text-brand">(للتوثيق)</span></label>
-          <div className="flex items-center gap-3">
-            <label className="btn-secondary cursor-pointer">
-              رفع السجل
-              <input type="file" accept="image/*,application/pdf" className="hidden" onChange={(e) => upload("registry", e.target.files?.[0])} />
-            </label>
-            {p.commercial_registry_key && <span className="text-sm font-semibold text-emerald-700">✓ تم الرفع</span>}
-          </div>
-        </div>
         <div className="flex items-center gap-3">
           <button className="btn-primary" onClick={save} disabled={busy}>{busy ? <Spinner /> : "حفظ"}</button>
           {saved && <span className="text-sm font-bold text-emerald-700">✓ تم الحفظ</span>}
