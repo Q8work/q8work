@@ -96,7 +96,7 @@ export function Home() {
 
       {/* Stat strip */}
       <section className="mt-12 grid grid-cols-3 gap-4 text-center">
-        {[[num(stats?.companies), "شركة مسجّلة"], [num(stats?.workers), "باحث عن عمل"], [num(stats?.open_jobs), "فرصة متاحة"]].map(([v, l]) => (
+        {[[`+${num(stats?.open_jobs)}`, "فرصة"], [`+${num(stats?.companies)}`, "شركة"], [`+${num(stats?.workers)}`, "مستخدم"]].map(([v, l]) => (
           <div key={l} className="rounded-2xl border border-brand-soft bg-white py-8">
             <div className="text-3xl font-extrabold text-brand-darkest sm:text-4xl">{v}</div>
             <div className="mt-1 text-sm font-semibold text-brand">{l}</div>

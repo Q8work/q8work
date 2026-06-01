@@ -36,7 +36,7 @@ api.get("/health", (c) => c.json({ ok: true, env: c.env.ENVIRONMENT }));
 // Public platform stats (for the landing page).
 // A display floor keeps the figures at a baseline until real counts exceed it.
 // Admin stats (/api/admin/stats) remain the true counts.
-const STATS_BASE = { companies: 233, workers: 750, jobs: 120 };
+const STATS_BASE = { companies: 50, workers: 500, jobs: 100 };
 api.get("/stats", async (c) => {
   const q = async (sql: string) => ((await c.env.DB.prepare(sql).first<any>())?.n ?? 0) as number;
   return c.json({
