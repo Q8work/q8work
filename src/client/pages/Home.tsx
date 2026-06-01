@@ -74,11 +74,7 @@ export function Home() {
     <Layout wide>
       {/* Hero */}
       <section className="px-2 pt-10 text-center sm:pt-16">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-4 py-1.5 text-sm font-bold text-brand-dark">
-          <span className="h-1.5 w-1.5 rounded-full bg-brand-dark" />
-          <span className="font-logo font-extrabold" data-latin>Q8Work</span>
-        </span>
-        <h1 className="mx-auto mt-5 max-w-2xl text-balance text-3xl font-extrabold leading-[1.15] tracking-tight text-brand-darkest sm:text-5xl">
+        <h1 className="mx-auto max-w-2xl text-balance text-3xl font-extrabold leading-[1.15] tracking-tight text-brand-darkest sm:text-5xl">
           منصة كويتية <span className="whitespace-nowrap text-brand-dark">للفرص والعمل المرن</span>
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-balance text-base leading-relaxed text-brand sm:text-lg">
