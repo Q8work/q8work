@@ -78,7 +78,7 @@ export function Home() {
           فرص عمل مرنة تمنحك الحرية في <span className="text-brand-dark">اختيار وقتك ومصدر دخلك</span>
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-lg text-brand">
-          منصة العمل الجزئي للكويتيين — <span data-latin>Q8Work</span> منصة دخل إضافي وفرص مرنة.
+          <span data-latin>Q8Work</span> منصة دخل إضافي وفرص مرنة.
         </p>
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
