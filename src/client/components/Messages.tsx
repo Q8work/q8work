@@ -6,8 +6,6 @@ import { useAuth } from "../lib/auth";
 import { WorkerProfileModal } from "./WorkerProfileModal";
 
 interface Thread {
-  offer_id: string;
-  status: string;
   company_user_id: string;
   worker_user_id: string;
   company_name: string;
@@ -54,7 +52,7 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
 
   useEffect(() => {
     if (!active) return;
-    api.get<{ messages: Message[] }>(`/messages/${active}`).then((r) => {
+    api.get<{ messages: Message[] }>(`/messages/with/${active}`).then((r) => {
       setMessages(r.messages);
       loadThreads();
       onChanged?.();
@@ -72,9 +70,9 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
     if (!active || !body.trim()) return;
     setSending(true);
     try {
-      await api.post(`/messages/${active}`, { body });
+      await api.post(`/messages/with/${active}`, { body });
       setBody("");
-      const r = await api.get<{ messages: Message[] }>(`/messages/${active}`);
+      const r = await api.get<{ messages: Message[] }>(`/messages/with/${active}`);
       setMessages(r.messages);
       loadThreads();
     } finally {
@@ -83,7 +81,8 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
   };
 
   const otherName = (t: Thread) => (user?.role === "company" ? t.worker_name : t.company_name) || "مستخدم";
-  const activeThread = threads.find((t) => t.offer_id === active);
+  const peerId = (t: Thread) => (user?.role === "company" ? t.worker_user_id : t.company_user_id);
+  const activeThread = threads.find((t) => peerId(t) === active);
 
   if (loading) return <div className="py-10 text-center"><Spinner /></div>;
   if (threads.length === 0)
@@ -97,10 +96,10 @@ export function MessagesPanel({ onChanged }: { onChanged?: () => void }) {
         <div className="flex-1 overflow-y-auto">
           {threads.map((t) => (
             <button
-              key={t.offer_id}
-              onClick={() => open(t.offer_id)}
+              key={peerId(t)}
+              onClick={() => open(peerId(t))}
               className={`flex w-full items-center gap-3 border-b border-brand-soft px-4 py-3 text-right transition-colors ${
-                active === t.offer_id ? "bg-brand-soft" : "hover:bg-brand-bg"
+                active === peerId(t) ? "bg-brand-soft" : "hover:bg-brand-bg"
               }`}
             >
               <Avatar name={otherName(t)} size={44} />
