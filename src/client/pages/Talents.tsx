@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { Avatar, PageLoader, EmptyState, StarRating, VerifiedTick } from "../components/ui";
+import { Avatar, PageLoader, EmptyState, StarRating } from "../components/ui";
 import { api, fileUrl } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { AREAS } from "../lib/constants";
@@ -98,7 +98,6 @@ export function Talents() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1">
                     <h3 className="truncate font-extrabold text-brand-darkest">{w.full_name || "باحث عن فرص"}</h3>
-                    <VerifiedTick verified={w.civil_id_verified} size={15} />
                   </div>
                   <div className="mt-1">
                     {w.avg_rating != null

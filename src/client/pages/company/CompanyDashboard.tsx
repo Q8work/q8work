@@ -338,7 +338,6 @@ function JobApplicants({ jobId }: { jobId: string }) {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-brand-darkest hover:underline">{a.full_name || "باحث عن فرص"}</span>
-                        {a.civil_id_verified ? <VerifiedBadge verified={1} /> : null}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-brand">
                         {a.area && <span className="inline-flex items-center gap-1"><IconPin className="h-3 w-3" /> {a.area}</span>}

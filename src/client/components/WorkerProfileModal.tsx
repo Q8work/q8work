@@ -74,7 +74,6 @@ export function WorkerProfileBody({ p, ratings }: { p: WorkerProfile; ratings: R
         </span>
         <div className="mt-3 flex items-center justify-center gap-1.5">
           <h4 className="text-2xl font-extrabold text-brand-darkest">{p.full_name || "باحث عن فرص"}</h4>
-          <VerifiedTick verified={p.civil_id_verified} size={18} />
         </div>
         <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-sm">
           {p.avg_rating != null && (
