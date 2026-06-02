@@ -1,14 +1,15 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Logo } from "./Logo";
 import { NotificationBell } from "./NotificationBell";
 import { useAuth } from "../lib/auth";
 
-function NavItem({ to, children, end }: { to: string; children: ReactNode; end?: boolean }) {
+function NavItem({ to, children, end, onClick }: { to: string; children: ReactNode; end?: boolean; onClick?: () => void }) {
   return (
     <NavLink
       to={to}
       end={end}
+      onClick={onClick}
       className={({ isActive }) =>
         `rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
           isActive ? "bg-brand-soft text-brand-darkest" : "text-brand-dark hover:bg-brand-bg"
@@ -23,26 +24,32 @@ function NavItem({ to, children, end }: { to: string; children: ReactNode; end?:
 export function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const onLogout = async () => {
+    setOpen(false);
     await logout();
     navigate("/");
   };
 
+  const links = (
+    <>
+      <NavItem to="/" end onClick={() => setOpen(false)}>الرئيسية</NavItem>
+      <NavItem to="/jobs" onClick={() => setOpen(false)}>فرص العمل</NavItem>
+      <NavItem to="/companies" onClick={() => setOpen(false)}>الشركات</NavItem>
+      <NavItem to="/about" onClick={() => setOpen(false)}>من نحن</NavItem>
+      <NavItem to="/contact" onClick={() => setOpen(false)}>تواصل معنا</NavItem>
+      {user && <NavItem to="/app" onClick={() => setOpen(false)}>لوحتي</NavItem>}
+    </>
+  );
+
   return (
     <header className="sticky top-0 z-40 border-b border-brand-soft bg-white/95 backdrop-blur">
       <div className="h-1.5 w-full" style={{ background: "linear-gradient(90deg,#030D4F,#1F6FEB,#10B5A4,#FFC52C,#FB0C06)" }} />
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-6">
-          <Link to="/"><Logo /></Link>
-          <nav className="hidden items-center gap-1 md:flex">
-            <NavItem to="/" end>الرئيسية</NavItem>
-            <NavItem to="/jobs">فرص العمل</NavItem>
-            <NavItem to="/companies">الشركات</NavItem>
-            <NavItem to="/about">من نحن</NavItem>
-            <NavItem to="/contact">تواصل معنا</NavItem>
-            {user && <NavItem to="/app">لوحتي</NavItem>}
-          </nav>
+          <Link to="/" onClick={() => setOpen(false)}><Logo /></Link>
+          <nav className="hidden items-center gap-1 md:flex">{links}</nav>
         </div>
 
         <div className="flex items-center gap-2">
@@ -54,12 +61,38 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className="btn-ghost">دخول</Link>
-              <Link to="/register" className="btn-primary">إنشاء حساب</Link>
+              <Link to="/login" className="btn-ghost hidden sm:inline-flex">دخول</Link>
+              <Link to="/register" className="btn-primary hidden sm:inline-flex">إنشاء حساب</Link>
             </>
           )}
+          {/* Mobile menu toggle */}
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label="القائمة"
+            aria-expanded={open}
+            className="btn-ghost px-2 md:hidden"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              {open ? <path d="M18 6 6 18M6 6l12 12" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
+            </svg>
+          </button>
         </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {open && (
+        <div className="border-t border-brand-soft bg-white md:hidden">
+          <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3">
+            {links}
+            {!user && (
+              <div className="mt-2 grid grid-cols-2 gap-2 border-t border-brand-soft pt-3">
+                <Link to="/login" onClick={() => setOpen(false)} className="btn-secondary justify-center">دخول</Link>
+                <Link to="/register" onClick={() => setOpen(false)} className="btn-primary justify-center">إنشاء حساب</Link>
+              </div>
+            )}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

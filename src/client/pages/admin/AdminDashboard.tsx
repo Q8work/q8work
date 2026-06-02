@@ -80,8 +80,8 @@ function UsersTab() {
       {!users ? <div className="py-10 text-center"><Spinner /></div> : users.length === 0 ? (
         <EmptyState title="لا يوجد مستخدمون" />
       ) : (
-        <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-brand-soft">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-2xl bg-white shadow-sm ring-1 ring-brand-soft">
+          <table className="w-full min-w-[680px] text-sm">
             <thead className="bg-brand-bg text-brand-dark">
               <tr>
                 <th className="p-3 text-right">الاسم</th>

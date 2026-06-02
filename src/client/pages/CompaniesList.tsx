@@ -49,8 +49,9 @@ export function CompaniesList() {
           تصفّح الشركات والمؤسسات الموثوقة على <span data-latin>Q8Work</span> واطّلع على فرصها المتاحة.
         </p>
         {companies && (
-          <p className="mt-4 inline-flex rounded-full bg-white/15 px-3 py-1 text-sm font-bold backdrop-blur" data-latin>
-            {companies.length} <span className="font-semibold"> شركة</span>
+          <p className="mt-4 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-sm font-bold backdrop-blur">
+            <span data-latin>{companies.length}</span>
+            <span className="font-semibold">شركة</span>
           </p>
         )}
       </div>
