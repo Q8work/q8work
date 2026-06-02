@@ -64,9 +64,9 @@ export function About() {
         {/* Who we are */}
         <section className="mt-16 grid gap-8 md:grid-cols-3">
           <div className="md:col-span-1">
-            <Eyebrow>قصتنا</Eyebrow>
+            <Eyebrow>عن المنصة</Eyebrow>
             <h2 className="mt-3 text-3xl font-extrabold leading-tight text-brand-darkest sm:text-4xl">
-              من نحن؟
+              قصتنا
             </h2>
             <span className="mt-4 block h-1 w-14 rounded-full bg-brand-dark" />
           </div>
