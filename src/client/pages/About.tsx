@@ -42,41 +42,44 @@ export function About() {
     <Layout wide>
       <div className="mx-auto max-w-5xl">
         {/* Hero */}
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-l from-brand-dark to-[#6c83ff] px-6 py-16 text-center text-white sm:px-12 sm:py-20">
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-l from-brand-dark to-[#6c83ff] px-6 pb-24 pt-14 text-center text-white sm:px-12 sm:pb-28 sm:pt-16">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-1.5 text-sm font-bold backdrop-blur">
             تعرّف علينا
           </span>
-          <h1 className="mt-5 text-4xl font-extrabold leading-tight sm:text-6xl">من نحن</h1>
+          <h1 className="mt-5 text-4xl font-extrabold leading-tight sm:text-5xl">من نحن</h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/80">
             منصة كويتية للعمل المرن تربط الكفاءات بالفرص
           </p>
-
-          <div className="mx-auto mt-10 grid max-w-2xl grid-cols-3 gap-4">
-            {STATS.map((s) => (
-              <div key={s.l} className="rounded-2xl bg-white/10 py-5 backdrop-blur">
-                <div className="text-3xl font-extrabold sm:text-4xl" data-latin>{s.v}</div>
-                <div className="mt-1 text-sm font-semibold text-white/70">{s.l}</div>
-              </div>
-            ))}
-          </div>
         </section>
 
+        {/* Stats strip — bridges hero & content */}
+        <div className="relative z-10 mx-auto -mt-16 grid max-w-3xl grid-cols-3 gap-4 px-4 sm:gap-6">
+          {STATS.map((s) => (
+            <div key={s.l} className="rounded-2xl border border-brand-soft bg-white py-6 text-center shadow-md">
+              <div className="text-3xl font-extrabold text-brand-dark sm:text-4xl" data-latin>{s.v}</div>
+              <div className="mt-1 text-sm font-semibold text-brand">{s.l}</div>
+            </div>
+          ))}
+        </div>
+
         {/* Intro / definition */}
-        <section className="mx-auto mt-14 max-w-3xl space-y-5 text-center text-lg leading-loose text-brand-dark">
-          <p>
-            <span className="font-bold text-brand-darkest" data-latin>Q8Work</span> منصة كويتية متخصصة في ربط الأفراد الباحثين عن فرص عمل مرنة
+        <section className="mx-auto mt-16 max-w-3xl">
+          <p className="text-center text-xl font-bold leading-relaxed text-brand-darkest sm:text-2xl">
+            <span data-latin>Q8Work</span> منصة كويتية متخصصة في ربط الأفراد الباحثين عن فرص عمل مرنة
             بالشركات والمؤسسات التي تحتاج إلى كفاءات ومهارات لفترات محددة أو مشاريع مؤقتة.
           </p>
-          <p>
-            انطلقت فكرة <span data-latin>Q8Work</span> من إيماننا بأهمية توفير فرص دخل إضافي للكويتيين،
-            وتمكينهم من الاستفادة من أوقاتهم ومهاراتهم وخبراتهم بطريقة مرنة تتناسب مع ظروفهم اليومية،
-            سواء كانوا طلبة، موظفين، أو باحثين عن فرص جديدة لتطوير مهاراتهم وزيادة دخلهم.
-          </p>
-          <p>
-            في المقابل، نوفر للشركات والمؤسسات حلاً عملياً وفعالاً للوصول إلى الكفاءات المناسبة عند الحاجة،
-            دون تحمل التكاليف والالتزامات المرتبطة بالتوظيف التقليدي طويل الأمد، مما يساهم في رفع كفاءة
-            الأعمال وتسريع تنفيذ المشاريع والمهام المختلفة.
-          </p>
+          <div className="mx-auto mt-6 grid max-w-3xl gap-6 leading-loose text-brand-dark md:grid-cols-2">
+            <p>
+              انطلقت فكرة <span data-latin>Q8Work</span> من إيماننا بأهمية توفير فرص دخل إضافي للكويتيين،
+              وتمكينهم من الاستفادة من أوقاتهم ومهاراتهم وخبراتهم بطريقة مرنة تتناسب مع ظروفهم اليومية،
+              سواء كانوا طلبة، موظفين، أو باحثين عن فرص جديدة لتطوير مهاراتهم وزيادة دخلهم.
+            </p>
+            <p>
+              في المقابل، نوفر للشركات والمؤسسات حلاً عملياً وفعالاً للوصول إلى الكفاءات المناسبة عند الحاجة،
+              دون تحمل التكاليف والالتزامات المرتبطة بالتوظيف التقليدي طويل الأمد، مما يساهم في رفع كفاءة
+              الأعمال وتسريع تنفيذ المشاريع والمهام المختلفة.
+            </p>
+          </div>
         </section>
 
         {/* Vision & Mission */}
