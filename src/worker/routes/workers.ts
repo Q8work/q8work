@@ -86,9 +86,9 @@ workers.get("/:id", requireAuth("company", "admin"), async (c) => {
   }
   profile.phone_visible = phoneVisible;
 
-  // recent rating comments (with the rating company's name)
+  // recent recommendations (with the rating company's name)
   const ratings = await c.env.DB.prepare(
-    `SELECT rt.stars, rt.comment, rt.created_at,
+    `SELECT rt.stars, rt.comment, rt.criteria, rt.badges, rt.rehire, rt.created_at,
             cp.company_name AS rater_name, cp.verified AS rater_verified
        FROM ratings rt
        LEFT JOIN company_profiles cp ON cp.user_id = rt.rater_user_id
@@ -97,8 +97,14 @@ workers.get("/:id", requireAuth("company", "admin"), async (c) => {
   )
     .bind(id)
     .all();
+  const parseJson = (s: unknown, fb: any) => { try { return JSON.parse(String(s)); } catch { return fb; } };
+  const recs = (ratings.results ?? []).map((r: any) => ({
+    ...r,
+    criteria: parseJson(r.criteria, {}),
+    badges: parseJson(r.badges, []),
+  }));
 
-  return c.json({ profile, ratings: ratings.results ?? [] });
+  return c.json({ profile, ratings: recs });
 });
 
 export default workers;

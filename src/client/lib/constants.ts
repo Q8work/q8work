@@ -57,6 +57,36 @@ export const SECTORS = [
   "أخرى",
 ];
 
+// Recommendation form: star criteria, badges, and rehire question
+export const RATING_CRITERIA: { key: string; label: string }[] = [
+  { key: "punctuality", label: "الالتزام بالمواعيد" },
+  { key: "quality", label: "جودة العمل" },
+  { key: "communication", label: "التواصل والتعاون" },
+  { key: "professionalism", label: "الاحترافية" },
+  { key: "rehire", label: "الرغبة في العمل معه مجدداً" },
+];
+
+export const BADGES: string[] = [
+  "ملتزم بالمواعيد",
+  "سريع التعلم",
+  "محترف في التعامل",
+  "يعمل بروح الفريق",
+  "دقيق في تنفيذ المهام",
+  "مبادر ومجتهد",
+  "خدمة عملاء ممتازة",
+  "موثوق ويمكن الاعتماد عليه",
+];
+
+export const REHIRE_OPTIONS: { value: string; label: string }[] = [
+  { value: "definitely", label: "نعم، بالتأكيد" },
+  { value: "yes", label: "نعم" },
+  { value: "maybe", label: "ربما" },
+  { value: "no", label: "لا" },
+];
+
+export const RECOMMENDATION_TEMPLATE =
+  "أظهر التزاماً عالياً خلال فترة العمل، وأنجز المهام المطلوبة بكفاءة واحترافية. نوصي بالتعامل معه في الفرص المستقبلية.";
+
 export function labelOf(list: { value: string; label: string }[], value?: string): string {
   return list.find((x) => x.value === value)?.label || value || "—";
 }

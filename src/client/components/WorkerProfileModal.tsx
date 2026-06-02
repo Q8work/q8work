@@ -25,7 +25,16 @@ interface RatingItem {
   created_at: number;
   rater_name?: string | null;
   rater_verified?: number;
+  badges?: string[];
+  rehire?: string;
 }
+
+const REHIRE_LABEL: Record<string, string> = {
+  definitely: "يوصى بشدّة بإعادة توظيفه",
+  yes: "يوصى بإعادة توظيفه",
+  maybe: "قد يُعاد توظيفه",
+  no: "لا يوصى بإعادة توظيفه",
+};
 
 const fmtDate = (ms?: number) =>
   ms ? new Intl.DateTimeFormat("ar-KW-u-nu-latn", { dateStyle: "medium" }).format(new Date(ms)) : "";
@@ -165,6 +174,16 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                         <p className="mt-2 border-r-2 border-brand-soft pr-3 text-sm leading-relaxed text-brand-dark">
                           «{r.comment}»
                         </p>
+                      )}
+                      {r.badges && r.badges.length > 0 && (
+                        <div className="mt-2.5 flex flex-wrap gap-1.5">
+                          {r.badges.map((b) => (
+                            <span key={b} className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700">🏆 {b}</span>
+                          ))}
+                        </div>
+                      )}
+                      {r.rehire && REHIRE_LABEL[r.rehire] && (
+                        <div className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-emerald-700">✓ {REHIRE_LABEL[r.rehire]}</div>
                       )}
                     </div>
                   ))}

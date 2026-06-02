@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Layout } from "../../components/Layout";
-import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge, VerifiedBadge } from "../../components/ui";
+import { Tabs, Spinner, EmptyState, StarRating, ErrorText, Avatar, Badge, VerifiedBadge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
 import { WorkerProfileModal } from "../../components/WorkerProfileModal";
+import { RecommendationForm } from "../../components/RecommendationForm";
 import { IconPin, IconClock, IconCash } from "../../components/icons";
 import { api, fileUrl } from "../../lib/api";
 import { toLatinDigits } from "../../lib/format";
@@ -485,17 +486,12 @@ interface Offer {
 
 function OffersTab() {
   const [offers, setOffers] = useState<Offer[] | null>(null);
-  const [rating, setRating] = useState<{ offerId: string; stars: number; comment: string } | null>(null);
+  const [recOffer, setRecOffer] = useState<{ id: string; name: string } | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
   const load = () => api.get<{ offers: Offer[] }>("/offers").then((r) => setOffers(r.offers));
   useEffect(() => { load(); }, []);
 
   const complete = async (id: string) => { await api.patch(`/offers/${id}`, { status: "completed" }); await load(); };
-  const submitRating = async () => {
-    if (!rating) return;
-    await api.post("/ratings", { offer_id: rating.offerId, stars: rating.stars, comment: rating.comment });
-    setRating(null); await load();
-  };
 
   if (!offers) return <div className="py-10 text-center"><Spinner /></div>;
   if (offers.length === 0) return <EmptyState title="لم ترسل أي عرض بعد" hint="ابحث عن المواهب وأرسل عرضك." />;
@@ -523,24 +519,22 @@ function OffersTab() {
           )}
           {o.status === "completed" && (
             <div className="mt-3">
-              {rating?.offerId === o.id ? (
-                <div className="rounded-xl bg-brand-bg p-3">
-                  <p className="mb-2 text-sm font-bold text-brand-darkest">اكتب شهادة توصية عن الشخص</p>
-                  <StarInput value={rating.stars} onChange={(s) => setRating({ ...rating, stars: s })} />
-                  <textarea className="input mt-2" rows={3} placeholder="مثال: عمل باحترافية والتزام، وأنصح بالتعامل معه..." value={rating.comment} onChange={(e) => setRating({ ...rating, comment: e.target.value })} />
-                  <div className="mt-2 flex gap-2">
-                    <button className="btn-primary" onClick={submitRating}>نشر التوصية</button>
-                    <button className="btn-ghost" onClick={() => setRating(null)}>إلغاء</button>
-                  </div>
-                </div>
-              ) : (
-                <button className="btn-secondary" onClick={() => setRating({ offerId: o.id, stars: 5, comment: "" })}>إضافة شهادة توصية</button>
-              )}
+              <button className="btn-secondary" onClick={() => setRecOffer({ id: o.id, name: o.worker_name || "الشخص" })}>
+                إضافة شهادة توصية
+              </button>
             </div>
           )}
         </div>
       ))}
       {profileId && <WorkerProfileModal workerId={profileId} onClose={() => setProfileId(null)} />}
+      {recOffer && (
+        <RecommendationForm
+          offerId={recOffer.id}
+          workerName={recOffer.name}
+          onClose={() => setRecOffer(null)}
+          onDone={() => { setRecOffer(null); load(); }}
+        />
+      )}
     </div>
   );
 }

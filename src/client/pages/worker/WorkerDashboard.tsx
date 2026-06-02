@@ -337,6 +337,13 @@ function RatingsTab() {
               <StarRating value={r.stars} />
             </div>
             {r.comment && <p className="mt-2 border-r-2 border-brand-soft pr-3 text-sm leading-relaxed text-brand-dark">«{r.comment}»</p>}
+            {Array.isArray(r.badges) && r.badges.length > 0 && (
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {r.badges.map((b: string) => (
+                  <span key={b} className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700">🏆 {b}</span>
+                ))}
+              </div>
+            )}
           </div>
         ))
       )}

@@ -113,8 +113,11 @@ CREATE TABLE IF NOT EXISTS ratings (
   offer_id      TEXT REFERENCES offers(id) ON DELETE SET NULL,
   rater_user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   ratee_user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  stars         INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
+  stars         INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),  -- overall (avg of criteria)
   comment       TEXT NOT NULL DEFAULT '',
+  criteria      TEXT NOT NULL DEFAULT '{}',   -- JSON: per-criterion stars
+  badges        TEXT NOT NULL DEFAULT '[]',   -- JSON array of earned badges
+  rehire        TEXT NOT NULL DEFAULT '',     -- definitely | yes | maybe | no
   created_at    INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_ratings_ratee ON ratings(ratee_user_id);
