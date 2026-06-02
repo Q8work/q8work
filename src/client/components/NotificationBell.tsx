@@ -7,6 +7,7 @@ interface NotiItem {
   label: string;
   count: number;
   tab: string;
+  link?: string;
 }
 
 export function NotificationBell() {
@@ -47,9 +48,9 @@ export function NotificationBell() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
 
-  const go = (tab: string) => {
+  const go = (it: NotiItem) => {
     setOpen(false);
-    navigate(`/app?tab=${tab}`);
+    navigate(it.link ?? `/app?tab=${it.tab}`);
   };
 
   return (
@@ -80,7 +81,7 @@ export function NotificationBell() {
               {items.map((it) => (
                 <li key={it.type}>
                   <button
-                    onClick={() => go(it.tab)}
+                    onClick={() => go(it)}
                     className="flex w-full items-center justify-between gap-3 px-4 py-3 text-right text-sm hover:bg-brand-bg"
                   >
                     <span className="font-semibold text-brand-darkest">{it.label}</span>

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { Avatar, PageLoader, EmptyState, StarRating, VerifiedTick } from "../components/ui";
 import { api, fileUrl } from "../lib/api";
+import { useAuth } from "../lib/auth";
 import { WORK_TYPES, DURATIONS, labelOf } from "../lib/constants";
 import { IconPin, IconBriefcase, IconClock, IconCash } from "../components/icons";
 import { toLatinDigits } from "../lib/format";
@@ -67,10 +68,13 @@ function Fact({ label, children }: { label: string; children: React.ReactNode })
 
 export function CompanyProfile() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [company, setCompany] = useState<Company | null>(null);
   const [jobs, setJobs] = useState<CompanyJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [following, setFollowing] = useState(false);
+  const [followBusy, setFollowBusy] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -81,6 +85,24 @@ export function CompanyProfile() {
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    if (!id || user?.role !== "worker") return;
+    api.get<{ following: boolean }>(`/follows/${id}`).then((r) => setFollowing(r.following)).catch(() => {});
+  }, [id, user]);
+
+  const toggleFollow = async () => {
+    if (!id || followBusy) return;
+    setFollowBusy(true);
+    try {
+      const r = following
+        ? await api.del<{ following: boolean }>(`/follows/${id}`)
+        : await api.post<{ following: boolean }>(`/follows/${id}`, {});
+      setFollowing(r.following);
+    } finally {
+      setFollowBusy(false);
+    }
+  };
 
   if (loading) return <Layout wide><PageLoader /></Layout>;
   if (notFound || !company) {
@@ -116,11 +138,22 @@ export function CompanyProfile() {
                 {company.rating != null && <StarRating value={company.rating} count={company.rating_count} />}
               </div>
             </div>
-            {company.website && (
-              <a href={withHttp(company.website)} target="_blank" rel="noopener noreferrer" className="btn-primary self-start sm:self-auto">
-                زيارة الموقع
-              </a>
-            )}
+            <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+              {user?.role === "worker" && (
+                <button
+                  onClick={toggleFollow}
+                  disabled={followBusy}
+                  className={following ? "btn-secondary" : "btn-primary"}
+                >
+                  {following ? "✓ متابَع" : "+ متابعة"}
+                </button>
+              )}
+              {company.website && (
+                <a href={withHttp(company.website)} target="_blank" rel="noopener noreferrer" className="btn-secondary">
+                  زيارة الموقع
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>

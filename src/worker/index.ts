@@ -13,6 +13,7 @@ import companies from "./routes/companies";
 import contact from "./routes/contact";
 import admin from "./routes/admin";
 import files from "./routes/files";
+import follows from "./routes/follows";
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -27,6 +28,7 @@ api.route("/ratings", ratings);
 api.route("/applications", applications);
 api.route("/notifications", notifications);
 api.route("/companies", companies);
+api.route("/follows", follows);
 api.route("/contact", contact);
 api.route("/admin", admin);
 api.route("/files", files);

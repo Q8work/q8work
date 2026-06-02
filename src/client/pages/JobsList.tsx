@@ -83,9 +83,15 @@ function JobCard({ job }: { job: Job }) {
 }
 
 export function JobsList() {
+  const { user } = useAuth();
   const [params, setParams] = useSearchParams();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Viewing the jobs feed clears the "new jobs from followed companies" alert.
+  useEffect(() => {
+    if (user?.role === "worker") api.post("/follows/seen/all", {}).catch(() => {});
+  }, [user]);
 
   const q = params.get("q") || "";
   const area = params.get("area") || "";

@@ -17,7 +17,7 @@ notifications.get("/", requireAuth("worker", "company"), async (c) => {
     user.id
   );
 
-  const items: { type: string; label: string; count: number; tab: string }[] = [];
+  const items: { type: string; label: string; count: number; tab: string; link?: string }[] = [];
   if (unreadMessages > 0) {
     items.push({ type: "messages", label: "رسائل غير مقروءة", count: unreadMessages, tab: "messages" });
   }
@@ -30,6 +30,17 @@ notifications.get("/", requireAuth("worker", "company"), async (c) => {
     );
     if (pendingOffers > 0) {
       items.push({ type: "offer", label: "عروض عمل جديدة بانتظار ردّك", count: pendingOffers, tab: "offers" });
+    }
+    // New jobs from companies the worker follows
+    const followedJobs = await countOf(
+      c.env,
+      `SELECT COUNT(*) AS n FROM jobs j
+         JOIN follows f ON f.company_user_id = j.company_user_id
+        WHERE f.follower_user_id = ? AND j.status = 'open' AND j.created_at > f.seen_at`,
+      user.id
+    );
+    if (followedJobs > 0) {
+      items.push({ type: "followed_jobs", label: "فرص جديدة من شركات تتابعها", count: followedJobs, tab: "jobs", link: "/jobs" });
     }
   } else {
     const newApplications = await countOf(

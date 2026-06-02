@@ -119,6 +119,16 @@ CREATE TABLE IF NOT EXISTS ratings (
 );
 CREATE INDEX IF NOT EXISTS idx_ratings_ratee ON ratings(ratee_user_id);
 
+-- Follows: a user follows a company to get notified of its new jobs
+CREATE TABLE IF NOT EXISTS follows (
+  follower_user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  company_user_id  TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at       INTEGER NOT NULL,
+  seen_at          INTEGER NOT NULL DEFAULT 0,   -- last time follower viewed the jobs feed
+  PRIMARY KEY (follower_user_id, company_user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_follows_company ON follows(company_user_id);
+
 -- Applications: a worker (الكويتي) applies to a posted job
 CREATE TABLE IF NOT EXISTS applications (
   id             TEXT PRIMARY KEY,
