@@ -49,7 +49,6 @@ export function Navbar() {
       )}
       <NavItem to="/about" onClick={() => setOpen(false)}>من نحن</NavItem>
       <NavItem to="/contact" onClick={() => setOpen(false)}>تواصل معنا</NavItem>
-      {user && <NavItem to="/app" onClick={() => setOpen(false)}>لوحتي</NavItem>}
     </>
   );
 
@@ -66,7 +65,7 @@ export function Navbar() {
           {user ? (
             <>
               {(user.role === "worker" || user.role === "company") && <NotificationBell />}
-              <Link to="/app" className="btn-ghost hidden sm:inline-flex">لوحتي</Link>
+              <Link to="/app" className="btn-ghost">لوحتي</Link>
               <button onClick={onLogout} className="btn-secondary">خروج</button>
             </>
           ) : (
