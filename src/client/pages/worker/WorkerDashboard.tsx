@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Layout } from "../../components/Layout";
-import { Tabs, Spinner, EmptyState, StarRating, StarInput, ErrorText, Avatar, Badge } from "../../components/ui";
+import { Tabs, Spinner, EmptyState, StarRating, ErrorText, Avatar, Badge } from "../../components/ui";
 import { MessagesPanel } from "../../components/Messages";
 import { api, fileUrl } from "../../lib/api";
 import { IconPin, IconCash } from "../../components/icons";
@@ -279,7 +279,6 @@ interface Offer {
 
 function OffersTab({ onChange }: { onChange: () => void }) {
   const [offers, setOffers] = useState<Offer[] | null>(null);
-  const [rating, setRating] = useState<{ offerId: string; stars: number; comment: string } | null>(null);
 
   const load = () => api.get<{ offers: Offer[] }>("/offers").then((r) => setOffers(r.offers));
   useEffect(() => { load(); }, []);
@@ -288,13 +287,6 @@ function OffersTab({ onChange }: { onChange: () => void }) {
     await api.patch(`/offers/${id}`, { status });
     await load();
     onChange();
-  };
-
-  const submitRating = async () => {
-    if (!rating) return;
-    await api.post("/ratings", { offer_id: rating.offerId, stars: rating.stars, comment: rating.comment });
-    setRating(null);
-    await load();
   };
 
   if (!offers) return <div className="py-10 text-center"><Spinner /></div>;
@@ -317,30 +309,6 @@ function OffersTab({ onChange }: { onChange: () => void }) {
             <div className="mt-3 flex gap-2">
               <button className="btn-primary" onClick={() => respond(o.id, "accepted")}>قبول</button>
               <button className="btn-ghost" onClick={() => respond(o.id, "rejected")}>رفض</button>
-            </div>
-          )}
-          {o.status === "completed" && (
-            <div className="mt-3">
-              {rating?.offerId === o.id ? (
-                <div className="rounded-xl bg-brand-bg p-3">
-                  <StarInput value={rating.stars} onChange={(s) => setRating({ ...rating, stars: s })} />
-                  <textarea
-                    className="input mt-2"
-                    rows={2}
-                    placeholder="تعليقك على التجربة..."
-                    value={rating.comment}
-                    onChange={(e) => setRating({ ...rating, comment: e.target.value })}
-                  />
-                  <div className="mt-2 flex gap-2">
-                    <button className="btn-primary" onClick={submitRating}>إرسال التقييم</button>
-                    <button className="btn-ghost" onClick={() => setRating(null)}>إلغاء</button>
-                  </div>
-                </div>
-              ) : (
-                <button className="btn-secondary" onClick={() => setRating({ offerId: o.id, stars: 5, comment: "" })}>
-                  قيّم الشركة
-                </button>
-              )}
             </div>
           )}
         </div>

@@ -5,9 +5,9 @@ import { genId } from "../lib/util";
 
 const ratings = new Hono<{ Bindings: Env; Variables: Variables }>();
 
-// POST /api/ratings — rate the other party after a completed offer
-//   company rates worker, worker rates company
-ratings.post("/", requireAuth("worker", "company"), async (c) => {
+// POST /api/ratings — a company rates the worker after a completed offer.
+//   Ratings are one-directional: only companies rate workers; workers cannot rate companies.
+ratings.post("/", requireAuth("company"), async (c) => {
   const user = c.get("user");
   const b = (await c.req.json().catch(() => ({}))) as Record<string, any>;
   const offerId = String(b.offer_id ?? "");
@@ -17,11 +17,10 @@ ratings.post("/", requireAuth("worker", "company"), async (c) => {
 
   const offer = await c.env.DB.prepare("SELECT * FROM offers WHERE id = ?").bind(offerId).first<any>();
   if (!offer) return c.json({ error: "العرض غير موجود." }, 404);
-  if (offer.company_user_id !== user.id && offer.worker_user_id !== user.id)
-    return c.json({ error: "لا تملك صلاحية." }, 403);
+  if (offer.company_user_id !== user.id) return c.json({ error: "لا تملك صلاحية." }, 403);
   if (offer.status !== "completed") return c.json({ error: "لا يمكن التقييم قبل إكمال العمل." }, 409);
 
-  const rateeId = offer.company_user_id === user.id ? offer.worker_user_id : offer.company_user_id;
+  const rateeId = offer.worker_user_id;
 
   const existing = await c.env.DB.prepare("SELECT id FROM ratings WHERE offer_id = ? AND rater_user_id = ?")
     .bind(offerId, user.id)
