@@ -17,12 +17,6 @@ const WHY = [
   "بيئة رقمية موثوقة تجمع بين أصحاب الفرص والباحثين عنها.",
 ];
 
-const STATS = [
-  { v: "+100", l: "فرصة" },
-  { v: "+50", l: "شركة" },
-  { v: "+500", l: "مستخدم" },
-];
-
 function Check({ className = "" }: { className?: string }) {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 6 9 17l-5-5" /></svg>;
 }
@@ -42,7 +36,7 @@ export function About() {
     <Layout wide>
       <div className="mx-auto max-w-5xl">
         {/* Hero */}
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-l from-brand-dark to-[#6c83ff] px-6 pb-24 pt-14 text-center text-white sm:px-12 sm:pb-28 sm:pt-16">
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-l from-brand-dark to-[#6c83ff] px-6 py-16 text-center text-white sm:px-12 sm:py-20">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-1.5 text-sm font-bold backdrop-blur">
             تعرّف علينا
           </span>
@@ -52,18 +46,8 @@ export function About() {
           </p>
         </section>
 
-        {/* Stats strip — bridges hero & content */}
-        <div className="relative z-10 mx-auto -mt-16 grid max-w-3xl grid-cols-3 gap-4 px-4 sm:gap-6">
-          {STATS.map((s) => (
-            <div key={s.l} className="rounded-2xl border border-brand-soft bg-white py-6 text-center shadow-md">
-              <div className="text-3xl font-extrabold text-brand-dark sm:text-4xl" data-latin>{s.v}</div>
-              <div className="mt-1 text-sm font-semibold text-brand">{s.l}</div>
-            </div>
-          ))}
-        </div>
-
         {/* Intro / definition */}
-        <section className="mx-auto mt-16 max-w-3xl">
+        <section className="mx-auto mt-14 max-w-3xl">
           <p className="text-center text-xl font-bold leading-relaxed text-brand-darkest sm:text-2xl">
             <span data-latin>Q8Work</span> منصة كويتية متخصصة في ربط الأفراد الباحثين عن فرص عمل مرنة
             بالشركات والمؤسسات التي تحتاج إلى كفاءات ومهارات لفترات محددة أو مشاريع مؤقتة.
