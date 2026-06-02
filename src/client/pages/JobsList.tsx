@@ -33,6 +33,15 @@ const REWARD_TIERS = [
 
 const parseReward = (s: string) => parseFloat(toLatinDigits(String(s)).replace(/[^\d.]/g, "")) || 0;
 
+const postedAgo = (ms?: number) => {
+  if (!ms) return "";
+  const days = Math.floor((Date.now() - ms) / 86400000);
+  if (days <= 0) return "نُشرت اليوم";
+  if (days === 1) return "نُشرت أمس";
+  if (days < 30) return `نُشرت منذ ${toLatinDigits(String(days))} يوم`;
+  return `نُشرت في ${new Intl.DateTimeFormat("ar-KW-u-nu-latn", { dateStyle: "medium" }).format(new Date(ms))}`;
+};
+
 function JobCard({ job }: { job: Job }) {
   const { user } = useAuth();
   const logo = fileUrl(job.logo_key);
@@ -74,8 +83,16 @@ function JobCard({ job }: { job: Job }) {
         </div>
       )}
 
+      {/* posted date */}
+      {job.created_at ? (
+        <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-brand">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+          {postedAgo(job.created_at)}
+        </p>
+      ) : null}
+
       {/* action */}
-      <Link to={detailsTo} className="btn-primary mt-4 w-full justify-center">
+      <Link to={detailsTo} className="btn-primary mt-3 w-full justify-center">
         عرض التفاصيل
       </Link>
     </div>
