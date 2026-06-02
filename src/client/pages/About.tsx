@@ -62,12 +62,15 @@ export function About() {
         </section>
 
         {/* Who we are */}
-        <section className="mt-16">
-          <Eyebrow>قصتنا</Eyebrow>
-          <h2 className="mt-3 text-3xl font-extrabold text-brand-darkest sm:text-4xl">
-            من نحن؟
-          </h2>
-          <div className="mt-6 grid gap-6 text-lg leading-relaxed text-brand-dark md:grid-cols-2">
+        <section className="mt-16 grid gap-8 md:grid-cols-3">
+          <div className="md:col-span-1">
+            <Eyebrow>قصتنا</Eyebrow>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight text-brand-darkest sm:text-4xl">
+              من نحن؟
+            </h2>
+            <span className="mt-4 block h-1 w-14 rounded-full bg-brand-dark" />
+          </div>
+          <div className="space-y-4 text-right leading-loose text-brand-dark md:col-span-2">
             <p>
               <span data-latin>Q8Work</span> منصة كويتية متخصصة في ربط الأفراد الباحثين عن فرص عمل مرنة
               بالشركات والمؤسسات التي تحتاج إلى كفاءات ومهارات لفترات محددة أو مشاريع مؤقتة.
@@ -77,7 +80,7 @@ export function About() {
               وتمكينهم من الاستفادة من أوقاتهم ومهاراتهم وخبراتهم بطريقة مرنة تتناسب مع ظروفهم اليومية،
               سواء كانوا طلبة، موظفين، أو باحثين عن فرص جديدة لتطوير مهاراتهم وزيادة دخلهم.
             </p>
-            <p className="md:col-span-2">
+            <p>
               في المقابل، نوفر للشركات والمؤسسات حلاً عملياً وفعالاً للوصول إلى الكفاءات المناسبة عند الحاجة،
               دون تحمل التكاليف والالتزامات المرتبطة بالتوظيف التقليدي طويل الأمد، مما يساهم في رفع كفاءة
               الأعمال وتسريع تنفيذ المشاريع والمهام المختلفة.
