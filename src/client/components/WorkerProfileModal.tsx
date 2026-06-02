@@ -144,15 +144,15 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
               </div>
             )}
 
-            {/* Ratings */}
+            {/* Recommendations */}
             <div className="mt-6 border-t border-brand-soft pt-5">
-              <h5 className="mb-3 text-sm font-bold text-brand-darkest">التقييمات ({p.rating_count})</h5>
+              <h5 className="mb-3 text-sm font-bold text-brand-darkest">شهادات التوصية ({p.rating_count})</h5>
               {ratings.length === 0 ? (
-                <p className="text-sm text-brand">لا توجد تقييمات بعد.</p>
+                <p className="text-sm text-brand">لا توجد توصيات بعد.</p>
               ) : (
                 <div className="space-y-3">
                   {ratings.map((r, i) => (
-                    <div key={i} className="rounded-2xl bg-brand-bg p-4">
+                    <div key={i} className="rounded-2xl border border-brand-soft bg-white p-4">
                       <div className="flex items-center justify-between gap-2">
                         <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-darkest">
                           {r.rater_name || "شركة"}
@@ -161,7 +161,11 @@ export function WorkerProfileModal({ workerId, onClose }: { workerId: string; on
                         <span className="text-xs text-brand">{fmtDate(r.created_at)}</span>
                       </div>
                       <div className="mt-1.5"><StarRating value={r.stars} /></div>
-                      {r.comment && <p className="mt-2 text-sm leading-relaxed text-brand-dark">{r.comment}</p>}
+                      {r.comment && (
+                        <p className="mt-2 border-r-2 border-brand-soft pr-3 text-sm leading-relaxed text-brand-dark">
+                          «{r.comment}»
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>

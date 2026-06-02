@@ -39,7 +39,12 @@ ratings.post("/", requireAuth("company"), async (c) => {
 ratings.get("/me", requireAuth("worker", "company"), async (c) => {
   const user = c.get("user");
   const rows = await c.env.DB.prepare(
-    "SELECT stars, comment, created_at FROM ratings WHERE ratee_user_id = ? ORDER BY created_at DESC"
+    `SELECT rt.stars, rt.comment, rt.created_at,
+            cp.company_name AS rater_name, cp.verified AS rater_verified
+       FROM ratings rt
+       LEFT JOIN company_profiles cp ON cp.user_id = rt.rater_user_id
+      WHERE rt.ratee_user_id = ?
+      ORDER BY rt.created_at DESC`
   )
     .bind(user.id)
     .all();

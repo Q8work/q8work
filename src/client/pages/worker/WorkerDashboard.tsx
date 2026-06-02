@@ -324,16 +324,19 @@ function RatingsTab() {
   return (
     <div className="space-y-4">
       <div className="card flex items-center justify-between">
-        <span className="font-bold text-brand-darkest">تقييمي العام</span>
+        <span className="font-bold text-brand-darkest">متوسط التوصيات</span>
         <StarRating value={data.avg} count={data.count} />
       </div>
       {data.ratings.length === 0 ? (
-        <EmptyState title="لا توجد تقييمات بعد" />
+        <EmptyState title="لا توجد توصيات بعد" hint="ستظهر هنا شهادات التوصية من الشركات بعد إكمال العمل." />
       ) : (
         data.ratings.map((r, i) => (
           <div key={i} className="card">
-            <StarRating value={r.stars} />
-            {r.comment && <p className="mt-2 text-sm text-brand-dark">{r.comment}</p>}
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-brand-darkest">{r.rater_name || "شركة"}</span>
+              <StarRating value={r.stars} />
+            </div>
+            {r.comment && <p className="mt-2 border-r-2 border-brand-soft pr-3 text-sm leading-relaxed text-brand-dark">«{r.comment}»</p>}
           </div>
         ))
       )}
@@ -413,7 +416,7 @@ export function WorkerDashboard() {
             { id: "applications", label: "تقديماتي" },
             { id: "offers", label: "العروض الواردة" },
             { id: "messages", label: "الرسائل" },
-            { id: "ratings", label: "تقييماتي" },
+            { id: "ratings", label: "التوصيات" },
           ]}
         />
       </div>

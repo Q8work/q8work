@@ -525,15 +525,16 @@ function OffersTab() {
             <div className="mt-3">
               {rating?.offerId === o.id ? (
                 <div className="rounded-xl bg-brand-bg p-3">
+                  <p className="mb-2 text-sm font-bold text-brand-darkest">اكتب شهادة توصية عن الشخص</p>
                   <StarInput value={rating.stars} onChange={(s) => setRating({ ...rating, stars: s })} />
-                  <textarea className="input mt-2" rows={2} placeholder="تقييم الأداء..." value={rating.comment} onChange={(e) => setRating({ ...rating, comment: e.target.value })} />
+                  <textarea className="input mt-2" rows={3} placeholder="مثال: عمل باحترافية والتزام، وأنصح بالتعامل معه..." value={rating.comment} onChange={(e) => setRating({ ...rating, comment: e.target.value })} />
                   <div className="mt-2 flex gap-2">
-                    <button className="btn-primary" onClick={submitRating}>إرسال</button>
+                    <button className="btn-primary" onClick={submitRating}>نشر التوصية</button>
                     <button className="btn-ghost" onClick={() => setRating(null)}>إلغاء</button>
                   </div>
                 </div>
               ) : (
-                <button className="btn-secondary" onClick={() => setRating({ offerId: o.id, stars: 5, comment: "" })}>قيّم الشخص</button>
+                <button className="btn-secondary" onClick={() => setRating({ offerId: o.id, stars: 5, comment: "" })}>إضافة شهادة توصية</button>
               )}
             </div>
           )}
