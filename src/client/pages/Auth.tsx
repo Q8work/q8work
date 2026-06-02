@@ -20,7 +20,7 @@ export function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [sp] = useSearchParams();
-  const redirect = sp.get("redirect") || "/app";
+  const redirect = sp.get("redirect") || "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -57,7 +57,7 @@ export function Login() {
         </button>
         <p className="text-center text-sm text-brand-dark">
           ليس لديك حساب؟{" "}
-          <Link to={`/register${redirect !== "/app" ? `?redirect=${encodeURIComponent(redirect)}` : ""}`} className="font-bold text-brand-dark underline">
+          <Link to={`/register${redirect !== "/" ? `?redirect=${encodeURIComponent(redirect)}` : ""}`} className="font-bold text-brand-dark underline">
             أنشئ حساباً
           </Link>
         </p>
@@ -70,7 +70,7 @@ export function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [sp] = useSearchParams();
-  const redirect = sp.get("redirect") || "/app";
+  const redirect = sp.get("redirect") || "/";
   const [role, setRole] = useState<"worker" | "company">("worker");
   const [name, setName] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -217,7 +217,7 @@ export function Register() {
         </button>
         <p className="text-center text-sm text-brand-dark">
           لديك حساب؟{" "}
-          <Link to={`/login${redirect !== "/app" ? `?redirect=${encodeURIComponent(redirect)}` : ""}`} className="font-bold text-brand-dark underline">
+          <Link to={`/login${redirect !== "/" ? `?redirect=${encodeURIComponent(redirect)}` : ""}`} className="font-bold text-brand-dark underline">
             تسجيل الدخول
           </Link>
         </p>

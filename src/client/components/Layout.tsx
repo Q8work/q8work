@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Logo } from "./Logo";
 import { NotificationBell } from "./NotificationBell";
 import { useAuth } from "../lib/auth";
@@ -24,7 +24,14 @@ function NavItem({ to, children, end, onClick }: { to: string; children: ReactNo
 export function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
+
+  // Return to the current page after auth (except from the auth pages themselves).
+  const here = location.pathname + location.search;
+  const ret = ["/login", "/register"].includes(location.pathname) ? "" : `?redirect=${encodeURIComponent(here)}`;
+  const loginTo = `/login${ret}`;
+  const registerTo = `/register${ret}`;
 
   const onLogout = async () => {
     setOpen(false);
@@ -61,8 +68,8 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className="btn-ghost hidden sm:inline-flex">دخول</Link>
-              <Link to="/register" className="btn-primary hidden sm:inline-flex">إنشاء حساب</Link>
+              <Link to={loginTo} className="btn-ghost hidden sm:inline-flex">دخول</Link>
+              <Link to={registerTo} className="btn-primary hidden sm:inline-flex">إنشاء حساب</Link>
             </>
           )}
           {/* Mobile menu toggle */}
@@ -86,8 +93,8 @@ export function Navbar() {
             {links}
             {!user && (
               <div className="mt-2 grid grid-cols-2 gap-2 border-t border-brand-soft pt-3">
-                <Link to="/login" onClick={() => setOpen(false)} className="btn-secondary justify-center">دخول</Link>
-                <Link to="/register" onClick={() => setOpen(false)} className="btn-primary justify-center">إنشاء حساب</Link>
+                <Link to={loginTo} onClick={() => setOpen(false)} className="btn-secondary justify-center">دخول</Link>
+                <Link to={registerTo} onClick={() => setOpen(false)} className="btn-primary justify-center">إنشاء حساب</Link>
               </div>
             )}
           </nav>
