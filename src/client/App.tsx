@@ -7,6 +7,7 @@ import { JobsList } from "./pages/JobsList";
 import { JobDetail } from "./pages/JobDetail";
 import { CompaniesList } from "./pages/CompaniesList";
 import { CompanyProfile } from "./pages/CompanyProfile";
+import { WorkerProfile } from "./pages/WorkerProfile";
 import { Contact } from "./pages/Contact";
 import { About } from "./pages/About";
 import { Login, Register } from "./pages/Auth";
@@ -42,6 +43,7 @@ export function App() {
       <Route path="/jobs/:id" element={<JobDetail />} />
       <Route path="/companies" element={<CompaniesList />} />
       <Route path="/companies/:id" element={<CompanyProfile />} />
+      <Route path="/workers/:id" element={<WorkerProfile />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
