@@ -46,11 +46,20 @@ ratings.post("/", requireAuth("company"), async (c) => {
   if (offer.status !== "completed") return c.json({ error: "لا يمكن التقييم قبل إكمال العمل." }, 409);
 
   const rateeId = offer.worker_user_id;
+  const comment = String(b.comment ?? "").slice(0, 2000);
 
+  // Upsert: a company can refine its recommendation for the same offer.
   const existing = await c.env.DB.prepare("SELECT id FROM ratings WHERE offer_id = ? AND rater_user_id = ?")
     .bind(offerId, user.id)
-    .first();
-  if (existing) return c.json({ error: "تمت التوصية مسبقاً." }, 409);
+    .first<any>();
+  if (existing) {
+    await c.env.DB.prepare(
+      "UPDATE ratings SET stars = ?, comment = ?, criteria = ?, badges = ?, rehire = ?, created_at = ? WHERE id = ?"
+    )
+      .bind(stars, comment, JSON.stringify(criteria), JSON.stringify(badges), rehire, Date.now(), existing.id)
+      .run();
+    return c.json({ ok: true, updated: true });
+  }
 
   await c.env.DB.prepare(
     `INSERT INTO ratings (id, offer_id, rater_user_id, ratee_user_id, stars, comment, criteria, badges, rehire, created_at)
@@ -58,8 +67,7 @@ ratings.post("/", requireAuth("company"), async (c) => {
   )
     .bind(
       genId("r_"), offerId, user.id, rateeId, stars,
-      String(b.comment ?? "").slice(0, 2000),
-      JSON.stringify(criteria), JSON.stringify(badges), rehire, Date.now()
+      comment, JSON.stringify(criteria), JSON.stringify(badges), rehire, Date.now()
     )
     .run();
   return c.json({ ok: true }, 201);
