@@ -80,6 +80,7 @@ export function Home() {
         <p className="mx-auto mt-5 max-w-xl text-balance text-base leading-relaxed text-brand sm:text-lg">
           اعمل وقت ما تريد، واختر الفرص المناسبة لمهاراتك، واحصل على دخل إضافي من شركات تبحث عن كفاءات لفترات محددة.
         </p>
+        <div className="flash-accent mx-auto mt-6 h-1.5 w-40" aria-hidden />
         <form
           onSubmit={(e) => { e.preventDefault(); navigate(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`); }}
           className="mx-auto mt-8 flex max-w-xl gap-2 rounded-xl border border-brand-soft bg-white p-2 shadow-sm"
