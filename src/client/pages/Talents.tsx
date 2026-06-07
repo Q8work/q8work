@@ -19,17 +19,17 @@ interface WorkerCard {
 }
 
 export function Talents() {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [workers, setWorkers] = useState<WorkerCard[] | null>(null);
   const [q, setQ] = useState("");
   const [area, setArea] = useState("");
 
-  const allowed = user && (user.role === "company" || user.role === "admin");
-
   useEffect(() => {
-    if (!allowed) return;
     api.get<{ workers: WorkerCard[] }>("/workers").then((r) => setWorkers(r.workers)).catch(() => setWorkers([]));
-  }, [allowed]);
+  }, []);
+
+  const profileTo = (uid: string) =>
+    user ? `/workers/${uid}` : `/register?redirect=${encodeURIComponent(`/workers/${uid}`)}`;
 
   const filtered = useMemo(() => {
     if (!workers) return [];
@@ -43,17 +43,6 @@ export function Talents() {
           w.skills.some((s) => s.includes(term)))
     );
   }, [workers, q, area]);
-
-  // Gate: companies & admins only
-  if (authLoading) return <Layout wide><PageLoader /></Layout>;
-  if (!allowed) {
-    return (
-      <Layout>
-        <EmptyState title="هذه الصفحة للشركات" hint="سجّل دخولك بحساب شركة لتصفّح المواهب وتوصياتهم." />
-        <div className="mt-4 text-center"><Link to="/login" className="btn-primary">تسجيل الدخول كشركة</Link></div>
-      </Layout>
-    );
-  }
 
   return (
     <Layout wide>
@@ -88,7 +77,7 @@ export function Talents() {
           {filtered.map((w) => (
             <Link
               key={w.user_id}
-              to={`/workers/${w.user_id}`}
+              to={profileTo(w.user_id)}
               className="group flex flex-col rounded-2xl border border-brand-soft bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-light hover:shadow-md"
             >
               <div className="flex items-start gap-3">

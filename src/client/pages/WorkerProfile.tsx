@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { PageLoader, EmptyState } from "../components/ui";
 import { useAuth } from "../lib/auth";
@@ -10,20 +10,13 @@ export function WorkerProfile() {
   const { p, ratings, loading, error } = useWorkerProfile(id || "");
 
   if (authLoading) return <Layout><PageLoader /></Layout>;
-  // Worker profiles (incl. recommendations) are visible to companies and admins.
-  if (!user || (user.role !== "company" && user.role !== "admin")) {
-    return (
-      <Layout>
-        <EmptyState title="هذه الصفحة للشركات" hint="سجّل دخولك بحساب شركة لعرض ملفات الباحثين وتوصياتهم." />
-        <div className="mt-4 text-center"><Link to="/login" className="btn-primary">تسجيل الدخول</Link></div>
-      </Layout>
-    );
-  }
+  // Viewing a full profile requires an account; guests are sent to register.
+  if (!user) return <Navigate to={`/register?redirect=${encodeURIComponent(`/workers/${id}`)}`} replace />;
 
   return (
     <Layout>
       <div className="mx-auto max-w-2xl">
-        <Link to="/app?tab=talent" className="text-sm font-bold text-brand-dark hover:underline">← العودة</Link>
+        <Link to="/talents" className="text-sm font-bold text-brand-dark hover:underline">← العودة للمواهب</Link>
         <div className="mt-3 overflow-hidden rounded-3xl border border-brand-soft bg-white shadow-sm">
           <div className="h-28 bg-gradient-to-l from-brand-dark to-[#6c83ff]" />
           {loading ? (

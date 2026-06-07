@@ -44,9 +44,7 @@ export function Navbar() {
       <NavItem to="/" end onClick={() => setOpen(false)}>الرئيسية</NavItem>
       <NavItem to="/jobs" onClick={() => setOpen(false)}>فرص العمل</NavItem>
       <NavItem to="/companies" onClick={() => setOpen(false)}>الشركات</NavItem>
-      {(user?.role === "company" || user?.role === "admin") && (
-        <NavItem to="/talents" onClick={() => setOpen(false)}>المواهب</NavItem>
-      )}
+      <NavItem to="/talents" onClick={() => setOpen(false)}>المواهب</NavItem>
       <NavItem to="/about" onClick={() => setOpen(false)}>من نحن</NavItem>
       <NavItem to="/contact" onClick={() => setOpen(false)}>تواصل معنا</NavItem>
     </>

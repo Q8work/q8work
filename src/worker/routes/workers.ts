@@ -7,8 +7,8 @@ const workers = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 // Average rating subquery helper baked into the SELECT below.
 
-// GET /api/workers — search/filter worker profiles (companies + admin)
-workers.get("/", requireAuth("company", "admin"), async (c) => {
+// GET /api/workers — public talent directory (no sensitive fields exposed)
+workers.get("/", async (c) => {
   const area = c.req.query("area");
   const workType = c.req.query("work_type");
   const availability = c.req.query("availability"); // single token match
@@ -47,8 +47,8 @@ workers.get("/", requireAuth("company", "admin"), async (c) => {
   return c.json({ workers: list });
 });
 
-// GET /api/workers/:id — single worker public profile (companies + admin)
-workers.get("/:id", requireAuth("company", "admin"), async (c) => {
+// GET /api/workers/:id — worker profile (any signed-in user; contact gated separately)
+workers.get("/:id", requireAuth("worker", "company", "admin"), async (c) => {
   const user = c.get("user");
   const id = c.req.param("id");
   const r = await c.env.DB.prepare(
