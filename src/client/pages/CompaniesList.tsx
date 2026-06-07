@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { Avatar, PageLoader, EmptyState, StarRating, VerifiedTick } from "../components/ui";
+import { Avatar, PageLoader, EmptyState, VerifiedTick } from "../components/ui";
 import { api, fileUrl } from "../lib/api";
 
 interface CompanyCard {
@@ -82,44 +82,41 @@ export function CompaniesList() {
             <Link
               key={c.user_id}
               to={`/companies/${c.user_id}`}
-              className="group flex flex-col rounded-2xl border border-brand-soft bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-light hover:shadow-md"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-brand-soft bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
             >
-              <div className="flex items-start gap-3">
-                <span className="shrink-0 rounded-2xl bg-white p-0.5 ring-1 ring-brand-soft">
-                  <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={56} />
+              {/* cover */}
+              <div className="h-16 bg-gradient-to-l from-brand-dark to-[#6c83ff]" />
+              <div className="flex flex-1 flex-col items-center px-5 pb-5 text-center">
+                <span className="-mt-10 rounded-2xl bg-white p-1 shadow-md ring-1 ring-brand-soft">
+                  <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={72} />
                 </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1">
-                    <h3 className="truncate text-lg font-extrabold text-brand-darkest">{c.company_name}</h3>
-                    <VerifiedTick verified={c.verified} size={16} />
-                  </div>
-                  {c.sector && (
-                    <span className="mt-1 inline-block rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand-dark">
-                      {c.sector}
-                    </span>
-                  )}
+                <div className="mt-3 flex items-center gap-1">
+                  <h3 className="truncate text-lg font-extrabold text-brand-darkest">{c.company_name}</h3>
+                  <VerifiedTick verified={c.verified} size={16} />
                 </div>
-              </div>
+                {c.sector && (
+                  <span className="mt-1.5 inline-block rounded-full bg-brand-soft px-3 py-0.5 text-xs font-semibold text-brand-dark">{c.sector}</span>
+                )}
+                {c.rating != null && (
+                  <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-sm font-bold text-amber-700">
+                    ★ {c.rating} <span className="text-xs font-semibold text-amber-700/70">({c.rating_count})</span>
+                  </span>
+                )}
 
-              {c.rating != null && (
-                <div className="mt-3"><StarRating value={c.rating} count={c.rating_count} /></div>
-              )}
+                <p className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-brand-dark">
+                  {c.description || "شركة مسجّلة على المنصة."}
+                </p>
 
-              <p className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-brand-dark">
-                {c.description || "شركة مسجّلة على المنصة."}
-              </p>
-
-              <div className="mt-4 flex items-center justify-between border-t border-brand-soft pt-3">
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-bold ${
+                  className={`mt-3 rounded-full px-3 py-1 text-xs font-bold ${
                     c.open_jobs > 0 ? "bg-emerald-50 text-emerald-700" : "bg-brand-soft text-brand"
                   }`}
                 >
                   {c.open_jobs > 0 ? `${c.open_jobs} فرصة متاحة` : "لا فرص حالياً"}
                 </span>
-                <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-dark">
+
+                <span className="btn-secondary mt-4 w-full justify-center group-hover:bg-brand-dark group-hover:text-white">
                   عرض الملف
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
                 </span>
               </div>
             </Link>
