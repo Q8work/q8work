@@ -67,55 +67,38 @@ export function Talents() {
       ) : filtered.length === 0 ? (
         <div className="mt-8"><EmptyState title="لا توجد مواهب مطابقة" hint="جرّب تعديل البحث أو المحافظة." /></div>
       ) : (
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 space-y-3">
           {filtered.map((w) => (
             <Link
               key={w.user_id}
               to={profileTo(w.user_id)}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-brand-soft bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
+              className="group flex items-center gap-4 rounded-2xl border border-brand-soft bg-white p-4 shadow-sm transition duration-200 hover:border-brand-light hover:shadow-md"
             >
-              {/* cover */}
-              <div className="h-16 bg-gradient-to-l from-brand-dark to-[#6c83ff]" />
-              <div className="flex flex-1 flex-col items-center px-5 pb-5 text-center">
-                <span className="-mt-10 rounded-full bg-white p-1 shadow-md ring-1 ring-brand-soft">
-                  <Avatar src={fileUrl(w.photo_key)} name={w.full_name} size={72} />
-                </span>
-                <h3 className="mt-3 truncate text-lg font-extrabold text-brand-darkest">{w.full_name || "باحث عن فرص"}</h3>
+              <span className="shrink-0">
+                <Avatar src={fileUrl(w.photo_key)} name={w.full_name} size={52} />
+              </span>
 
-                {/* rating */}
-                <div className="mt-1.5">
-                  {w.avg_rating != null ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-sm font-bold text-amber-700">
-                      ★ {w.avg_rating}
-                      <span className="text-xs font-semibold text-amber-700/70">({w.rating_count})</span>
-                    </span>
-                  ) : (
-                    <span className="inline-flex rounded-full bg-brand-soft px-3 py-1 text-xs font-bold text-brand-dark">موهبة جديدة</span>
-                  )}
+              <div className="min-w-0 flex-1">
+                <h3 className="truncate text-base font-bold text-brand-darkest sm:text-lg">{w.full_name || "باحث عن فرص"}</h3>
+                <div className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-brand">
+                  {w.avg_rating != null && <span className="inline-flex items-center gap-0.5 font-bold text-amber-600">★ {w.avg_rating}</span>}
+                  {w.area && <span className="font-semibold">{w.area}</span>}
+                  {w.skills.length > 0 && <span className="hidden truncate md:inline">· {w.skills.slice(0, 3).join("، ")}</span>}
                 </div>
-
-                {/* area */}
-                {w.area && (
-                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-brand">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" /><circle cx="12" cy="10" r="3" /></svg>
-                    {w.area}
-                  </span>
-                )}
-
-                {/* skills */}
-                {w.skills.length > 0 && (
-                  <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-                    {w.skills.slice(0, 3).map((s) => (
-                      <span key={s} className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand-dark">{s}</span>
-                    ))}
-                    {w.skills.length > 3 && <span className="px-1 text-xs text-brand">+{w.skills.length - 3}</span>}
-                  </div>
-                )}
-
-                <span className="btn-secondary mt-5 w-full justify-center group-hover:bg-brand-dark group-hover:text-white">
-                  عرض الملف
-                </span>
               </div>
+
+              <span
+                className={`hidden shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:inline ${
+                  w.avg_rating != null ? "bg-amber-50 text-amber-700" : "bg-brand-soft text-brand-dark"
+                }`}
+              >
+                {w.avg_rating != null ? `★ ${w.avg_rating} (${w.rating_count})` : "موهبة جديدة"}
+              </span>
+
+              <span className="inline-flex shrink-0 items-center gap-1 text-sm font-bold text-brand-dark">
+                <span className="hidden sm:inline">عرض الملف</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+              </span>
             </Link>
           ))}
         </div>
