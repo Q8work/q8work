@@ -77,7 +77,7 @@ export function CompaniesList() {
               to={`/companies/${c.user_id}`}
               className="group flex items-center gap-4 rounded-2xl border border-brand-soft bg-white p-4 shadow-sm transition duration-200 hover:border-brand-light hover:shadow-md"
             >
-              <span className="shrink-0 rounded-xl bg-white ring-1 ring-brand-soft">
+              <span className="shrink-0">
                 <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={52} />
               </span>
 
