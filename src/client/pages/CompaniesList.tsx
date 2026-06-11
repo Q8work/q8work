@@ -70,49 +70,41 @@ export function CompaniesList() {
       ) : filtered.length === 0 ? (
         <div className="mt-8"><EmptyState title="لا توجد شركات مطابقة" hint="جرّب تعديل البحث أو القطاع." /></div>
       ) : (
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 space-y-3">
           {filtered.map((c) => (
             <Link
               key={c.user_id}
               to={`/companies/${c.user_id}`}
-              className="group flex flex-col rounded-2xl border border-brand-soft bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-light hover:shadow-md"
+              className="group flex items-center gap-4 rounded-2xl border border-brand-soft bg-white p-4 shadow-sm transition duration-200 hover:border-brand-light hover:shadow-md"
             >
-              {/* identity row */}
-              <div className="flex items-center gap-3">
-                <span className="shrink-0 rounded-xl bg-white ring-1 ring-brand-soft">
-                  <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={48} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1">
-                    <h3 className="truncate text-base font-bold text-brand-darkest">{c.company_name}</h3>
-                    <VerifiedTick verified={c.verified} size={14} />
-                  </div>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-brand">
-                    {c.sector && <span className="font-semibold">{c.sector}</span>}
-                    {c.rating != null && (
-                      <span className="inline-flex items-center gap-0.5 font-bold text-amber-600">★ {c.rating}</span>
-                    )}
-                  </div>
+              <span className="shrink-0 rounded-xl bg-white ring-1 ring-brand-soft">
+                <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={52} />
+              </span>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1">
+                  <h3 className="truncate text-base font-bold text-brand-darkest sm:text-lg">{c.company_name}</h3>
+                  <VerifiedTick verified={c.verified} size={15} />
+                </div>
+                <div className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-brand">
+                  {c.sector && <span className="font-semibold">{c.sector}</span>}
+                  {c.rating != null && <span className="inline-flex items-center gap-0.5 font-bold text-amber-600">★ {c.rating}</span>}
+                  {c.description && <span className="hidden truncate text-brand md:inline">· {c.description}</span>}
                 </div>
               </div>
 
-              <p className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-brand-dark">
-                {c.description || "شركة مسجّلة على المنصة."}
-              </p>
+              <span
+                className={`hidden shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:inline ${
+                  c.open_jobs > 0 ? "bg-emerald-50 text-emerald-700" : "bg-brand-soft text-brand"
+                }`}
+              >
+                {c.open_jobs > 0 ? `${c.open_jobs} فرصة متاحة` : "لا فرص حالياً"}
+              </span>
 
-              <div className="mt-4 flex items-center justify-between border-t border-brand-soft pt-3">
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-bold ${
-                    c.open_jobs > 0 ? "bg-emerald-50 text-emerald-700" : "bg-brand-soft text-brand"
-                  }`}
-                >
-                  {c.open_jobs > 0 ? `${c.open_jobs} فرصة متاحة` : "لا فرص حالياً"}
-                </span>
-                <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-dark">
-                  عرض الملف
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
-                </span>
-              </div>
+              <span className="inline-flex shrink-0 items-center gap-1 text-sm font-bold text-brand-dark">
+                <span className="hidden sm:inline">عرض الملف</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+              </span>
             </Link>
           ))}
         </div>
