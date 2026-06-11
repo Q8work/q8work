@@ -75,41 +75,42 @@ export function CompaniesList() {
             <Link
               key={c.user_id}
               to={`/companies/${c.user_id}`}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-brand-soft bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
+              className="group flex flex-col rounded-2xl border border-brand-soft bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-light hover:shadow-md"
             >
-              {/* cover */}
-              <div className="h-16 bg-gradient-to-l from-brand-dark to-[#6c83ff]" />
-              <div className="flex flex-1 flex-col items-center px-5 pb-5 text-center">
-                <span className="-mt-10 rounded-2xl bg-white p-1 shadow-md ring-1 ring-brand-soft">
-                  <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={72} />
+              {/* identity row */}
+              <div className="flex items-center gap-3">
+                <span className="shrink-0 rounded-xl bg-white ring-1 ring-brand-soft">
+                  <Avatar src={fileUrl(c.logo_key)} name={c.company_name} size={48} />
                 </span>
-                <div className="mt-3 flex items-center gap-1">
-                  <h3 className="truncate text-lg font-extrabold text-brand-darkest">{c.company_name}</h3>
-                  <VerifiedTick verified={c.verified} size={16} />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1">
+                    <h3 className="truncate text-base font-bold text-brand-darkest">{c.company_name}</h3>
+                    <VerifiedTick verified={c.verified} size={14} />
+                  </div>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-brand">
+                    {c.sector && <span className="font-semibold">{c.sector}</span>}
+                    {c.rating != null && (
+                      <span className="inline-flex items-center gap-0.5 font-bold text-amber-600">★ {c.rating}</span>
+                    )}
+                  </div>
                 </div>
-                {c.sector && (
-                  <span className="mt-1.5 inline-block rounded-full bg-brand-soft px-3 py-0.5 text-xs font-semibold text-brand-dark">{c.sector}</span>
-                )}
-                {c.rating != null && (
-                  <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-sm font-bold text-amber-700">
-                    ★ {c.rating} <span className="text-xs font-semibold text-amber-700/70">({c.rating_count})</span>
-                  </span>
-                )}
+              </div>
 
-                <p className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-brand-dark">
-                  {c.description || "شركة مسجّلة على المنصة."}
-                </p>
+              <p className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-brand-dark">
+                {c.description || "شركة مسجّلة على المنصة."}
+              </p>
 
+              <div className="mt-4 flex items-center justify-between border-t border-brand-soft pt-3">
                 <span
-                  className={`mt-3 rounded-full px-3 py-1 text-xs font-bold ${
+                  className={`rounded-full px-3 py-1 text-xs font-bold ${
                     c.open_jobs > 0 ? "bg-emerald-50 text-emerald-700" : "bg-brand-soft text-brand"
                   }`}
                 >
                   {c.open_jobs > 0 ? `${c.open_jobs} فرصة متاحة` : "لا فرص حالياً"}
                 </span>
-
-                <span className="btn-secondary mt-4 w-full justify-center group-hover:bg-brand-dark group-hover:text-white">
+                <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-dark">
                   عرض الملف
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:-translate-x-1"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
                 </span>
               </div>
             </Link>
