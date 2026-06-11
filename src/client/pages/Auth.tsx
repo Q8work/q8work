@@ -5,12 +5,16 @@ import { ErrorText, Spinner } from "../components/ui";
 import { useAuth } from "../lib/auth";
 import { ApiError, api } from "../lib/api";
 
-function AuthShell({ title, children }: { title: string; children: React.ReactNode }) {
+function AuthShell({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
     <Layout>
-      <div className="mx-auto max-w-md">
-        <h1 className="mb-6 text-center text-2xl font-extrabold text-brand-darkest">{title}</h1>
-        <div className="card">{children}</div>
+      <div className="mx-auto max-w-md py-4">
+        <div className="mb-6 text-center">
+          <span className="font-logo text-2xl font-extrabold tracking-tight text-brand-dark" data-latin>Q8Work</span>
+          <h1 className="mt-3 text-2xl font-extrabold text-brand-darkest">{title}</h1>
+          {subtitle && <p className="mt-1 text-sm text-brand">{subtitle}</p>}
+        </div>
+        <div className="rounded-3xl border border-brand-soft bg-white p-6 shadow-sm sm:p-8">{children}</div>
       </div>
     </Layout>
   );
@@ -41,7 +45,7 @@ export function Login() {
   };
 
   return (
-    <AuthShell title="تسجيل الدخول">
+    <AuthShell title="تسجيل الدخول" subtitle="أهلاً بعودتك — سجّل دخولك للمتابعة">
       <form onSubmit={submit} className="space-y-4">
         <ErrorText>{error}</ErrorText>
         <div>
@@ -122,7 +126,7 @@ export function Register() {
   };
 
   return (
-    <AuthShell title="إنشاء حساب جديد">
+    <AuthShell title="إنشاء حساب جديد" subtitle="انضم إلى منصة الفرص المرنة في الكويت">
       <form onSubmit={submit} className="space-y-4">
         <ErrorText>{error}</ErrorText>
 

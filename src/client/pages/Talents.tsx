@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "../components/Layout";
+import { PageHeader } from "../components/PageHeader";
 import { Avatar, PageLoader, EmptyState } from "../components/ui";
 import { api, fileUrl } from "../lib/api";
 import { useAuth } from "../lib/auth";
@@ -46,18 +47,11 @@ export function Talents() {
 
   return (
     <Layout wide>
-      {/* Header */}
-      <div className="rounded-3xl bg-gradient-to-l from-brand-dark to-[#6c83ff] px-6 py-10 text-white sm:px-10 sm:py-12">
-        <h1 className="text-3xl font-extrabold sm:text-4xl">المواهب</h1>
-        <p className="mt-2 max-w-2xl text-white/80">
-          تصفّح الباحثين عن الفرص على <span data-latin>Q8Work</span>، واطّلع على مهاراتهم وتقييماتهم وشهادات التوصية.
-        </p>
-        {workers && (
-          <p className="mt-4 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-sm font-bold backdrop-blur">
-            <span data-latin>{workers.length}</span><span className="font-semibold">موهبة</span>
-          </p>
-        )}
-      </div>
+      <PageHeader
+        title="المواهب"
+        subtitle={<>تصفّح الباحثين عن الفرص على <span data-latin>Q8Work</span>، واطّلع على مهاراتهم وتقييماتهم وشهادات التوصية.</>}
+        badge={workers ? <><span data-latin>{workers.length}</span><span className="font-semibold">موهبة</span></> : undefined}
+      />
 
       {/* Filters */}
       <div className="mt-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-brand-soft">

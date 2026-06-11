@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
+import { PageHeader } from "../components/PageHeader";
 import { EmptyState, PageLoader, VerifiedTick } from "../components/ui";
 import { IconPin, IconClock, IconBriefcase } from "../components/icons";
 import { api, fileUrl } from "../lib/api";
@@ -145,11 +146,14 @@ export function JobsList() {
 
   return (
     <Layout wide>
-      <h1 className="mb-2 text-3xl font-extrabold text-brand-darkest">اكتشف الفرص المناسبة لك</h1>
-      <p className="mb-6 text-brand-dark">فرص عمل مرنة ومكافآت واضحة من شركات تبحث عن كفاءات لفترات محددة.</p>
+      <PageHeader
+        title="اكتشف الفرص المناسبة لك"
+        subtitle="فرص عمل مرنة ومكافآت واضحة من شركات تبحث عن كفاءات لفترات محددة."
+        badge={filtered.length > 0 ? <><span data-latin>{filtered.length}</span><span className="font-semibold">فرصة</span></> : undefined}
+      />
 
       {/* Smart filters */}
-      <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-brand-soft">
+      <div className="mb-6 mt-6 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-brand-soft">
         <input
           className="input w-full"
           placeholder="ابحث عن فرصة تناسب وقتك"
